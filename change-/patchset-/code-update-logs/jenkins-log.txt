@@ -1,0 +1,198 @@
+Started by upstream project "OpenBMC/automated-test/HW" build number 182
+originally caused by:
+ Started by upstream project "OpenBMC/automated-test/CI" build number 120
+ originally caused by:
+  Started by upstream project "OpenBMC/automated-test/Gerrit Trigger" build number 11
+  originally caused by:
+   Retriggered by user andrewg for Gerrit: https://gerrit.openbmc-project.xyz/42
+[EnvInject] - Loading node environment variables.
+Building remotely on tulpok01p2-ppc64le (docker ppc64le-docker) in workspace /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update
+Set build name.
+New build name is '#258-9.3.23.30'
+Next nodes: []
+[code-update] $ /bin/bash -xe /tmp/hudson226630547710993090.sh
++ set -uo pipefail
++ DOCKER_IMG_NAME=openbmc/ubuntu-obmc-code-update
++ WORKSPACE=/tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update
++ mkdir -p /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update
++ cd /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update
++ rm -Rf ./openbmc-build-scripts
++ rm -Rf ./openbmc-test-automation
++ git clone https://gerrit.openbmc-project.xyz/openbmc/openbmc-build-scripts
+Cloning into 'openbmc-build-scripts'...
++ cd openbmc-build-scripts
++ . ./scripts/build-qemu-robot-docker.sh
+++ set -uo pipefail
+++ DOCKER_IMG_NAME=openbmc/ubuntu-robot-qemu
++++ uname -m
+++ '[' ppc64le == ppc64le ']'
+++ DOCKER_BASE=ppc64le/
++++ cat
+++ Dockerfile='FROM ppc64le/ubuntu:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl
+
+RUN easy_install     tox     pip     requests
+
+RUN pip install     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+
+RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+USER fspcibld
+ENV HOME /home/fspcibld
+RUN /bin/bash'
+++ docker build -t openbmc/ubuntu-robot-qemu -
+Sending build context to Docker daemon  2.56 kB
+Step 1 : FROM ppc64le/ubuntu:latest
+ ---> d2e29d5dd835
+Step 2 : ENV DEBIAN_FRONTEND noninteractive
+ ---> Using cache
+ ---> f9a63d0220f4
+Step 3 : RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl
+ ---> Using cache
+ ---> 25d098e1e8ad
+Step 4 : RUN easy_install     tox     pip     requests
+ ---> Using cache
+ ---> 4975afd1b7eb
+Step 5 : RUN pip install     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+ ---> Using cache
+ ---> ba8d4956e355
+Step 6 : RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+ ---> Using cache
+ ---> 93103e75d7ea
+Step 7 : RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+ ---> Using cache
+ ---> bf8ba8286e06
+Step 8 : USER fspcibld
+ ---> Using cache
+ ---> aafb9561b548
+Step 9 : ENV HOME /home/fspcibld
+ ---> Using cache
+ ---> c28c16f4f2f2
+Step 10 : RUN /bin/bash
+ ---> Using cache
+ ---> 4939503d9458
+Successfully built 4939503d9458
++ cd /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update
++ git clone https://github.com/openbmc/openbmc-test-automation.git
+Cloning into 'openbmc-test-automation'...
++ SHORT_BMC_IMG_NAME=barreleye-20161117172843.all.tar
++ '[' '!' -f ./barreleye-20161117172843.all.tar ']'
++ echo 'Already have downloaded barreleye-20161117172843.all.tar'
+Already have downloaded barreleye-20161117172843.all.tar
++ BMC_IP=9.3.23.30
++ docker run --user root --env HOME=/home/fspcibld --workdir /home/fspcibld --volume /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update:/home/fspcibld --tty openbmc/ubuntu-robot-qemu python -m robot -v OPENBMC_HOST:9.3.23.30 -v FILE_PATH:/home/fspcibld/barreleye-20161117172843.all.tar /home/fspcibld/openbmc-test-automation/extended/code_update/update_bmc.robot
+==============================================================================
+Update Bmc :: Trigger code update to a target BMC.                            
+==============================================================================
+Initiate Code update BMC :: BMC code update process initiation        [32m.[0m[32m.[0m[32m.[0m[32m.[0mURI:https://9.3.23.30/org/openbmc/control/chassis0//action/powerOff, method:Post, args:{u'data': {u'data': []}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.23.30/org/openbmc/control/chassis0//action/getPowerState, method:Post, args:{u'data': {u'data': []}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": 0, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+[32m.[0mURI:https://9.3.23.30/org/openbmc/settings/host0/attr/power_policy, method:Put, args:{u'data': {u'data': u'RESTORE_LAST_STATE'}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.23.30/org/openbmc/settings/host0/attr/power_policy, method:Get, args:{}
+Response code:200, Content:{
+  "data": "RESTORE_LAST_STATE", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+[32m.[0mURI:https://9.3.23.30/org/openbmc/control/flash/bmc/action/PrepareForUpdate, method:Post, args:{u'data': {u'data': []}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.23.30/org/openbmc/control/flash/bmc, method:Get, args:{}
+Response code:200, Content:{
+  "data": {
+    "auto_apply": 0, 
+    "clear_persistent_files": 0, 
+    "filename": "", 
+    "preserve_network_settings": 1, 
+    "restore_application_defaults": 0, 
+    "status": "Switch to update mode in progress", 
+    "update_kernel_and_apps": 0
+  }, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+[32m.[0m[32m.[0m                                                                              Initiate Code update BMC :: BMC code update process initiation        [32m.[0mURI:https://9.3.23.30/org/openbmc/managers/System//action/getSystemState, method:Post, args:{u'data': {u'data': []}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": "BMC_READY", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+[32m.[0mURI:https://9.3.23.30/org/openbmc/control/flash/bmc/attr/preserve_network_settings, method:Put, args:{u'data': {u'data': 1}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.23.30/org/openbmc/control/flash/bmc, method:Get, args:{}
+Response code:200, Content:{
+  "data": {
+    "auto_apply": 0, 
+    "clear_persistent_files": 0, 
+    "filename": "", 
+    "preserve_network_settings": 1, 
+    "restore_application_defaults": 0, 
+    "status": "Switch to update mode in progress", 
+    "update_kernel_and_apps": 0
+  }, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+[32m.[0m[32m.[0mURI:https://9.3.23.30/org/openbmc/control/flash/bmc/action/update, method:Post, args:{u'data': {u'data': [u'/tmp/flashimg']}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.23.30/org/openbmc/control/flash/bmc, method:Get, args:{}
+Response code:200, Content:{
+  "data": {
+    "auto_apply": 0, 
+    "clear_persistent_files": 0, 
+    "filename": "/tmp/flashimg", 
+    "preserve_network_settings": 1, 
+    "restore_application_defaults": 0, 
+    "status": "Verify error: update: --no-flash --ignore-mount --no-save-files --no-restore-files --no-clean-saved-files\nERROR: Unable to find mtd partiton for image-bmc.\n", 
+    "update_kernel_and_apps": 0
+  }, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+[31mF[0m                                                                              Initiate Code update BMC :: BMC code update process initiation        | [31mFAIL[0m |
+'Verify error: update: --no-flash --ignore-mount --no-save-files --no-restore-files --no-clean-saved-files
+ERROR: Unable to find mtd partiton for image-bmc.
+' does not contain 'to apply'
+------------------------------------------------------------------------------
+Update Bmc :: Trigger code update to a target BMC.                    | [31mFAIL[0m |
+1 critical test, 0 passed, 1 failed
+1 test total, 0 passed, 1 failed
+==============================================================================
+Output:  /home/fspcibld/output.xml
+Log:     /home/fspcibld/log.html
+Report:  /home/fspcibld/report.html
+Build step 'Execute shell' marked build as failure
+Set build name.
+New build name is '#258-9.3.23.30'
+Variable with name 'BUILD_DISPLAY_NAME' already exists, current value: '#258-9.3.23.30', new value: '#258-9.3.23.30'
+[PostBuildScript] - Execution post build scripts.
+[code-update] $ /bin/bash -xe /tmp/hudson5135240803879686537.sh
++ curl -s http://tulpok01p4.aus.stglabs.ibm.com:8080/jenkins/job/OpenBMC/job/automated-test/job/helper-jobs/job/code-update/258//consoleText
