@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20161202 13:59:33.992" generator="Robot 3.0 (Python 2.7.12 on linux2)">
+<suite source="/home/fspcibld/openbmc-test-automation/extended/code_update/update_bmc.robot" id="s1" name="Update Bmc">
+<test id="s1-t1" name="Initiate Code update BMC">
+<kw name="Check If File Exist" library="code_update_utils">
+<arguments>
+<arg>${FILE_PATH}</arg>
+</arguments>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>\n PATH: ${filepath}</arg>
+</arguments>
+<msg timestamp="20161202 13:59:34.372" level="INFO">
+PATH: /home/fspcibld/barreleye-20161202134655.all.tar</msg>
+<status status="PASS" endtime="20161202 13:59:34.372" starttime="20161202 13:59:34.371"></status>
+</kw>
+<kw name="File Should Exist" library="OperatingSystem">
+<doc>Fails unless the given ``path`` points to an existing file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>msg=${filepath} doesn't exist [ ERROR ]</arg>
+</arguments>
+<msg timestamp="20161202 13:59:34.373" html="yes" level="INFO">File '&lt;a href="file:///home/fspcibld/barreleye-20161202134655.all.tar"&gt;/home/fspcibld/barreleye-20161202134655.all.tar&lt;/a&gt;' exists.</msg>
+<status status="PASS" endtime="20161202 13:59:34.373" starttime="20161202 13:59:34.372"></status>
+</kw>
+<kw name="Set Global Variable" library="BuiltIn">
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<arguments>
+<arg>${FILE_PATH}</arg>
+<arg>${filepath}</arg>
+</arguments>
+<msg timestamp="20161202 13:59:34.373" level="INFO">${FILE_PATH} = /home/fspcibld/barreleye-20161202134655.all.tar</msg>
+<status status="PASS" endtime="20161202 13:59:34.373" starttime="20161202 13:59:34.373"></status>
+</kw>
+<status status="PASS" endtime="20161202 13:59:34.373" starttime="20161202 13:59:34.370"></status>
+</kw>
+<kw name="System Readiness Test" library="code_update_utils">
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Verify Ping and REST Authentication</arg>
+</arguments>
+<assign>
+<var>${l_status}</var>
+</assign>
+<kw name="Verify Ping and REST Authentication" library="utils">
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Ping Host</arg>
+<arg>${OPENBMC_HOST}</arg>
+</arguments>
+<assign>
+<var>${l_ping}</var>
+</assign>
+<kw name="Ping Host" library="utils">
+<arguments>
+<arg>${OPENBMC_HOST}</arg>
+</arguments>
+<kw name="Should Not Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is not empty.</doc>
+<arguments>
+<arg>${host}</arg>
+<arg>msg=No host provided</arg>
+</arguments>
+<msg timestamp="20161202 13:59:34.376" level="INFO">Length is 10</msg>
+<status status="PASS" endtime="20161202 13:59:34.376" starttime="20161202 13:59:34.375"></status>
+</kw>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<arguments>
+<arg>ping -c 4 ${host}</arg>
+</arguments>
+<assign>
+<var>${RC}</var>
+<var>${output}</var>
+</assign>
+<msg timestamp="20161202 13:59:34.380" level="INFO">Running command 'ping -c 4 9.3.29.119 2&gt;&amp;1'.</msg>
+<msg timestamp="20161202 13:59:37.387" level="INFO">${RC} = 0</msg>
+<msg timestamp="20161202 13:59:37.388" level="INFO">${output} = PING 9.3.29.119 (9.3.29.119) 56(84) bytes of data.
+64 bytes from 9.3.29.119: icmp_seq=1 ttl=62 time=1.26 ms
+64 bytes from 9.3.29.119: icmp_seq=2 ttl=62 time=0.923 ms
+64 bytes from 9.3.29.119: icmp_seq...</msg>
+<status status="PASS" endtime="20161202 13:59:37.388" starttime="20161202 13:59:34.376"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>RC: ${RC}\nOutput:\n${output}</arg>
+</arguments>
+<msg timestamp="20161202 13:59:37.391" level="INFO">RC: 0
+Output:
+PING 9.3.29.119 (9.3.29.119) 56(84) bytes of data.
+64 bytes from 9.3.29.119: icmp_seq=1 ttl=62 time=1.26 ms
+64 bytes from 9.3.29.119: icmp_seq=2 ttl=62 time=0.923 ms
+64 bytes from 9.3.29.119: icmp_seq=3 ttl=62 time=0.820 ms
+64 bytes from 9.3.29.119: icmp_seq=4 ttl=62 time=0.825 ms
+
+--- 9.3.29.119 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3002ms
+rtt min/avg/max/mdev = 0.820/0.957/1.261/0.181 ms</msg>
+<status status="PASS" endtime="20161202 13:59:37.392" starttime="20161202 13:59:37.390"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${RC}</arg>
+<arg>${0}</arg>
+</arguments>
+<status status="PASS" endtime="20161202 13:59:37.393" starttime="20161202 13:59:37.392"></status>
+</kw>
+<status status="PASS" endtime="20161202 13:59:37.393" starttime="20161202 13:59:34.375"></status>
+</kw>
+<msg timestamp="20161202 13:59:37.393" level="INFO">${l_ping} = True</msg>
+<status status="PASS" endtime="20161202 13:59:37.393" starttime="20161202 13:59:34.375"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${l_ping}' == '${False}'</arg>
+<arg>Fail</arg>
+<arg>msg=Ping Failed</arg>
+</arguments>
+<status status="PASS" endtime="20161202 13:59:37.398" starttime="20161202 13:59:37.394"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Initialize OpenBMC</arg>
+</arguments>
+<assign>
+<var>${l_rest}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20161202 13:59:37.400" level="INFO">Creating Session using : alias=openbmc, url=https://9.3.29.119, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20161202 13:59:37.401" starttime="20161202 13:59:37.399"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20161202 13:59:37.402" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20161202 13:59:37.402" starttime="20161202 13:59:37.401"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20161202 13:59:37.402" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20161202 13:59:37.402" starttime="20161202 13:59:37.402"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20161202 13:59:37.403" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20161202 13:59:37.403" starttime="20161202 13:59:37.403"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20161202 14:00:18.064" level="FAIL">ConnectionError: HTTPSConnectionPool(host='9.3.29.119', port=443): Max retries exceeded with url: /login (Caused by ReadTimeoutError("HTTPSConnectionPool(host='9.3.29.119', port=443): Read timed out. (read timeout=10.0)",))</msg>
+<status status="FAIL" endtime="20161202 14:00:18.064" starttime="20161202 13:59:37.403"></status>
+</kw>
+<status status="FAIL" endtime="20161202 14:00:18.065" starttime="20161202 13:59:37.399"></status>
+</kw>
+<msg timestamp="20161202 14:00:18.065" level="INFO">${l_rest} = False</msg>
+<status status="PASS" endtime="20161202 14:00:18.065" starttime="20161202 13:59:37.398"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${l_rest}' == '${False}'</arg>
+<arg>Fail</arg>
+<arg>msg=REST Authentication Failed</arg>
+</arguments>
+<kw name="Fail" library="BuiltIn">
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<arguments>
+<arg>msg=REST Authentication Failed</arg>
+</arguments>
+<msg timestamp="20161202 14:00:18.071" level="FAIL">REST Authentication Failed</msg>
+<status status="FAIL" endtime="20161202 14:00:18.072" starttime="20161202 14:00:18.071"></status>
+</kw>
+<status status="FAIL" endtime="20161202 14:00:18.072" starttime="20161202 14:00:18.066"></status>
+</kw>
+<status status="FAIL" endtime="20161202 14:00:18.072" starttime="20161202 13:59:34.374"></status>
+</kw>
+<msg timestamp="20161202 14:00:18.072" level="INFO">${l_status} = False</msg>
+<status status="PASS" endtime="20161202 14:00:18.072" starttime="20161202 13:59:34.374"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${l_status}' == '${False}'</arg>
+<arg>Fail</arg>
+<arg>msg=System not in ideal state to use [ERROR]</arg>
+</arguments>
+<kw name="Fail" library="BuiltIn">
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<arguments>
+<arg>msg=System not in ideal state to use [ERROR]</arg>
+</arguments>
+<msg timestamp="20161202 14:00:18.078" level="FAIL">System not in ideal state to use [ERROR]</msg>
+<status status="FAIL" endtime="20161202 14:00:18.078" starttime="20161202 14:00:18.077"></status>
+</kw>
+<status status="FAIL" endtime="20161202 14:00:18.078" starttime="20161202 14:00:18.073"></status>
+</kw>
+<status status="FAIL" endtime="20161202 14:00:18.078" starttime="20161202 13:59:34.374"></status>
+</kw>
+<doc>BMC code update process initiation</doc>
+<status status="FAIL" endtime="20161202 14:00:18.079" critical="yes" starttime="20161202 13:59:34.368">System not in ideal state to use [ERROR]</status>
+</test>
+<doc>Trigger code update to a target BMC.
+Execution Method :
+python -m robot -v OPENBMC_HOST:&lt;hostname&gt;
+-v FILE_PATH:&lt;path/*all.tar&gt; update_bmc.robot
+
+Code update method BMC using REST
+Update work flow sequence:
+- User input BMC File existence check
+- Ping Test and REST authentication
+- Set Host Power host setting Policy to RESTORE_LAST_STATE
+On reboot this policy would ensure the BMC comes
+online and stays at HOST_POWERED_OFF state.
+- Issue poweroff
+- Prepare for Update
+- Wait for BMC to come online clean
+- Wait for BMC_READY state
+- Apply preserve BMC Network setting
+- SCP image to BMC
+- Activate the flash image
+- Warm Reset BMC to activate code
+- Wait for BMC to come online time out 30 minutes
+- Version check post update</doc>
+<status status="FAIL" endtime="20161202 14:00:18.079" starttime="20161202 13:59:33.994"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="0">Critical Tests</stat>
+<stat fail="1" pass="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="1" id="s1" name="Update Bmc" pass="0">Update Bmc</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
