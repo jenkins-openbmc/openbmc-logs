@@ -1,0 +1,127 @@
+Started by upstream project "OpenBMC/automated-test/HW" build number 233
+originally caused by:
+ Started by upstream project "OpenBMC/automated-test/CI" build number 171
+ originally caused by:
+  Started by upstream project "OpenBMC/automated-test/Gerrit Trigger" build number 61
+  originally caused by:
+   Retriggered by user cphofer for Gerrit: https://gerrit.openbmc-project.xyz/971
+[EnvInject] - Loading node environment variables.
+Building remotely on tulpok01p2-ppc64le (docker ppc64le-docker) in workspace /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
+Set build name.
+New build name is '#399-barreleye-9.3.23.30'
+Next nodes: []
+[run-hardware-tests] $ /bin/bash -xe /tmp/hudson6008467228181870291.sh
++ set -uo pipefail
++ DOCKER_IMG_NAME=openbmc/ubuntu-robot-qemu
++ WORKSPACE=/tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ mkdir -p /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ cd /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ rm -Rf ./openbmc-build-scripts
++ rm -f './*.xml'
++ rm -f './*.html'
++ git clone https://gerrit.openbmc-project.xyz/openbmc/openbmc-build-scripts
+Cloning into 'openbmc-build-scripts'...
++ cd openbmc-build-scripts
++ . ./scripts/build-qemu-robot-docker.sh
+++ set -uo pipefail
+++ DOCKER_IMG_NAME=openbmc/ubuntu-robot-qemu
++++ uname -m
+++ '[' ppc64le == ppc64le ']'
+++ DOCKER_BASE=ppc64le/
++++ cat
+++ Dockerfile='FROM ppc64le/ubuntu:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl
+
+RUN easy_install     tox     pip     requests
+
+RUN pip install     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+
+RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+USER fspcibld
+ENV HOME /home/fspcibld
+RUN /bin/bash'
+++ docker build -t openbmc/ubuntu-robot-qemu -
+Sending build context to Docker daemon  2.56 kB
+Step 1 : FROM ppc64le/ubuntu:latest
+ ---> d2e29d5dd835
+Step 2 : ENV DEBIAN_FRONTEND noninteractive
+ ---> Using cache
+ ---> f9a63d0220f4
+Step 3 : RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl
+ ---> Using cache
+ ---> 25d098e1e8ad
+Step 4 : RUN easy_install     tox     pip     requests
+ ---> Using cache
+ ---> 4975afd1b7eb
+Step 5 : RUN pip install     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+ ---> Using cache
+ ---> ba8d4956e355
+Step 6 : RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+ ---> Using cache
+ ---> 93103e75d7ea
+Step 7 : RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+ ---> Using cache
+ ---> bf8ba8286e06
+Step 8 : USER fspcibld
+ ---> Using cache
+ ---> aafb9561b548
+Step 9 : ENV HOME /home/fspcibld
+ ---> Using cache
+ ---> c28c16f4f2f2
+Step 10 : RUN /bin/bash
+ ---> Using cache
+ ---> 4939503d9458
+Successfully built 4939503d9458
++ SSH_PORT=22
++ HTTPS_PORT=443
+++ getent hosts 9.3.23.30
+++ awk '{ print $1 }'
++ BMC_IP=9.3.23.30
++ docker run --user root --env HOME=/home/fspcibld --env IP_ADDR=9.3.23.30 --env SSH_PORT=22 --env HTTPS_PORT=443 --env 'ROBOT_TEST_CMD=tox -e barreleye -- --argumentfile test_lists/HW_CI tests' ' '
+docker: Error parsing reference: " " is not a valid repository/tag.
+See 'docker run --help'.
+Build step 'Execute shell' marked build as failure
+Set build name.
+New build name is '#399-barreleye-9.3.23.30'
+Variable with name 'BUILD_DISPLAY_NAME' already exists, current value: '#399-barreleye-9.3.23.30', new value: '#399-barreleye-9.3.23.30'
+Robot results publisher started...
+-Parsing output xml:
+Failed!
+hudson.AbortException: No files found in path /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests with configured filemask: output.xml
+	at hudson.plugins.robot.RobotParser$RobotParserCallable.invoke(RobotParser.java:77)
+	at hudson.plugins.robot.RobotParser$RobotParserCallable.invoke(RobotParser.java:54)
+	at hudson.FilePath$FileCallableWrapper.call(FilePath.java:2772)
+	at hudson.remoting.UserRequest.perform(UserRequest.java:152)
+	at hudson.remoting.UserRequest.perform(UserRequest.java:50)
+	at hudson.remoting.Request$2.run(Request.java:332)
+	at hudson.remoting.InterceptingExecutorService$1.call(InterceptingExecutorService.java:68)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+	at ......remote call to tulpok01p2-ppc64le(Native Method)
+	at hudson.remoting.Channel.attachCallSiteStackTrace(Channel.java:1416)
+	at hudson.remoting.UserResponse.retrieve(UserRequest.java:252)
+	at hudson.remoting.Channel.call(Channel.java:781)
+	at hudson.FilePath.act(FilePath.java:1007)
+	at hudson.FilePath.act(FilePath.java:996)
+	at hudson.plugins.robot.RobotParser.parse(RobotParser.java:49)
+	at hudson.plugins.robot.RobotPublisher.parse(RobotPublisher.java:217)
+	at hudson.plugins.robot.RobotPublisher.perform(RobotPublisher.java:239)
+	at hudson.tasks.BuildStepCompatibilityLayer.perform(BuildStepCompatibilityLayer.java:78)
+	at hudson.tasks.BuildStepMonitor$1.perform(BuildStepMonitor.java:20)
+	at hudson.model.AbstractBuild$AbstractBuildExecution.perform(AbstractBuild.java:779)
+	at hudson.model.AbstractBuild$AbstractBuildExecution.performAllBuildSteps(AbstractBuild.java:720)
+	at hudson.model.Build$BuildExecution.post2(Build.java:185)
+	at hudson.model.AbstractBuild$AbstractBuildExecution.post(AbstractBuild.java:665)
+	at hudson.model.Run.execute(Run.java:1766)
+	at hudson.model.FreeStyleBuild.run(FreeStyleBuild.java:43)
+	at hudson.model.ResourceController.execute(ResourceController.java:98)
+	at hudson.model.Executor.run(Executor.java:410)
+[PostBuildScript] - Execution post build scripts.
+[run-hardware-tests] $ /bin/bash -xe /tmp/hudson1366531705508977773.sh
++ curl -s http://tulpok01p4.aus.stglabs.ibm.com:8080/jenkins/job/OpenBMC/job/automated-test/job/helper-jobs/job/run-hardware-tests/399//consoleText
