@@ -1,0 +1,1295 @@
+Started by upstream project "OpenBMC/automated-test/HW" build number 821
+originally caused by:
+ Started by upstream project "OpenBMC/automated-test/CI" build number 694
+ originally caused by:
+  Started by upstream project "OpenBMC/automated-test/Gerrit-trigger" build number 314
+  originally caused by:
+   Triggered by Gerrit: https://gerrit.openbmc-project.xyz/4189
+[EnvInject] - Loading node environment variables.
+Building remotely on tulpok01p2-ppc64le (ppc64le-docker docker) in workspace /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Done
+Set build name.
+New build name is '#1048-witherspoon-9.41.166.169'
+Next nodes: []
+[run-hardware-tests] $ /bin/bash -xe /tmp/hudson8960302741925520564.sh
++ set -uo pipefail
++ DOCKER_IMG_NAME=openbmc/ubuntu-robot-qemu
++ WORKSPACE=/tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ mkdir -p /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ cd /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ rm -Rf ./openbmc-build-scripts
++ rm -f './*.xml'
++ rm -f './*.html'
++ rm -Rf './logs/*'
++ git clone https://gerrit.openbmc-project.xyz/openbmc/openbmc-build-scripts
+Cloning into 'openbmc-build-scripts'...
++ cd openbmc-build-scripts
++ . ./scripts/build-qemu-robot-docker.sh
+++ set -uo pipefail
+++ DOCKER_IMG_NAME=openbmc/ubuntu-robot-qemu
++++ uname -m
+++ '[' ppc64le == ppc64le ']'
+++ DOCKER_BASE=ppc64le/
++++ cat
+++ Dockerfile='FROM ppc64le/ubuntu:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     python3     python3-dev     python3-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl     build-essential
+
+RUN easy_install     tox     pip     requests
+
+RUN pip install     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+
+RUN wget https://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.18/ipmitool-1.8.18.tar.bz2
+RUN tar xvfj ipmitool-*.tar.bz2
+RUN ./ipmitool-1.8.18/configure
+RUN make
+RUN make install
+
+RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+USER fspcibld
+ENV HOME /home/fspcibld
+RUN /bin/bash'
+++ docker build -t openbmc/ubuntu-robot-qemu -
+Sending build context to Docker daemon  2.56 kB
+Step 1 : FROM ppc64le/ubuntu:latest
+ ---> d2e29d5dd835
+Step 2 : ENV DEBIAN_FRONTEND noninteractive
+ ---> Using cache
+ ---> f9a63d0220f4
+Step 3 : RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     python3     python3-dev     python3-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl     build-essential
+ ---> Using cache
+ ---> d80ac0737ea7
+Step 4 : RUN easy_install     tox     pip     requests
+ ---> Using cache
+ ---> 9b4253cfa5d7
+Step 5 : RUN pip install     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+ ---> Using cache
+ ---> b5bb0684d5ea
+Step 6 : RUN wget https://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.18/ipmitool-1.8.18.tar.bz2
+ ---> Using cache
+ ---> d1153ef9f023
+Step 7 : RUN tar xvfj ipmitool-*.tar.bz2
+ ---> Using cache
+ ---> 15bccd049680
+Step 8 : RUN ./ipmitool-1.8.18/configure
+ ---> Using cache
+ ---> b3f040182430
+Step 9 : RUN make
+ ---> Using cache
+ ---> 4e22eeea4367
+Step 10 : RUN make install
+ ---> Using cache
+ ---> 886531d5acb8
+Step 11 : RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+ ---> Using cache
+ ---> 7abd7ab4b177
+Step 12 : RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+ ---> Using cache
+ ---> 0ab155bf3871
+Step 13 : USER fspcibld
+ ---> Using cache
+ ---> 420dd0c1dd6b
+Step 14 : ENV HOME /home/fspcibld
+ ---> Using cache
+ ---> 13f8f469b544
+Step 15 : RUN /bin/bash
+ ---> Using cache
+ ---> faa61f6f12b2
+Successfully built faa61f6f12b2
++ SSH_PORT=22
++ HTTPS_PORT=443
+++ getent hosts 9.41.166.169
+++ awk '{ print $1 }'
++ BMC_IP=9.41.166.169
++ docker run --user fspcibld --env HOME=/home/fspcibld --env IP_ADDR=9.41.166.169 --env SSH_PORT=22 --env HTTPS_PORT=443 --env 'ROBOT_TEST_CMD=tox -e witherspoon -- --argumentfile test_lists/HW_CI tests' --workdir /home/fspcibld --volume /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests:/home/fspcibld --tty openbmc/ubuntu-robot-qemu /home/fspcibld/openbmc-build-scripts/scripts/run-robot.sh
+++ whoami
++ ROBOT_CODE_HOME=/tmp/fspcibld/18816/obmc-robot/
++ ROBOT_TEST_CMD='tox -e witherspoon -- --argumentfile test_lists/HW_CI tests'
++ git clone https://github.com/openbmc/openbmc-test-automation.git /tmp/fspcibld/18816/obmc-robot/
+Cloning into '/tmp/fspcibld/18816/obmc-robot'...
+remote: Counting objects: 2558, done.[K
+remote: Compressing objects:   3% (1/30)   [Kremote: Compressing objects:   6% (2/30)   [Kremote: Compressing objects:  10% (3/30)   [Kremote: Compressing objects:  13% (4/30)   [Kremote: Compressing objects:  16% (5/30)   [Kremote: Compressing objects:  20% (6/30)   [Kremote: Compressing objects:  23% (7/30)   [Kremote: Compressing objects:  26% (8/30)   [Kremote: Compressing objects:  30% (9/30)   [Kremote: Compressing objects:  33% (10/30)   [Kremote: Compressing objects:  36% (11/30)   [Kremote: Compressing objects:  40% (12/30)   [Kremote: Compressing objects:  43% (13/30)   [Kremote: Compressing objects:  46% (14/30)   [Kremote: Compressing objects:  50% (15/30)   [Kremote: Compressing objects:  53% (16/30)   [Kremote: Compressing objects:  56% (17/30)   [Kremote: Compressing objects:  60% (18/30)   [Kremote: Compressing objects:  63% (19/30)   [Kremote: Compressing objects:  66% (20/30)   [Kremote: Compressing objects:  70% (21/30)   [Kremote: Compressing objects:  73% (22/30)   [Kremote: Compressing objects:  76% (23/30)   [Kremote: Compressing objects:  80% (24/30)   [Kremote: Compressing objects:  83% (25/30)   [Kremote: Compressing objects:  86% (26/30)   [Kremote: Compressing objects:  90% (27/30)   [Kremote: Compressing objects:  93% (28/30)   [Kremote: Compressing objects:  96% (29/30)   [Kremote: Compressing objects: 100% (30/30)   [Kremote: Compressing objects: 100% (30/30), done.[K
+Receiving objects:   0% (1/2558)   Receiving objects:   1% (26/2558)   Receiving objects:   2% (52/2558)   Receiving objects:   3% (77/2558)   Receiving objects:   4% (103/2558)   Receiving objects:   5% (128/2558)   Receiving objects:   6% (154/2558)   Receiving objects:   7% (180/2558)   Receiving objects:   8% (205/2558)   Receiving objects:   9% (231/2558)   Receiving objects:  10% (256/2558)   Receiving objects:  11% (282/2558)   Receiving objects:  12% (307/2558)   Receiving objects:  13% (333/2558)   Receiving objects:  14% (359/2558)   Receiving objects:  15% (384/2558)   Receiving objects:  16% (410/2558)   Receiving objects:  17% (435/2558)   Receiving objects:  18% (461/2558)   Receiving objects:  19% (487/2558)   Receiving objects:  20% (512/2558)   Receiving objects:  21% (538/2558)   Receiving objects:  22% (563/2558)   Receiving objects:  23% (589/2558)   Receiving objects:  24% (614/2558)   Receiving objects:  25% (640/2558)   Receiving objects:  26% (666/2558)   Receiving objects:  27% (691/2558)   Receiving objects:  28% (717/2558)   Receiving objects:  29% (742/2558)   Receiving objects:  30% (768/2558)   Receiving objects:  31% (793/2558)   Receiving objects:  32% (819/2558)   Receiving objects:  33% (845/2558)   Receiving objects:  34% (870/2558)   Receiving objects:  35% (896/2558)   Receiving objects:  36% (921/2558)   Receiving objects:  37% (947/2558)   Receiving objects:  38% (973/2558)   Receiving objects:  39% (998/2558)   Receiving objects:  40% (1024/2558)   Receiving objects:  41% (1049/2558)   Receiving objects:  42% (1075/2558)   Receiving objects:  43% (1100/2558)   Receiving objects:  44% (1126/2558)   Receiving objects:  45% (1152/2558)   Receiving objects:  46% (1177/2558)   Receiving objects:  47% (1203/2558)   Receiving objects:  48% (1228/2558)   Receiving objects:  49% (1254/2558)   Receiving objects:  50% (1279/2558)   Receiving objects:  51% (1305/2558)   Receiving objects:  52% (1331/2558)   Receiving objects:  53% (1356/2558)   Receiving objects:  54% (1382/2558)   Receiving objects:  55% (1407/2558)   Receiving objects:  56% (1433/2558)   Receiving objects:  57% (1459/2558)   Receiving objects:  58% (1484/2558)   Receiving objects:  59% (1510/2558)   Receiving objects:  60% (1535/2558)   Receiving objects:  61% (1561/2558)   Receiving objects:  62% (1586/2558)   Receiving objects:  63% (1612/2558)   Receiving objects:  64% (1638/2558)   Receiving objects:  65% (1663/2558)   Receiving objects:  66% (1689/2558)   Receiving objects:  67% (1714/2558)   Receiving objects:  68% (1740/2558)   Receiving objects:  69% (1766/2558)   Receiving objects:  70% (1791/2558)   Receiving objects:  71% (1817/2558)   Receiving objects:  72% (1842/2558)   Receiving objects:  73% (1868/2558)   Receiving objects:  74% (1893/2558)   Receiving objects:  75% (1919/2558)   Receiving objects:  76% (1945/2558)   Receiving objects:  77% (1970/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  78% (1996/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  79% (2021/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  80% (2047/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  81% (2072/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  82% (2098/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  83% (2124/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  84% (2149/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  85% (2175/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  86% (2200/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  87% (2226/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  88% (2252/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  89% (2277/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  90% (2303/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  91% (2328/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  92% (2354/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  93% (2379/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  94% (2405/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  95% (2431/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  96% (2456/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  97% (2482/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  98% (2507/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects:  99% (2533/2558), 628.01 KiB | 1.17 MiB/s   remote: Total 2558 (delta 7), reused 0 (delta 0), pack-reused 2528[K
+Receiving objects: 100% (2558/2558), 628.01 KiB | 1.17 MiB/s   Receiving objects: 100% (2558/2558), 745.83 KiB | 1.17 MiB/s, done.
+Resolving deltas:   0% (0/1775)   Resolving deltas:   1% (23/1775)   Resolving deltas:   2% (41/1775)   Resolving deltas:   3% (69/1775)   Resolving deltas:   4% (82/1775)   Resolving deltas:   6% (121/1775)   Resolving deltas:   7% (125/1775)   Resolving deltas:   9% (168/1775)   Resolving deltas:  10% (192/1775)   Resolving deltas:  11% (196/1775)   Resolving deltas:  12% (217/1775)   Resolving deltas:  13% (238/1775)   Resolving deltas:  14% (254/1775)   Resolving deltas:  15% (270/1775)   Resolving deltas:  17% (311/1775)   Resolving deltas:  18% (327/1775)   Resolving deltas:  20% (361/1775)   Resolving deltas:  21% (379/1775)   Resolving deltas:  22% (405/1775)   Resolving deltas:  25% (449/1775)   Resolving deltas:  26% (464/1775)   Resolving deltas:  27% (483/1775)   Resolving deltas:  28% (511/1775)   Resolving deltas:  29% (515/1775)   Resolving deltas:  33% (601/1775)   Resolving deltas:  36% (656/1775)   Resolving deltas:  37% (664/1775)   Resolving deltas:  38% (688/1775)   Resolving deltas:  40% (712/1775)   Resolving deltas:  41% (735/1775)   Resolving deltas:  42% (756/1775)   Resolving deltas:  43% (766/1775)   Resolving deltas:  44% (796/1775)   Resolving deltas:  45% (804/1775)   Resolving deltas:  46% (821/1775)   Resolving deltas:  47% (845/1775)   Resolving deltas:  48% (853/1775)   Resolving deltas:  49% (876/1775)   Resolving deltas:  50% (890/1775)   Resolving deltas:  51% (906/1775)   Resolving deltas:  52% (938/1775)   Resolving deltas:  54% (968/1775)   Resolving deltas:  56% (995/1775)   Resolving deltas:  57% (1013/1775)   Resolving deltas:  58% (1033/1775)   Resolving deltas:  61% (1083/1775)   Resolving deltas:  62% (1103/1775)   Resolving deltas:  65% (1166/1775)   Resolving deltas:  67% (1190/1775)   Resolving deltas:  68% (1207/1775)   Resolving deltas:  69% (1225/1775)   Resolving deltas:  70% (1253/1775)   Resolving deltas:  72% (1281/1775)   Resolving deltas:  73% (1297/1775)   Resolving deltas:  75% (1337/1775)   Resolving deltas:  76% (1350/1775)   Resolving deltas:  77% (1368/1775)   Resolving deltas:  79% (1406/1775)   Resolving deltas:  82% (1459/1775)   Resolving deltas:  83% (1475/1775)   Resolving deltas:  87% (1560/1775)   Resolving deltas:  88% (1574/1775)   Resolving deltas:  89% (1584/1775)   Resolving deltas:  90% (1600/1775)   Resolving deltas:  91% (1618/1775)   Resolving deltas:  93% (1652/1775)   Resolving deltas:  94% (1677/1775)   Resolving deltas:  95% (1691/1775)   Resolving deltas:  96% (1721/1775)   Resolving deltas:  97% (1725/1775)   Resolving deltas:  98% (1749/1775)   Resolving deltas:  99% (1759/1775)   Resolving deltas: 100% (1775/1775)   Resolving deltas: 100% (1775/1775), done.
+Checking connectivity... done.
++ cd /tmp/fspcibld/18816/obmc-robot/
++ chmod ugo+rw -R /tmp/fspcibld/18816/obmc-robot//LICENSE /tmp/fspcibld/18816/obmc-robot//README.md /tmp/fspcibld/18816/obmc-robot//bin /tmp/fspcibld/18816/obmc-robot//data /tmp/fspcibld/18816/obmc-robot//extended /tmp/fspcibld/18816/obmc-robot//gui /tmp/fspcibld/18816/obmc-robot//lib /tmp/fspcibld/18816/obmc-robot//mnfg /tmp/fspcibld/18816/obmc-robot//requirements.txt /tmp/fspcibld/18816/obmc-robot//syslib /tmp/fspcibld/18816/obmc-robot//systest /tmp/fspcibld/18816/obmc-robot//templates /tmp/fspcibld/18816/obmc-robot//test_lists /tmp/fspcibld/18816/obmc-robot//tests /tmp/fspcibld/18816/obmc-robot//tools /tmp/fspcibld/18816/obmc-robot//tox.ini
++ export OPENBMC_HOST=9.41.166.169
++ OPENBMC_HOST=9.41.166.169
++ export SSH_PORT=22
++ SSH_PORT=22
++ export HTTPS_PORT=443
++ HTTPS_PORT=443
+++ tox -e witherspoon -- --argumentfile test_lists/HW_CI tests
++ 'witherspoon create: /tmp/fspcibld/18816/obmc-robot/.tox/witherspoon
+witherspoon installdeps: -r/tmp/fspcibld/18816/obmc-robot/requirements.txt
+witherspoon installed: appdirs==1.4.3,asn1crypto==0.22.0,cffi==1.10.0,cryptography==1.8.1,enum34==1.1.6,idna==2.5,ipaddress==1.0.18,packaging==16.8,paramiko==2.0.2,pyasn1==0.2.3,pycparser==2.17,pyparsing==2.2.0,requests==2.14.2,robotframework==3.0.2,robotframework-requests==0.4.7,robotframework-scplibrary==1.1.1,robotframework-sshlibrary==2.1.3,scp==0.10.2,six==1.10.0
+witherspoon runtests: PYTHONHASHSEED='\''1002657029'\''
+witherspoon runtests: commands[0] | -mkdir -p /tmp/fspcibld/18816/obmc-robot/.tox/witherspoon/tmp
+witherspoon runtests: commands[1] | bash /tmp/fspcibld/18816/obmc-robot/tools/generate_argumentfile.sh
+witherspoon runtests: commands[2] | cp bin/ssh_pw /tmp/fspcibld/18816/obmc-robot/.tox/witherspoon/bin/ssh_pw
+witherspoon runtests: commands[3] | python -m robot.run --argumentfile /tmp/fspcibld/18816/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI tests
+==============================================================================
+Tests :: Set metadata for test suite.                                         
+==============================================================================
+Tests.Security                                                                
+==============================================================================
+Tests.Security.Test Ssl :: This testsuite is for testing SSL connection to ...
+==============================================================================
+Test SSL Connection :: This testcase is for testing the SSL connec... URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+#(UTC) 2017/05/12 23:07:25.950557 -   15.011513 - Issuing: Get Test Dir and Name
+TEST_HISTORY:                                     /tmp/fspcibld/18816/obmc-robot/logs//test_history.txt
+| PASS |
+------------------------------------------------------------------------------
+Tests.Security.Test Ssl :: This testsuite is for testing SSL conne... | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Security                                                        | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Test Basic Poweron :: Test power on for HW CI.                          
+==============================================================================
+Power On Test :: Power off and on.                                    URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'\''data'\'': {u'\''data'\'': '\''xyz.openbmc_project.State.Host.Transition.Off'\''}, u'\''headers'\'': {u'\''Content-Type'\'': u'\''application/json'\''}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'\''data'\'': {u'\''data'\'': '\''xyz.openbmc_project.State.Host.Transition.On'\''}, u'\''headers'\'': {u'\''Content-Type'\'': u'\''application/json'\''}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Starting OS", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'\''data'\'': {u'\''data'\'': '\''xyz.openbmc_project.State.Host.Transition.Off'\''}, u'\''headers'\'': {u'\''Content-Type'\'': u'\''application/json'\''}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'\''data'\'': {u'\''data'\'': '\''xyz.openbmc_project.State.Host.Transition.On'\''}, u'\''headers'\'': {u'\''Content-Type'\'': u'\''application/json'\''}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+#(UTC) 2017/05/12 23:20:30.880376 -  784.929819 - Issuing: Ping Host  9.41.166.169
+status_ping:                                      None
+#(UTC) 2017/05/12 23:20:33.917020 -    3.036644 - Collecting FFDC.
+#(UTC) 2017/05/12 23:20:33.934615 -    0.017595 - Issuing: Get Test Dir and Name
+ffdc_dir_path:                                    /tmp/fspcibld/18816/obmc-robot/logs/20170512232033925331_TestsTestBasicPoweron/20170512232033925331_PowerOnTest/
+ffdc_prefix:                                      20170512232033925331_
+#(UTC) 2017/05/12 23:20:33.957689 -    0.023074 - Issuing: Create Directory  /tmp/fspcibld/18816/obmc-robot/logs/20170512232033925331_TestsTestBasicPoweron/20170512232033925331_PowerOnTest/
+#(UTC) 2017/05/12 23:20:33.980903 -    0.023214 - Issuing: Header Message
+#(UTC) 2017/05/12 23:20:35.750198 -    1.769295 - Issuing: Call FFDC Methods  ffdc_function_list=
+#(UTC) 2017/05/12 23:20:35.783567 -    0.033369 - Issuing: SCP Coredump Files
+#(UTC) 2017/05/12 23:20:55.887223 -   20.103656 - Issuing: OS FFDC Files
+#(UTC) 2017/05/12 23:20:55.917130 -    0.029907 - Issuing: Collect eSEL Log
+#(UTC) 2017/05/12 23:20:59.950490 -    4.033360 - Issuing: BMC FFDC Files
+#(UTC) 2017/05/12 23:21:09.329445 -    9.378955 - Issuing: BMC FFDC Manifest
+#(UTC) 2017/05/12 23:21:12.774136 -    3.444691 - Issuing: BMC FFDC Get Requests
+#(UTC) 2017/05/12 23:21:18.598976 -    5.824840 - Finished collecting FFDC.
+TEST_HISTORY:                                     /tmp/fspcibld/18816/obmc-robot/logs//test_history.txt
+| FAIL |
+Keyword '\''Is OS Starting'\'' failed after retrying for 10 minutes. The last error was: FW Progress, Baseboard Init != FW Progress, Starting OS
+------------------------------------------------------------------------------
+Tests.Test Basic Poweron :: Test power on for HW CI.                  | FAIL |
+1 critical test, 0 passed, 1 failed
+1 test total, 0 passed, 1 failed
+==============================================================================
+Tests :: Set metadata for test suite.                                 | FAIL |
+2 critical tests, 1 passed, 1 failed
+2 tests total, 1 passed, 1 failed
+==============================================================================
+Output:  /tmp/fspcibld/18816/obmc-robot/output.xml
+Log:     /tmp/fspcibld/18816/obmc-robot/log.html
+Report:  /tmp/fspcibld/18816/obmc-robot/report.html
+ERROR: InvocationError: '\''/tmp/fspcibld/18816/obmc-robot/.tox/witherspoon/bin/python -m robot.run --argumentfile /tmp/fspcibld/18816/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI tests'\''
+___________________________________ summary ____________________________________
+ERROR:   witherspoon: commands failed'
+/home/fspcibld/openbmc-build-scripts/scripts/run-robot.sh: line 34: witherspoon create: /tmp/fspcibld/18816/obmc-robot/.tox/witherspoon
+witherspoon installdeps: -r/tmp/fspcibld/18816/obmc-robot/requirements.txt
+witherspoon installed: appdirs==1.4.3,asn1crypto==0.22.0,cffi==1.10.0,cryptography==1.8.1,enum34==1.1.6,idna==2.5,ipaddress==1.0.18,packaging==16.8,paramiko==2.0.2,pyasn1==0.2.3,pycparser==2.17,pyparsing==2.2.0,requests==2.14.2,robotframework==3.0.2,robotframework-requests==0.4.7,robotframework-scplibrary==1.1.1,robotframework-sshlibrary==2.1.3,scp==0.10.2,six==1.10.0
+witherspoon runtests: PYTHONHASHSEED='1002657029'
+witherspoon runtests: commands[0] | -mkdir -p /tmp/fspcibld/18816/obmc-robot/.tox/witherspoon/tmp
+witherspoon runtests: commands[1] | bash /tmp/fspcibld/18816/obmc-robot/tools/generate_argumentfile.sh
+witherspoon runtests: commands[2] | cp bin/ssh_pw /tmp/fspcibld/18816/obmc-robot/.tox/witherspoon/bin/ssh_pw
+witherspoon runtests: commands[3] | python -m robot.run --argumentfile /tmp/fspcibld/18816/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI tests
+==============================================================================
+Tests :: Set metadata for test suite.                                         
+==============================================================================
+Tests.Security                                                                
+==============================================================================
+Tests.Security.Test Ssl :: This testsuite is for testing SSL connection to ...
+==============================================================================
+Test SSL Connection :: This testcase is for testing the SSL connec... URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+#(UTC) 2017/05/12 23:07:25.950557 -   15.011513 - Issuing: Get Test Dir and Name
+TEST_HISTORY:                                     /tmp/fspcibld/18816/obmc-robot/logs//test_history.txt
+| PASS |
+------------------------------------------------------------------------------
+Tests.Security.Test Ssl :: This testsuite is for testing SSL conne... | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Security                                                        | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Test Basic Poweron :: Test power on for HW CI.                          
+==============================================================================
+Power On Test :: Power off and on.                                    URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'data': {u'data': 'xyz.openbmc_project.State.Host.Transition.Off'}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'data': {u'data': 'xyz.openbmc_project.State.Host.Transition.On'}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Starting OS", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'data': {u'data': 'xyz.openbmc_project.State.Host.Transition.Off'}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'data': {u'data': 'xyz.openbmc_project.State.Host.Transition.On'}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "Off", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/org/openbmc/sensors/host/BootProgress/attr/value, method:Get, args:{}
+Response code:200, Content:{
+  "data": "FW Progress, Baseboard Init", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.41.166.169:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+#(UTC) 2017/05/12 23:20:30.880376 -  784.929819 - Issuing: Ping Host  9.41.166.169
+status_ping:                                      None
+#(UTC) 2017/05/12 23:20:33.917020 -    3.036644 - Collecting FFDC.
+#(UTC) 2017/05/12 23:20:33.934615 -    0.017595 - Issuing: Get Test Dir and Name
+ffdc_dir_path:                                    /tmp/fspcibld/18816/obmc-robot/logs/20170512232033925331_TestsTestBasicPoweron/20170512232033925331_PowerOnTest/
+ffdc_prefix:                                      20170512232033925331_
+#(UTC) 2017/05/12 23:20:33.957689 -    0.023074 - Issuing: Create Directory  /tmp/fspcibld/18816/obmc-robot/logs/20170512232033925331_TestsTestBasicPoweron/20170512232033925331_PowerOnTest/
+#(UTC) 2017/05/12 23:20:33.980903 -    0.023214 - Issuing: Header Message
+#(UTC) 2017/05/12 23:20:35.750198 -    1.769295 - Issuing: Call FFDC Methods  ffdc_function_list=
+#(UTC) 2017/05/12 23:20:35.783567 -    0.033369 - Issuing: SCP Coredump Files
+#(UTC) 2017/05/12 23:20:55.887223 -   20.103656 - Issuing: OS FFDC Files
+#(UTC) 2017/05/12 23:20:55.917130 -    0.029907 - Issuing: Collect eSEL Log
+#(UTC) 2017/05/12 23:20:59.950490 -    4.033360 - Issuing: BMC FFDC Files
+#(UTC) 2017/05/12 23:21:09.329445 -    9.378955 - Issuing: BMC FFDC Manifest
+#(UTC) 2017/05/12 23:21:12.774136 -    3.444691 - Issuing: BMC FFDC Get Requests
+#(UTC) 2017/05/12 23:21:18.598976 -    5.824840 - Finished collecting FFDC.
+TEST_HISTORY:                                     /tmp/fspcibld/18816/obmc-robot/logs//test_history.txt
+| FAIL |
+Keyword 'Is OS Starting' failed after retrying for 10 minutes. The last error was: FW Progress, Baseboard Init != FW Progress, Starting OS
+------------------------------------------------------------------------------
+Tests.Test Basic Poweron :: Test power on for HW CI.                  | FAIL |
+1 critical test, 0 passed, 1 failed
+1 test total, 0 passed, 1 failed
+==============================================================================
+Tests :: Set metadata for test suite.                                 | FAIL |
+2 critical tests, 1 passed, 1 failed
+2 tests total, 1 passed, 1 failed
+==============================================================================
+Output:  /tmp/fspcibld/18816/obmc-robot/output.xml
+Log:     /tmp/fspcibld/18816/obmc-robot/log.html
+Report:  /tmp/fspcibld/18816/obmc-robot/report.html
+ERROR: InvocationError: '/tmp/fspcibld/18816/obmc-robot/.tox/witherspoon/bin/python -m robot.run --argumentfile /tmp/fspcibld/18816/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI tests'
+___________________________________ summary ____________________________________
+ERROR:   witherspoon: commands failed: File name too long
++ cp /tmp/fspcibld/18816/obmc-robot//output.xml /home/fspcibld/
++ cp /tmp/fspcibld/18816/obmc-robot//log.html /tmp/fspcibld/18816/obmc-robot//report.html /home/fspcibld/
++ '[' -d logs ']'
++ cp -Rf /tmp/fspcibld/18816/obmc-robot//logs /home/fspcibld/
+Set build name.
+New build name is '#1048-witherspoon-9.41.166.169'
+Variable with name 'BUILD_DISPLAY_NAME' already exists, current value: '#1048-witherspoon-9.41.166.169', new value: '#1048-witherspoon-9.41.166.169'
+Robot results publisher started...
+-Parsing output xml:
+Done!
+-Copying log files to build dir:
+Done!
+-Assigning results to build:
+Done!
+-Checking thresholds:
+Done!
+Done publishing Robot results.
+Build step 'Publish Robot Framework test results' changed build result to FAILURE
+[PostBuildScript] - Execution post build scripts.
+[run-hardware-tests] $ /bin/bash -xe /tmp/hudson3311226438854538175.sh
++ curl -s http://tulpok01p4.aus.stglabs.ibm.com:8080/jenkins/job/OpenBMC/job/automated-test/job/helper-jobs/job/run-hardware-tests/1048//consoleText
