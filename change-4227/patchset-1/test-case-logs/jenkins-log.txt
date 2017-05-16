@@ -1,0 +1,321 @@
+Started by upstream project "OpenBMC/automated-test/HW" build number 861
+originally caused by:
+ Started by upstream project "OpenBMC/automated-test/CI" build number 727
+ originally caused by:
+  Started by upstream project "OpenBMC/automated-test/Gerrit-trigger" build number 339
+  originally caused by:
+   Triggered by Gerrit: https://gerrit.openbmc-project.xyz/4227
+[EnvInject] - Loading node environment variables.
+Building remotely on tulpok01p2-ppc64le (ppc64le-docker docker) in workspace /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Done
+Set build name.
+New build name is '#1077-witherspoon-9.3.86.161'
+Next nodes: []
+[run-hardware-tests] $ /bin/bash -xe /tmp/hudson514478883359070930.sh
++ set -uo pipefail
++ DOCKER_IMG_NAME=openbmc/ubuntu-robot-qemu
++ WORKSPACE=/tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ mkdir -p /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ cd /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ rm -Rf ./openbmc-build-scripts
++ rm -f './*.xml'
++ rm -f './*.html'
++ rm -Rf './logs/*'
++ git clone https://gerrit.openbmc-project.xyz/openbmc/openbmc-build-scripts
+Cloning into 'openbmc-build-scripts'...
++ cd openbmc-build-scripts
++ . ./scripts/build-qemu-robot-docker.sh
+++ set -uo pipefail
+++ DOCKER_IMG_NAME=openbmc/ubuntu-robot-qemu
++++ uname -m
+++ '[' ppc64le == ppc64le ']'
+++ DOCKER_BASE=ppc64le/
++++ cat
+++ Dockerfile='FROM ppc64le/ubuntu:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     python3     python3-dev     python3-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl     build-essential
+
+RUN easy_install     tox     pip     requests
+
+RUN pip install     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+
+RUN wget https://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.18/ipmitool-1.8.18.tar.bz2
+RUN tar xvfj ipmitool-*.tar.bz2
+RUN ./ipmitool-1.8.18/configure
+RUN make
+RUN make install
+
+RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+USER fspcibld
+ENV HOME /home/fspcibld
+RUN /bin/bash'
+++ docker build -t openbmc/ubuntu-robot-qemu -
+Sending build context to Docker daemon  2.56 kB
+Step 1 : FROM ppc64le/ubuntu:latest
+ ---> d2e29d5dd835
+Step 2 : ENV DEBIAN_FRONTEND noninteractive
+ ---> Using cache
+ ---> f9a63d0220f4
+Step 3 : RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     python3     python3-dev     python3-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl     build-essential
+ ---> Using cache
+ ---> d80ac0737ea7
+Step 4 : RUN easy_install     tox     pip     requests
+ ---> Using cache
+ ---> 9b4253cfa5d7
+Step 5 : RUN pip install     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+ ---> Using cache
+ ---> b5bb0684d5ea
+Step 6 : RUN wget https://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.18/ipmitool-1.8.18.tar.bz2
+ ---> Using cache
+ ---> d1153ef9f023
+Step 7 : RUN tar xvfj ipmitool-*.tar.bz2
+ ---> Using cache
+ ---> 15bccd049680
+Step 8 : RUN ./ipmitool-1.8.18/configure
+ ---> Using cache
+ ---> b3f040182430
+Step 9 : RUN make
+ ---> Using cache
+ ---> 4e22eeea4367
+Step 10 : RUN make install
+ ---> Using cache
+ ---> 886531d5acb8
+Step 11 : RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+ ---> Using cache
+ ---> 7abd7ab4b177
+Step 12 : RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+ ---> Using cache
+ ---> 0ab155bf3871
+Step 13 : USER fspcibld
+ ---> Using cache
+ ---> 420dd0c1dd6b
+Step 14 : ENV HOME /home/fspcibld
+ ---> Using cache
+ ---> 13f8f469b544
+Step 15 : RUN /bin/bash
+ ---> Using cache
+ ---> faa61f6f12b2
+Successfully built faa61f6f12b2
++ SSH_PORT=22
++ HTTPS_PORT=443
+++ getent hosts 9.3.86.161
+++ awk '{ print $1 }'
++ BMC_IP=9.3.86.161
++ docker run --user fspcibld --env HOME=/home/fspcibld --env IP_ADDR=9.3.86.161 --env SSH_PORT=22 --env HTTPS_PORT=443 --env 'ROBOT_TEST_CMD=tox -e witherspoon -- --argumentfile test_lists/HW_CI tests' --workdir /home/fspcibld --volume /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests:/home/fspcibld --tty openbmc/ubuntu-robot-qemu /home/fspcibld/openbmc-build-scripts/scripts/run-robot.sh
+++ whoami
++ ROBOT_CODE_HOME=/tmp/fspcibld/6467/obmc-robot/
++ ROBOT_TEST_CMD='tox -e witherspoon -- --argumentfile test_lists/HW_CI tests'
++ git clone https://github.com/openbmc/openbmc-test-automation.git /tmp/fspcibld/6467/obmc-robot/
+Cloning into '/tmp/fspcibld/6467/obmc-robot'...
+remote: Counting objects: 2580, done.[K
+remote: Compressing objects:   4% (1/25)   [Kremote: Compressing objects:   8% (2/25)   [Kremote: Compressing objects:  12% (3/25)   [Kremote: Compressing objects:  16% (4/25)   [Kremote: Compressing objects:  20% (5/25)   [Kremote: Compressing objects:  24% (6/25)   [Kremote: Compressing objects:  28% (7/25)   [Kremote: Compressing objects:  32% (8/25)   [Kremote: Compressing objects:  36% (9/25)   [Kremote: Compressing objects:  40% (10/25)   [Kremote: Compressing objects:  44% (11/25)   [Kremote: Compressing objects:  48% (12/25)   [Kremote: Compressing objects:  52% (13/25)   [Kremote: Compressing objects:  56% (14/25)   [Kremote: Compressing objects:  60% (15/25)   [Kremote: Compressing objects:  64% (16/25)   [Kremote: Compressing objects:  68% (17/25)   [Kremote: Compressing objects:  72% (18/25)   [Kremote: Compressing objects:  76% (19/25)   [Kremote: Compressing objects:  80% (20/25)   [Kremote: Compressing objects:  84% (21/25)   [Kremote: Compressing objects:  88% (22/25)   [Kremote: Compressing objects:  92% (23/25)   [Kremote: Compressing objects:  96% (24/25)   [Kremote: Compressing objects: 100% (25/25)   [Kremote: Compressing objects: 100% (25/25), done.[K
+Receiving objects:   0% (1/2580)   Receiving objects:   1% (26/2580)   Receiving objects:   2% (52/2580)   Receiving objects:   3% (78/2580)   Receiving objects:   4% (104/2580)   Receiving objects:   5% (129/2580)   Receiving objects:   6% (155/2580)   Receiving objects:   7% (181/2580)   Receiving objects:   8% (207/2580)   Receiving objects:   9% (233/2580)   Receiving objects:  10% (258/2580)   Receiving objects:  11% (284/2580)   Receiving objects:  12% (310/2580)   Receiving objects:  13% (336/2580)   Receiving objects:  14% (362/2580)   Receiving objects:  15% (387/2580)   Receiving objects:  16% (413/2580)   Receiving objects:  17% (439/2580)   Receiving objects:  18% (465/2580)   Receiving objects:  19% (491/2580)   Receiving objects:  20% (516/2580)   Receiving objects:  21% (542/2580)   Receiving objects:  22% (568/2580)   Receiving objects:  23% (594/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  24% (620/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  25% (645/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  26% (671/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  27% (697/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  28% (723/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  29% (749/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  30% (774/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  31% (800/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  32% (826/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  33% (852/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  34% (878/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  35% (903/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  36% (929/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  37% (955/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  38% (981/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  39% (1007/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  40% (1032/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  41% (1058/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  42% (1084/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  43% (1110/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  44% (1136/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  45% (1161/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  46% (1187/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  47% (1213/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  48% (1239/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  49% (1265/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  50% (1290/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  51% (1316/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  52% (1342/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  53% (1368/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  54% (1394/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  55% (1419/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  56% (1445/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  57% (1471/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  58% (1497/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  59% (1523/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  60% (1548/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  61% (1574/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  62% (1600/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  63% (1626/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  64% (1652/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  65% (1677/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  66% (1703/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  67% (1729/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  68% (1755/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  69% (1781/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  69% (1803/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  70% (1806/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  71% (1832/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  72% (1858/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  73% (1884/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  74% (1910/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  75% (1935/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  76% (1961/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  77% (1987/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  78% (2013/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  79% (2039/2580), 268.01 KiB | 507.00 KiB/s   Receiving objects:  80% (2064/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  81% (2090/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  82% (2116/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  83% (2142/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  84% (2168/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  85% (2193/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  86% (2219/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  87% (2245/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  88% (2271/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  89% (2297/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  90% (2322/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  91% (2348/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  92% (2374/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  93% (2400/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  94% (2426/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  95% (2451/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  96% (2477/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  97% (2503/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  98% (2529/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects:  99% (2555/2580), 644.01 KiB | 610.00 KiB/s   remote: Total 2580 (delta 6), reused 2 (delta 2), pack-reused 2553[K
+Receiving objects: 100% (2580/2580), 644.01 KiB | 610.00 KiB/s   Receiving objects: 100% (2580/2580), 749.52 KiB | 610.00 KiB/s, done.
+Resolving deltas:   0% (0/1786)   Resolving deltas:   1% (28/1786)   Resolving deltas:   2% (36/1786)   Resolving deltas:   4% (72/1786)   Resolving deltas:   6% (112/1786)   Resolving deltas:   8% (160/1786)   Resolving deltas:   9% (165/1786)   Resolving deltas:  10% (181/1786)   Resolving deltas:  11% (200/1786)   Resolving deltas:  12% (217/1786)   Resolving deltas:  13% (233/1786)   Resolving deltas:  14% (262/1786)   Resolving deltas:  15% (268/1786)   Resolving deltas:  16% (299/1786)   Resolving deltas:  17% (308/1786)   Resolving deltas:  18% (323/1786)   Resolving deltas:  19% (350/1786)   Resolving deltas:  24% (439/1786)   Resolving deltas:  27% (497/1786)   Resolving deltas:  28% (505/1786)   Resolving deltas:  29% (527/1786)   Resolving deltas:  30% (537/1786)   Resolving deltas:  31% (555/1786)   Resolving deltas:  32% (587/1786)   Resolving deltas:  33% (591/1786)   Resolving deltas:  34% (620/1786)   Resolving deltas:  35% (629/1786)   Resolving deltas:  36% (646/1786)   Resolving deltas:  37% (662/1786)   Resolving deltas:  38% (686/1786)   Resolving deltas:  39% (697/1786)   Resolving deltas:  40% (719/1786)   Resolving deltas:  41% (733/1786)   Resolving deltas:  45% (804/1786)   Resolving deltas:  50% (901/1786)   Resolving deltas:  51% (911/1786)   Resolving deltas:  54% (976/1786)   Resolving deltas:  57% (1022/1786)   Resolving deltas:  58% (1041/1786)   Resolving deltas:  59% (1069/1786)   Resolving deltas:  60% (1076/1786)   Resolving deltas:  61% (1091/1786)   Resolving deltas:  62% (1115/1786)   Resolving deltas:  63% (1138/1786)   Resolving deltas:  66% (1181/1786)   Resolving deltas:  67% (1207/1786)   Resolving deltas:  68% (1223/1786)   Resolving deltas:  69% (1235/1786)   Resolving deltas:  70% (1264/1786)   Resolving deltas:  71% (1273/1786)   Resolving deltas:  72% (1301/1786)   Resolving deltas:  73% (1308/1786)   Resolving deltas:  74% (1324/1786)   Resolving deltas:  75% (1346/1786)   Resolving deltas:  76% (1366/1786)   Resolving deltas:  77% (1379/1786)   Resolving deltas:  78% (1394/1786)   Resolving deltas:  79% (1422/1786)   Resolving deltas:  80% (1431/1786)   Resolving deltas:  82% (1467/1786)   Resolving deltas:  84% (1508/1786)   Resolving deltas:  85% (1525/1786)   Resolving deltas:  86% (1538/1786)   Resolving deltas:  89% (1599/1786)   Resolving deltas:  91% (1640/1786)   Resolving deltas:  92% (1644/1786)   Resolving deltas:  93% (1663/1786)   Resolving deltas:  94% (1684/1786)   Resolving deltas:  96% (1721/1786)   Resolving deltas:  97% (1744/1786)   Resolving deltas:  98% (1755/1786)   Resolving deltas:  99% (1769/1786)   Resolving deltas: 100% (1786/1786)   Resolving deltas: 100% (1786/1786), done.
+Checking connectivity... done.
++ cd /tmp/fspcibld/6467/obmc-robot/
++ chmod ugo+rw -R /tmp/fspcibld/6467/obmc-robot//LICENSE /tmp/fspcibld/6467/obmc-robot//README.md /tmp/fspcibld/6467/obmc-robot//bin /tmp/fspcibld/6467/obmc-robot//data /tmp/fspcibld/6467/obmc-robot//extended /tmp/fspcibld/6467/obmc-robot//gui /tmp/fspcibld/6467/obmc-robot//lib /tmp/fspcibld/6467/obmc-robot//mnfg /tmp/fspcibld/6467/obmc-robot//requirements.txt /tmp/fspcibld/6467/obmc-robot//syslib /tmp/fspcibld/6467/obmc-robot//systest /tmp/fspcibld/6467/obmc-robot//templates /tmp/fspcibld/6467/obmc-robot//test_lists /tmp/fspcibld/6467/obmc-robot//tests /tmp/fspcibld/6467/obmc-robot//tools /tmp/fspcibld/6467/obmc-robot//tox.ini
++ export OPENBMC_HOST=9.3.86.161
++ OPENBMC_HOST=9.3.86.161
++ export SSH_PORT=22
++ SSH_PORT=22
++ export HTTPS_PORT=443
++ HTTPS_PORT=443
+++ tox -e witherspoon -- --argumentfile test_lists/HW_CI tests
++ 'witherspoon create: /tmp/fspcibld/6467/obmc-robot/.tox/witherspoon
+witherspoon installdeps: -r/tmp/fspcibld/6467/obmc-robot/requirements.txt
+witherspoon installed: appdirs==1.4.3,asn1crypto==0.22.0,cffi==1.10.0,cryptography==1.8.1,enum34==1.1.6,idna==2.5,ipaddress==1.0.18,packaging==16.8,paramiko==2.0.2,pyasn1==0.2.3,pycparser==2.17,pyparsing==2.2.0,requests==2.14.2,robotframework==3.0.2,robotframework-requests==0.4.7,robotframework-scplibrary==1.1.1,robotframework-sshlibrary==2.1.3,scp==0.10.2,six==1.10.0
+witherspoon runtests: PYTHONHASHSEED='\''3226978436'\''
+witherspoon runtests: commands[0] | -mkdir -p /tmp/fspcibld/6467/obmc-robot/.tox/witherspoon/tmp
+witherspoon runtests: commands[1] | bash /tmp/fspcibld/6467/obmc-robot/tools/generate_argumentfile.sh
+witherspoon runtests: commands[2] | cp bin/ssh_pw /tmp/fspcibld/6467/obmc-robot/.tox/witherspoon/bin/ssh_pw
+witherspoon runtests: commands[3] | python -m robot.run --argumentfile /tmp/fspcibld/6467/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI tests
+==============================================================================
+Tests :: Set metadata for test suite.                                         
+==============================================================================
+Tests.Security                                                                
+==============================================================================
+Tests.Security.Test Ssl :: This testsuite is for testing SSL connection to ...
+==============================================================================
+Test SSL Connection :: This testcase is for testing the SSL connec... URI:https://9.3.86.161:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+#(UTC) 2017/05/16 02:34:21.448590 -    6.524789 - Issuing: Get Test Dir and Name
+TEST_HISTORY:                                     /tmp/fspcibld/6467/obmc-robot/logs//test_history.txt
+| PASS |
+------------------------------------------------------------------------------
+Tests.Security.Test Ssl :: This testsuite is for testing SSL conne... | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Security                                                        | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Test Basic Poweron :: Test power on for HW CI.                          
+==============================================================================
+Power On Test :: Power off and on.                                    URI:https://9.3.86.161:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'\''data'\'': {u'\''data'\'': '\''xyz.openbmc_project.State.Host.Transition.Off'\''}, u'\''headers'\'': {u'\''Content-Type'\'': u'\''application/json'\''}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.86.161:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.86.161:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+None
+#(UTC) 2017/05/16 02:39:06.046802 -  284.598212 - Issuing: Ping Host  9.3.86.161
+status_ping:                                      None
+#(UTC) 2017/05/16 02:39:09.079340 -    3.032538 - Collecting FFDC.
+#(UTC) 2017/05/16 02:39:09.101663 -    0.022323 - Issuing: Get Test Dir and Name
+ffdc_dir_path:                                    /tmp/fspcibld/6467/obmc-robot/logs/20170516023909092124_TestsTestBasicPoweron/20170516023909092124_PowerOnTest/
+ffdc_prefix:                                      20170516023909092124_
+#(UTC) 2017/05/16 02:39:09.132200 -    0.030537 - Issuing: Create Directory  /tmp/fspcibld/6467/obmc-robot/logs/20170516023909092124_TestsTestBasicPoweron/20170516023909092124_PowerOnTest/
+#(UTC) 2017/05/16 02:39:09.163972 -    0.031772 - Issuing: Header Message
+#(UTC) 2017/05/16 02:39:10.969756 -    1.805784 - Issuing: Call FFDC Methods  ffdc_function_list=
+#(UTC) 2017/05/16 02:39:11.015825 -    0.046069 - Issuing: BMC FFDC Get Requests
+#(UTC) 2017/05/16 02:39:15.940026 -    4.924201 - Issuing: SCP Coredump Files
+#(UTC) 2017/05/16 02:39:18.347432 -    2.407406 - Issuing: OS FFDC Files
+#(UTC) 2017/05/16 02:39:18.400038 -    0.052606 - Issuing: BMC FFDC Manifest
+#(UTC) 2017/05/16 02:39:21.813070 -    3.413032 - Issuing: BMC FFDC Files
+#(UTC) 2017/05/16 02:39:26.444377 -    4.631307 - Issuing: Collect eSEL Log
+#(UTC) 2017/05/16 02:39:26.751991 -    0.307614 - Finished collecting FFDC.
+TEST_HISTORY:                                     /tmp/fspcibld/6467/obmc-robot/logs//test_history.txt
+| FAIL |
+Keyword '\''Is Host Off'\'' failed after retrying for 3 minutes. The last error was: Keyword '\''Post Login Request'\'' failed after retrying for 40 seconds. The last error was: ReadTimeout: HTTPSConnectionPool(host='\''9.3.86.161'\'', port=443): Read timed out. (read timeout=10.0): FAIL != PASS
+
+Also teardown failed:
+Replacing variables from keyword return value failed: Resolving variable '\''${state.rsplit('\''.'\'', 1)[1]}'\'' failed: AttributeError: '\''NoneType'\'' object has no attribute '\''rsplit'\''
+------------------------------------------------------------------------------
+Tests.Test Basic Poweron :: Test power on for HW CI.                  | FAIL |
+1 critical test, 0 passed, 1 failed
+1 test total, 0 passed, 1 failed
+==============================================================================
+Tests :: Set metadata for test suite.                                 | FAIL |
+2 critical tests, 1 passed, 1 failed
+2 tests total, 1 passed, 1 failed
+==============================================================================
+Output:  /tmp/fspcibld/6467/obmc-robot/output.xml
+Log:     /tmp/fspcibld/6467/obmc-robot/log.html
+Report:  /tmp/fspcibld/6467/obmc-robot/report.html
+ERROR: InvocationError: '\''/tmp/fspcibld/6467/obmc-robot/.tox/witherspoon/bin/python -m robot.run --argumentfile /tmp/fspcibld/6467/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI tests'\''
+___________________________________ summary ____________________________________
+ERROR:   witherspoon: commands failed'
+/home/fspcibld/openbmc-build-scripts/scripts/run-robot.sh: line 34: witherspoon create: /tmp/fspcibld/6467/obmc-robot/.tox/witherspoon
+witherspoon installdeps: -r/tmp/fspcibld/6467/obmc-robot/requirements.txt
+witherspoon installed: appdirs==1.4.3,asn1crypto==0.22.0,cffi==1.10.0,cryptography==1.8.1,enum34==1.1.6,idna==2.5,ipaddress==1.0.18,packaging==16.8,paramiko==2.0.2,pyasn1==0.2.3,pycparser==2.17,pyparsing==2.2.0,requests==2.14.2,robotframework==3.0.2,robotframework-requests==0.4.7,robotframework-scplibrary==1.1.1,robotframework-sshlibrary==2.1.3,scp==0.10.2,six==1.10.0
+witherspoon runtests: PYTHONHASHSEED='3226978436'
+witherspoon runtests: commands[0] | -mkdir -p /tmp/fspcibld/6467/obmc-robot/.tox/witherspoon/tmp
+witherspoon runtests: commands[1] | bash /tmp/fspcibld/6467/obmc-robot/tools/generate_argumentfile.sh
+witherspoon runtests: commands[2] | cp bin/ssh_pw /tmp/fspcibld/6467/obmc-robot/.tox/witherspoon/bin/ssh_pw
+witherspoon runtests: commands[3] | python -m robot.run --argumentfile /tmp/fspcibld/6467/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI tests
+==============================================================================
+Tests :: Set metadata for test suite.                                         
+==============================================================================
+Tests.Security                                                                
+==============================================================================
+Tests.Security.Test Ssl :: This testsuite is for testing SSL connection to ...
+==============================================================================
+Test SSL Connection :: This testcase is for testing the SSL connec... URI:https://9.3.86.161:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+#(UTC) 2017/05/16 02:34:21.448590 -    6.524789 - Issuing: Get Test Dir and Name
+TEST_HISTORY:                                     /tmp/fspcibld/6467/obmc-robot/logs//test_history.txt
+| PASS |
+------------------------------------------------------------------------------
+Tests.Security.Test Ssl :: This testsuite is for testing SSL conne... | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Security                                                        | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Test Basic Poweron :: Test power on for HW CI.                          
+==============================================================================
+Power On Test :: Power off and on.                                    URI:https://9.3.86.161:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'data': {u'data': 'xyz.openbmc_project.State.Host.Transition.Off'}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.86.161:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.86.161:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+None
+#(UTC) 2017/05/16 02:39:06.046802 -  284.598212 - Issuing: Ping Host  9.3.86.161
+status_ping:                                      None
+#(UTC) 2017/05/16 02:39:09.079340 -    3.032538 - Collecting FFDC.
+#(UTC) 2017/05/16 02:39:09.101663 -    0.022323 - Issuing: Get Test Dir and Name
+ffdc_dir_path:                                    /tmp/fspcibld/6467/obmc-robot/logs/20170516023909092124_TestsTestBasicPoweron/20170516023909092124_PowerOnTest/
+ffdc_prefix:                                      20170516023909092124_
+#(UTC) 2017/05/16 02:39:09.132200 -    0.030537 - Issuing: Create Directory  /tmp/fspcibld/6467/obmc-robot/logs/20170516023909092124_TestsTestBasicPoweron/20170516023909092124_PowerOnTest/
+#(UTC) 2017/05/16 02:39:09.163972 -    0.031772 - Issuing: Header Message
+#(UTC) 2017/05/16 02:39:10.969756 -    1.805784 - Issuing: Call FFDC Methods  ffdc_function_list=
+#(UTC) 2017/05/16 02:39:11.015825 -    0.046069 - Issuing: BMC FFDC Get Requests
+#(UTC) 2017/05/16 02:39:15.940026 -    4.924201 - Issuing: SCP Coredump Files
+#(UTC) 2017/05/16 02:39:18.347432 -    2.407406 - Issuing: OS FFDC Files
+#(UTC) 2017/05/16 02:39:18.400038 -    0.052606 - Issuing: BMC FFDC Manifest
+#(UTC) 2017/05/16 02:39:21.813070 -    3.413032 - Issuing: BMC FFDC Files
+#(UTC) 2017/05/16 02:39:26.444377 -    4.631307 - Issuing: Collect eSEL Log
+#(UTC) 2017/05/16 02:39:26.751991 -    0.307614 - Finished collecting FFDC.
+TEST_HISTORY:                                     /tmp/fspcibld/6467/obmc-robot/logs//test_history.txt
+| FAIL |
+Keyword 'Is Host Off' failed after retrying for 3 minutes. The last error was: Keyword 'Post Login Request' failed after retrying for 40 seconds. The last error was: ReadTimeout: HTTPSConnectionPool(host='9.3.86.161', port=443): Read timed out. (read timeout=10.0): FAIL != PASS
+
+Also teardown failed:
+Replacing variables from keyword return value failed: Resolving variable '${state.rsplit('.', 1)[1]}' failed: AttributeError: 'NoneType' object has no attribute 'rsplit'
+------------------------------------------------------------------------------
+Tests.Test Basic Poweron :: Test power on for HW CI.                  | FAIL |
+1 critical test, 0 passed, 1 failed
+1 test total, 0 passed, 1 failed
+==============================================================================
+Tests :: Set metadata for test suite.                                 | FAIL |
+2 critical tests, 1 passed, 1 failed
+2 tests total, 1 passed, 1 failed
+==============================================================================
+Output:  /tmp/fspcibld/6467/obmc-robot/output.xml
+Log:     /tmp/fspcibld/6467/obmc-robot/log.html
+Report:  /tmp/fspcibld/6467/obmc-robot/report.html
+ERROR: InvocationError: '/tmp/fspcibld/6467/obmc-robot/.tox/witherspoon/bin/python -m robot.run --argumentfile /tmp/fspcibld/6467/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI tests'
+___________________________________ summary ____________________________________
+ERROR:   witherspoon: commands failed: File name too long
++ cp /tmp/fspcibld/6467/obmc-robot//output.xml /home/fspcibld/
++ cp /tmp/fspcibld/6467/obmc-robot//log.html /tmp/fspcibld/6467/obmc-robot//report.html /home/fspcibld/
++ '[' -d logs ']'
++ cp -Rf /tmp/fspcibld/6467/obmc-robot//logs /home/fspcibld/
+Set build name.
+New build name is '#1077-witherspoon-9.3.86.161'
+Variable with name 'BUILD_DISPLAY_NAME' already exists, current value: '#1077-witherspoon-9.3.86.161', new value: '#1077-witherspoon-9.3.86.161'
+Robot results publisher started...
+-Parsing output xml:
+Done!
+-Copying log files to build dir:
+Done!
+-Assigning results to build:
+Done!
+-Checking thresholds:
+Done!
+Done publishing Robot results.
+Build step 'Publish Robot Framework test results' changed build result to FAILURE
+[PostBuildScript] - Execution post build scripts.
+[run-hardware-tests] $ /bin/bash -xe /tmp/hudson219944092964910489.sh
++ curl -s http://tulpok01p4.aus.stglabs.ibm.com:8080/jenkins/job/OpenBMC/job/automated-test/job/helper-jobs/job/run-hardware-tests/1077//consoleText
