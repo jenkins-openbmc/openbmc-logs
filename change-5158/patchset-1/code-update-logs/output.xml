@@ -1,0 +1,1463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170707 22:28:45.691" generator="Robot 3.0.2 (Python 2.7.12 on linux2)">
+<suite source="/home/fspcibld/openbmc-test-automation/extended/code_update/update_bmc.robot" id="s1" name="Update Bmc">
+<test id="s1-t1" name="Initiate Code Update BMC">
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${FORCE_UPDATE} == ${0}</arg>
+<arg>Prepare BMC For Update</arg>
+</arguments>
+<kw name="Prepare BMC For Update">
+<doc>Prerequisite operation before code update.</doc>
+<kw name="Check Boot Count And Time">
+<doc>Check for unexpected reboots.</doc>
+<kw name="Set BMC Reset Reference Time" library="utils">
+<doc>Set current boot time as a reference and increment</doc>
+<kw name="Get BMC Boot Time" library="utils">
+<doc>Get boot time from /proc/stat.</doc>
+<assign>
+<var>${cur_btime}</var>
+</assign>
+<kw name="Open Connection And Log In" library="connection_client">
+<doc>Opens a connection with the given arguments, and logs in.</doc>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<assign>
+<var>${has_host}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<msg timestamp="20170707 22:28:46.746" level="FAIL">Dictionary does not contain key 'host'.</msg>
+<status status="FAIL" endtime="20170707 22:28:46.747" starttime="20170707 22:28:46.746"></status>
+</kw>
+<msg timestamp="20170707 22:28:46.747" level="INFO">${has_host} = False</msg>
+<status status="PASS" endtime="20170707 22:28:46.747" starttime="20170707 22:28:46.746"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${has_host} == ${FALSE}</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:28:46.748" starttime="20170707 22:28:46.748"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:28:46.748" starttime="20170707 22:28:46.747"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and '${HTTPS_PORT}' != '${EMPTY}'</arg>
+<arg>User input SSH and HTTPs Ports</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:28:46.749" starttime="20170707 22:28:46.748"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<assign>
+<var>${has_port}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<msg timestamp="20170707 22:28:46.750" level="FAIL">Dictionary does not contain key 'port'.</msg>
+<status status="FAIL" endtime="20170707 22:28:46.750" starttime="20170707 22:28:46.749"></status>
+</kw>
+<msg timestamp="20170707 22:28:46.750" level="INFO">${has_port} = False</msg>
+<status status="PASS" endtime="20170707 22:28:46.750" starttime="20170707 22:28:46.749"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and ${has_port} == ${FALSE}</arg>
+<arg>Run Keywords</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>port=${SSH_PORT}</arg>
+<arg>AND</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+<arg>ELSE</arg>
+<arg>Run Keyword</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Run Keyword" library="BuiltIn">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:28:46.752" starttime="20170707 22:28:46.752"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:28:46.752" starttime="20170707 22:28:46.751"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:28:46.752" starttime="20170707 22:28:46.750"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${username}</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170707 22:28:46.753" level="INFO">Logging into '9.3.21.61:22' as 'root'.</msg>
+<msg timestamp="20170707 22:29:16.805" level="FAIL">SSHException: No existing session</msg>
+<status status="FAIL" endtime="20170707 22:29:16.806" starttime="20170707 22:28:46.752"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:29:16.806" starttime="20170707 22:28:46.745"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:29:16.806" starttime="20170707 22:28:46.744"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:29:16.806" starttime="20170707 22:28:46.744"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:29:16.806" starttime="20170707 22:28:46.744"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:29:16.807" starttime="20170707 22:28:46.743"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:29:16.807" starttime="20170707 22:28:46.743"></status>
+</kw>
+<kw type="teardown" name="Run Key" library="gen_robot_keyword">
+<doc>Run the given keyword, return the status and the keyword return values.</doc>
+<arguments>
+<arg>FFDC On Test Case Fail</arg>
+</arguments>
+<kw name="FFDC On Test Case Fail" library="openbmc_ffdc">
+<doc>Generic FFDC entry point. Place holder to hook in</doc>
+<kw name="Is Host Quiesced" library="state_manager">
+<doc>Check if host state is quiesced.</doc>
+<assign>
+<var>${status}</var>
+</assign>
+<kw name="Get Host State" library="state_manager">
+<doc>Return the state of the host as a string.</doc>
+<assign>
+<var>${host_state}</var>
+</assign>
+<kw name="Read Attribute" library="rest_client">
+<arguments>
+<arg>${HOST_STATE_URI}</arg>
+<arg>CurrentHostState</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${state}</var>
+</assign>
+<kw name="OpenBMC Get Request" library="rest_client">
+<arguments>
+<arg>${uri}/attr/${attr}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170707 22:29:16.822" level="INFO">Creating Session using : alias=openbmc, url=https://9.3.21.61, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170707 22:29:16.823" starttime="20170707 22:29:16.822"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170707 22:29:16.824" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170707 22:29:16.824" starttime="20170707 22:29:16.823"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170707 22:29:16.825" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170707 22:29:16.825" starttime="20170707 22:29:16.824"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170707 22:29:16.825" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170707 22:29:16.825" starttime="20170707 22:29:16.825"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170707 22:29:26.842" level="FAIL">ReadTimeout: HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)</msg>
+<status status="FAIL" endtime="20170707 22:29:26.843" starttime="20170707 22:29:16.826"></status>
+</kw>
+<msg timestamp="20170707 22:29:26.843" level="INFO">${status} = FAIL</msg>
+<msg timestamp="20170707 22:29:26.843" level="INFO">${resp} = ReadTimeout: HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)</msg>
+<status status="PASS" endtime="20170707 22:29:26.843" starttime="20170707 22:29:16.826"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170707 22:29:26.844" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20170707 22:29:26.844" level="FAIL">ReadTimeout: HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0): FAIL != PASS</msg>
+<status status="FAIL" endtime="20170707 22:29:26.844" starttime="20170707 22:29:26.843"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170707 22:29:26.845" level="FAIL">Resolving variable '${resp.status_code}' failed: AttributeError: 'unicode' object has no attribute 'status_code'</msg>
+<status status="FAIL" endtime="20170707 22:29:26.845" starttime="20170707 22:29:26.844"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:29:26.845" starttime="20170707 22:29:16.821"></status>
+</kw>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170707 22:29:46.847" level="INFO">Creating Session using : alias=openbmc, url=https://9.3.21.61, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170707 22:29:46.848" starttime="20170707 22:29:46.847"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170707 22:29:46.848" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170707 22:29:46.848" starttime="20170707 22:29:46.848"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170707 22:29:46.849" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170707 22:29:46.849" starttime="20170707 22:29:46.849"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170707 22:29:46.850" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170707 22:29:46.850" starttime="20170707 22:29:46.849"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170707 22:29:56.866" level="FAIL">ReadTimeout: HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)</msg>
+<status status="FAIL" endtime="20170707 22:29:56.866" starttime="20170707 22:29:46.850"></status>
+</kw>
+<msg timestamp="20170707 22:29:56.866" level="INFO">${status} = FAIL</msg>
+<msg timestamp="20170707 22:29:56.866" level="INFO">${resp} = ReadTimeout: HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)</msg>
+<status status="PASS" endtime="20170707 22:29:56.866" starttime="20170707 22:29:46.850"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170707 22:29:56.867" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20170707 22:29:56.867" level="FAIL">ReadTimeout: HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0): FAIL != PASS</msg>
+<status status="FAIL" endtime="20170707 22:29:56.868" starttime="20170707 22:29:56.867"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170707 22:29:56.868" level="FAIL">Resolving variable '${resp.status_code}' failed: AttributeError: 'unicode' object has no attribute 'status_code'</msg>
+<status status="FAIL" endtime="20170707 22:29:56.868" starttime="20170707 22:29:56.868"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:29:56.868" starttime="20170707 22:29:46.846"></status>
+</kw>
+<msg timestamp="20170707 22:29:56.869" level="FAIL">Keyword 'Post Login Request' failed after retrying for 40 seconds. The last error was: Several failures occurred:
+
+1) ReadTimeout: HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0): FAIL != PASS
+
+2) Resolving variable '${resp.status_code}' failed: AttributeError: 'unicode' object has no attribute 'status_code'</msg>
+<status status="FAIL" endtime="20170707 22:29:56.869" starttime="20170707 22:29:16.821"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:29:56.869" starttime="20170707 22:29:16.820"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170707 22:29:56.870" level="INFO">${base_uri} = /xyz/openbmc_project/state/host0//attr/CurrentHostState</msg>
+<status status="PASS" endtime="20170707 22:29:56.870" starttime="20170707 22:29:56.869"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Get</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:29:56.870" starttime="20170707 22:29:56.870"></status>
+</kw>
+<kw name="Get Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170707 22:30:06.885" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/state/host0//attr/CurrentHostState</msg>
+<msg timestamp="20170707 22:30:17.093" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/state/host0//attr/CurrentHostState</msg>
+<msg timestamp="20170707 22:30:27.509" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/state/host0//attr/CurrentHostState</msg>
+<msg timestamp="20170707 22:30:37.528" level="INFO">${ret} = None</msg>
+<msg timestamp="20170707 22:30:37.528" level="FAIL">ConnectionError: HTTPSConnectionPool(host='9.3.21.61', port=443): Max retries exceeded with url: /xyz/openbmc_project/state/host0//attr/CurrentHostState (Caused by ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",))</msg>
+<status status="FAIL" endtime="20170707 22:30:37.529" starttime="20170707 22:29:56.871"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:30:37.533" starttime="20170707 22:30:37.532"></status>
+</kw>
+<msg timestamp="20170707 22:30:37.534" level="INFO">${resp} = None</msg>
+<status status="FAIL" endtime="20170707 22:30:37.534" starttime="20170707 22:29:16.819"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:37.535" level="FAIL">Resolving variable '${resp.status_code}' failed: AttributeError: 'NoneType' object has no attribute 'status_code'</msg>
+<status status="FAIL" endtime="20170707 22:30:37.535" starttime="20170707 22:30:37.534"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary.RequestsKeywords">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${content}</var>
+</assign>
+<msg timestamp="20170707 22:30:37.536" level="INFO">${content} = None</msg>
+<msg timestamp="20170707 22:30:37.536" level="FAIL">Resolving variable '${resp.content}' failed: AttributeError: 'NoneType' object has no attribute 'content'</msg>
+<status status="FAIL" endtime="20170707 22:30:37.536" starttime="20170707 22:30:37.535"></status>
+</kw>
+<msg timestamp="20170707 22:30:37.536" level="INFO">${state} = None</msg>
+<msg timestamp="20170707 22:30:37.536" level="FAIL">Replacing variables from keyword return value failed: Resolving variable '${content["data"]}' failed: TypeError: 'NoneType' object has no attribute '__getitem__'</msg>
+<status status="FAIL" endtime="20170707 22:30:37.536" starttime="20170707 22:29:16.818"></status>
+</kw>
+<msg timestamp="20170707 22:30:37.537" level="INFO">${host_state} = None</msg>
+<msg timestamp="20170707 22:30:37.537" level="FAIL">Replacing variables from keyword return value failed: Resolving variable '${state.rsplit('.', 1)[1]}' failed: AttributeError: 'NoneType' object has no attribute 'rsplit'</msg>
+<status status="FAIL" endtime="20170707 22:30:37.537" starttime="20170707 22:29:16.818"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Should Be Equal</arg>
+<arg>${host_state}</arg>
+<arg>Quiesced</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+</assign>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${host_state}</arg>
+<arg>Quiesced</arg>
+</arguments>
+<msg timestamp="20170707 22:30:37.538" level="INFO">Argument types are:
+&lt;type 'NoneType'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20170707 22:30:37.538" level="FAIL">None != Quiesced</msg>
+<status status="FAIL" endtime="20170707 22:30:37.538" starttime="20170707 22:30:37.538"></status>
+</kw>
+<msg timestamp="20170707 22:30:37.538" level="INFO">${status} = False</msg>
+<status status="PASS" endtime="20170707 22:30:37.538" starttime="20170707 22:30:37.537"></status>
+</kw>
+<msg timestamp="20170707 22:30:37.539" level="INFO">${status} = False</msg>
+<status status="FAIL" endtime="20170707 22:30:37.539" starttime="20170707 22:29:16.817"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${TEST_STATUS}' == 'FAIL' or '${status}'=='True'</arg>
+<arg>FFDC</arg>
+</arguments>
+<kw name="Ffdc" library="openbmc_ffdc">
+<doc>Gather First Failure Data Capture (FFDC).</doc>
+<kw name="Ping Host" library="utils">
+<arguments>
+<arg>9.3.21.61</arg>
+</arguments>
+<kw name="Should Not Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is not empty.</doc>
+<arguments>
+<arg>${host}</arg>
+<arg>msg=No host provided</arg>
+</arguments>
+<msg timestamp="20170707 22:30:37.560" level="INFO">Length is 9</msg>
+<status status="PASS" endtime="20170707 22:30:37.560" starttime="20170707 22:30:37.559"></status>
+</kw>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<arguments>
+<arg>ping -c 4 ${host}</arg>
+</arguments>
+<assign>
+<var>${RC}</var>
+<var>${output}</var>
+</assign>
+<msg timestamp="20170707 22:30:37.579" level="INFO">Running command 'ping -c 4 9.3.21.61 2&gt;&amp;1'.</msg>
+<msg timestamp="20170707 22:30:40.571" level="INFO">${RC} = 0</msg>
+<msg timestamp="20170707 22:30:40.571" level="INFO">${output} = PING 9.3.21.61 (9.3.21.61) 56(84) bytes of data.
+64 bytes from 9.3.21.61: icmp_seq=1 ttl=62 time=1.35 ms
+64 bytes from 9.3.21.61: icmp_seq=2 ttl=62 time=1.19 ms
+64 bytes from 9.3.21.61: icmp_seq=3 ttl...</msg>
+<status status="PASS" endtime="20170707 22:30:40.571" starttime="20170707 22:30:37.560"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>RC: ${RC}\nOutput:\n${output}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.575" level="INFO">RC: 0
+Output:
+PING 9.3.21.61 (9.3.21.61) 56(84) bytes of data.
+64 bytes from 9.3.21.61: icmp_seq=1 ttl=62 time=1.35 ms
+64 bytes from 9.3.21.61: icmp_seq=2 ttl=62 time=1.19 ms
+64 bytes from 9.3.21.61: icmp_seq=3 ttl=62 time=0.624 ms
+64 bytes from 9.3.21.61: icmp_seq=4 ttl=62 time=0.645 ms
+
+--- 9.3.21.61 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3002ms
+rtt min/avg/max/mdev = 0.624/0.955/1.355/0.325 ms</msg>
+<status status="PASS" endtime="20170707 22:30:40.575" starttime="20170707 22:30:40.574"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${RC}</arg>
+<arg>${0}</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:30:40.576" starttime="20170707 22:30:40.575"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.576" starttime="20170707 22:30:37.558"></status>
+</kw>
+<kw name="Get Current Time Stamp" library="openbmc_ffdc_utils">
+<doc>Get the current time stamp data</doc>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>result_format=%Y-%m-%d %H:%M:%S:%f</arg>
+</arguments>
+<assign>
+<var>${cur_time}</var>
+</assign>
+<msg timestamp="20170707 22:30:40.600" level="INFO">${cur_time} = 2017-07-07 22:30:40:599781</msg>
+<status status="PASS" endtime="20170707 22:30:40.600" starttime="20170707 22:30:40.600"></status>
+</kw>
+<kw name="Get Strip String" library="openbmc_ffdc_list">
+<doc>########################################################################</doc>
+<arguments>
+<arg>${cur_time}</arg>
+</arguments>
+<assign>
+<var>${cur_time}</var>
+</assign>
+<msg timestamp="20170707 22:30:40.601" level="INFO">${cur_time} = 20170707223040599781</msg>
+<status status="PASS" endtime="20170707 22:30:40.601" starttime="20170707 22:30:40.600"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.601" starttime="20170707 22:30:40.599"></status>
+</kw>
+<msg timestamp="20170707 22:30:40.606" level="INFO">${FFDC_TIME} = 20170707223040599781</msg>
+<kw name="Get Test Dir and Name" library="openbmc_ffdc_utils">
+<doc>SUITE_NAME and TEST_NAME are automatic variables</doc>
+<kw name="Get Strip String" library="openbmc_ffdc_list">
+<doc>########################################################################</doc>
+<arguments>
+<arg>${SUITE_NAME}</arg>
+</arguments>
+<assign>
+<var>${suite_name}</var>
+</assign>
+<msg timestamp="20170707 22:30:40.607" level="INFO">${suite_name} = UpdateBmc</msg>
+<status status="PASS" endtime="20170707 22:30:40.607" starttime="20170707 22:30:40.607"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${FFDC_TIME}_</arg>
+<arg>${suite_name}</arg>
+</arguments>
+<assign>
+<var>${suite_name}</var>
+</assign>
+<msg timestamp="20170707 22:30:40.608" level="INFO">${suite_name} = 20170707223040599781_UpdateBmc</msg>
+<status status="PASS" endtime="20170707 22:30:40.608" starttime="20170707 22:30:40.608"></status>
+</kw>
+<kw name="Get Strip String" library="openbmc_ffdc_list">
+<doc>########################################################################</doc>
+<arguments>
+<arg>${TEST_NAME}</arg>
+</arguments>
+<assign>
+<var>${test_name}</var>
+</assign>
+<msg timestamp="20170707 22:30:40.608" level="INFO">${test_name} = InitiateCodeUpdateBMC</msg>
+<status status="PASS" endtime="20170707 22:30:40.609" starttime="20170707 22:30:40.608"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${FFDC_TIME}_</arg>
+<arg>${test_name}</arg>
+</arguments>
+<assign>
+<var>${test_name}</var>
+</assign>
+<msg timestamp="20170707 22:30:40.609" level="INFO">${test_name} = 20170707223040599781_InitiateCodeUpdateBMC</msg>
+<status status="PASS" endtime="20170707 22:30:40.609" starttime="20170707 22:30:40.609"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.609" starttime="20170707 22:30:40.606"></status>
+</kw>
+<msg timestamp="20170707 22:30:40.614" level="INFO">${FFDC_DIR_PATH} = /home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/</msg>
+<msg timestamp="20170707 22:30:40.619" level="INFO">${FFDC_PREFIX} = 20170707223040599781_</msg>
+<msg timestamp="20170707 22:30:40.642" level="INFO">${LOG_PREFIX} = /home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_</msg>
+<kw name="Create Directory" library="OperatingSystem">
+<doc>Creates the specified directory.</doc>
+<arguments>
+<arg>/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.643" html="yes" level="INFO">Created directory '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.643" starttime="20170707 22:30:40.643"></status>
+</kw>
+<msg timestamp="20170707 22:30:40.648" level="INFO">${FFDC_FILE_PATH} = /home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt</msg>
+<kw name="Header Message" library="openbmc_ffdc_utils">
+<doc>Write header message to the report document manifest.</doc>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>${HEADER_MSG}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.662" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.662" starttime="20170707 22:30:40.661"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.662" starttime="20170707 22:30:40.661"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>${FOOTER_MSG}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.663" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.663" starttime="20170707 22:30:40.663"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.664" starttime="20170707 22:30:40.662"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>Test Suite File\t\t: ${SUITE_NAME} ${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.666" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.666" starttime="20170707 22:30:40.665"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.666" starttime="20170707 22:30:40.664"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>Test Case Name\t\t: ${TEST_NAME}${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.667" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.667" starttime="20170707 22:30:40.667"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.667" starttime="20170707 22:30:40.666"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>Test Source File\t: ${SUITE_SOURCE}${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.669" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.669" starttime="20170707 22:30:40.668"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.669" starttime="20170707 22:30:40.668"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>Failure Time Stamp\t: ${FFDC_TIME}${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.670" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.670" starttime="20170707 22:30:40.670"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.670" starttime="20170707 22:30:40.669"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>Test Error Message\t: ${TEST_MESSAGE}${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.671" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.671" starttime="20170707 22:30:40.671"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.672" starttime="20170707 22:30:40.670"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>Test Documentation\t:${\n}${TEST_DOCUMENTATION}${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.673" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.673" starttime="20170707 22:30:40.673"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.673" starttime="20170707 22:30:40.672"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>${FOOTER_MSG}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.675" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.675" starttime="20170707 22:30:40.674"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.675" starttime="20170707 22:30:40.674"></status>
+</kw>
+<kw name="Test Setup Info" library="openbmc_ffdc_utils">
+<doc>BMC IP, Model and other information</doc>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>${\n}-----------------------${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.676" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.676" starttime="20170707 22:30:40.676"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.676" starttime="20170707 22:30:40.675"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>Test Setup Information:</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.678" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.678" starttime="20170707 22:30:40.677"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.678" starttime="20170707 22:30:40.677"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>${\n}-----------------------${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.679" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.679" starttime="20170707 22:30:40.679"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.679" starttime="20170707 22:30:40.678"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>OPENBMC HOST \t: ${OPENBMC_HOST}${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.681" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:30:40.681" starttime="20170707 22:30:40.680"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.681" starttime="20170707 22:30:40.680"></status>
+</kw>
+<kw name="Get BMC System Model" library="utils">
+<doc>Get the BMC model from the device tree.</doc>
+<assign>
+<var>${model_name}</var>
+</assign>
+<kw name="Open Connection And Log In" library="connection_client">
+<doc>Opens a connection with the given arguments, and logs in.</doc>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<assign>
+<var>${has_host}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.683" level="FAIL">Dictionary does not contain key 'host'.</msg>
+<status status="FAIL" endtime="20170707 22:30:40.683" starttime="20170707 22:30:40.683"></status>
+</kw>
+<msg timestamp="20170707 22:30:40.683" level="INFO">${has_host} = False</msg>
+<status status="PASS" endtime="20170707 22:30:40.683" starttime="20170707 22:30:40.682"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${has_host} == ${FALSE}</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:30:40.684" starttime="20170707 22:30:40.684"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.684" starttime="20170707 22:30:40.683"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and '${HTTPS_PORT}' != '${EMPTY}'</arg>
+<arg>User input SSH and HTTPs Ports</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:30:40.685" starttime="20170707 22:30:40.685"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<assign>
+<var>${has_port}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.686" level="FAIL">Dictionary does not contain key 'port'.</msg>
+<status status="FAIL" endtime="20170707 22:30:40.686" starttime="20170707 22:30:40.686"></status>
+</kw>
+<msg timestamp="20170707 22:30:40.686" level="INFO">${has_port} = False</msg>
+<status status="PASS" endtime="20170707 22:30:40.686" starttime="20170707 22:30:40.685"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and ${has_port} == ${FALSE}</arg>
+<arg>Run Keywords</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>port=${SSH_PORT}</arg>
+<arg>AND</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+<arg>ELSE</arg>
+<arg>Run Keyword</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Run Keyword" library="BuiltIn">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:30:40.688" starttime="20170707 22:30:40.688"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.688" starttime="20170707 22:30:40.687"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:30:40.688" starttime="20170707 22:30:40.687"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${username}</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170707 22:30:40.689" level="INFO">Logging into '9.3.21.61:22' as 'root'.</msg>
+<msg timestamp="20170707 22:31:10.718" level="FAIL">SSHException: No existing session</msg>
+<status status="FAIL" endtime="20170707 22:31:10.718" starttime="20170707 22:30:40.689"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:31:10.718" starttime="20170707 22:30:40.681"></status>
+</kw>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>cat ${devicetree_base} | cut -d " " -f 1</arg>
+<arg>return_stderr=True</arg>
+</arguments>
+<assign>
+<var>${bmc_model}</var>
+<var>${stderr}</var>
+</assign>
+<msg timestamp="20170707 22:31:10.719" level="INFO">Executing command 'cat /sys/firmware/devicetree/base/model | cut -d " " -f 1'.</msg>
+<msg timestamp="20170707 22:31:40.746" level="INFO">${bmc_model} = None</msg>
+<msg timestamp="20170707 22:31:40.747" level="INFO">${stderr} = None</msg>
+<msg timestamp="20170707 22:31:40.747" level="FAIL">SSHException: Key-exchange timed out waiting for key negotiation</msg>
+<status status="FAIL" endtime="20170707 22:31:40.747" starttime="20170707 22:31:10.719"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${stderr}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.748" level="FAIL">Could not get length of 'None'.</msg>
+<status status="FAIL" endtime="20170707 22:31:40.748" starttime="20170707 22:31:40.747"></status>
+</kw>
+<kw name="Should Not Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is not empty.</doc>
+<arguments>
+<arg>${bmc_model}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.748" level="FAIL">Could not get length of 'None'.</msg>
+<status status="FAIL" endtime="20170707 22:31:40.749" starttime="20170707 22:31:40.748"></status>
+</kw>
+<msg timestamp="20170707 22:31:40.749" level="INFO">${model_name} = None</msg>
+<status status="FAIL" endtime="20170707 22:31:40.749" starttime="20170707 22:30:40.681"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>SYSTEM TYPE \t: ${model_name}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.751" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:31:40.751" starttime="20170707 22:31:40.750"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.751" starttime="20170707 22:31:40.749"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:31:40.751" starttime="20170707 22:30:40.675"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>${\n}${MSG_INTRO}${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.752" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:31:40.753" starttime="20170707 22:31:40.752"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.753" starttime="20170707 22:31:40.751"></status>
+</kw>
+<kw name="Get Ffdc Cmd Index" library="openbmc_ffdc_list">
+<doc>########################################################################</doc>
+<assign>
+<var>@{entries}</var>
+</assign>
+<msg timestamp="20170707 22:31:40.753" level="INFO">@{entries} = [ APPLICATION DATA | DRIVER INFO | BMC DATA ]</msg>
+<status status="PASS" endtime="20170707 22:31:40.753" starttime="20170707 22:31:40.753"></status>
+</kw>
+<kw type="for" name="${index} IN [ @{entries} ]">
+<kw type="foritem" name="${index} = APPLICATION DATA">
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>* ${index.upper()}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.755" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:31:40.755" starttime="20170707 22:31:40.754"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.755" starttime="20170707 22:31:40.754"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.756" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:31:40.756" starttime="20170707 22:31:40.756"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.756" starttime="20170707 22:31:40.755"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.756" starttime="20170707 22:31:40.753"></status>
+</kw>
+<kw type="foritem" name="${index} = DRIVER INFO">
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>* ${index.upper()}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.758" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:31:40.758" starttime="20170707 22:31:40.757"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.758" starttime="20170707 22:31:40.757"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.759" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:31:40.759" starttime="20170707 22:31:40.758"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.759" starttime="20170707 22:31:40.758"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.759" starttime="20170707 22:31:40.756"></status>
+</kw>
+<kw type="foritem" name="${index} = BMC DATA">
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>* ${index.upper()}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.760" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:31:40.760" starttime="20170707 22:31:40.760"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.761" starttime="20170707 22:31:40.759"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>${\n}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.762" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:31:40.762" starttime="20170707 22:31:40.761"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.762" starttime="20170707 22:31:40.761"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.762" starttime="20170707 22:31:40.759"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.762" starttime="20170707 22:31:40.753"></status>
+</kw>
+<kw name="Write Data To File" library="openbmc_ffdc_utils">
+<doc>Write data to the ffdc report document</doc>
+<arguments>
+<arg>${MSG_DETAIL}</arg>
+</arguments>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${filepath}</arg>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.763" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt"&gt;/home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/20170707223040599781_BMC_general.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:31:40.763" starttime="20170707 22:31:40.763"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.763" starttime="20170707 22:31:40.762"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:31:40.764" starttime="20170707 22:30:40.660"></status>
+</kw>
+<msg timestamp="20170707 22:31:40.764" level="FAIL">Several failures occurred:
+
+1) SSHException: No existing session
+
+2) SSHException: Key-exchange timed out waiting for key negotiation
+
+3) Could not get length of 'None'.
+
+4) Could not get length of 'None'.</msg>
+<status status="FAIL" endtime="20170707 22:31:40.764" starttime="20170707 22:30:37.541"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:31:40.764" starttime="20170707 22:30:37.541"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${status}'=='True'</arg>
+<arg>Recover Quiesced Host</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:31:40.765" starttime="20170707 22:31:40.764"></status>
+</kw>
+<kw name="Log Test Case Status" library="openbmc_ffdc_methods">
+<doc>Test case execution result history.</doc>
+<kw name="Get Variable Value" library="BuiltIn">
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<arguments>
+<arg>${FFDC_DIR_PATH_STYLE}</arg>
+<arg>${EMPTY}</arg>
+</arguments>
+<assign>
+<var>${FFDC_DIR_PATH_STYLE}</var>
+</assign>
+<msg timestamp="20170707 22:31:40.766" level="INFO">${FFDC_DIR_PATH_STYLE} = </msg>
+<status status="PASS" endtime="20170707 22:31:40.766" starttime="20170707 22:31:40.765"></status>
+</kw>
+<kw name="Get Variable Value" library="BuiltIn">
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<arguments>
+<arg>${FFDC_DIR_PATH}</arg>
+<arg>${EMPTY}</arg>
+</arguments>
+<assign>
+<var>${FFDC_DIR_PATH}</var>
+</assign>
+<msg timestamp="20170707 22:31:40.766" level="INFO">${FFDC_DIR_PATH} = /home/fspcibld/logs/20170707223040599781_UpdateBmc/20170707223040599781_InitiateCodeUpdateBMC/</msg>
+<status status="PASS" endtime="20170707 22:31:40.766" starttime="20170707 22:31:40.766"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${FFDC_DIR_PATH}' == '${EMPTY}'</arg>
+<arg>Set FFDC Defaults</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:31:40.767" starttime="20170707 22:31:40.767"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${FFDC_DIR_PATH_STYLE}' == '${1}'</arg>
+<arg>Run Keywords</arg>
+<arg>Set Global Variable</arg>
+<arg>${FFDC_LOG_PATH}</arg>
+<arg>${FFDC_DIR_PATH}</arg>
+<arg>AND</arg>
+<arg>Set Global Variable</arg>
+<arg>${TEST_HISTORY}</arg>
+<arg>${FFDC_DIR_PATH}test_history.txt</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:31:40.768" starttime="20170707 22:31:40.767"></status>
+</kw>
+<kw name="Create Directory" library="OperatingSystem">
+<doc>Creates the specified directory.</doc>
+<arguments>
+<arg>${FFDC_LOG_PATH}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.768" html="yes" level="INFO">Directory '&lt;a href="file:///home/fspcibld/logs"&gt;/home/fspcibld/logs&lt;/a&gt;' already exists.</msg>
+<status status="PASS" endtime="20170707 22:31:40.768" starttime="20170707 22:31:40.768"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>OperatingSystem.File Should Exist</arg>
+<arg>${TEST_HISTORY}</arg>
+</arguments>
+<assign>
+<var>${exist}</var>
+</assign>
+<kw name="File Should Exist" library="OperatingSystem">
+<doc>Fails unless the given ``path`` points to an existing file.</doc>
+<arguments>
+<arg>${TEST_HISTORY}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.769" html="yes" level="INFO">File '&lt;a href="file:///home/fspcibld/logs/test_history.txt"&gt;/home/fspcibld/logs/test_history.txt&lt;/a&gt;' exists.</msg>
+<status status="PASS" endtime="20170707 22:31:40.769" starttime="20170707 22:31:40.769"></status>
+</kw>
+<msg timestamp="20170707 22:31:40.769" level="INFO">${exist} = True</msg>
+<status status="PASS" endtime="20170707 22:31:40.769" starttime="20170707 22:31:40.769"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${exist}' == '${False}'</arg>
+<arg>Create File</arg>
+<arg>${TEST_HISTORY}</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:31:40.770" starttime="20170707 22:31:40.770"></status>
+</kw>
+<kw name="Rpvars" library="gen_robot_print">
+<arguments>
+<arg>TEST_HISTORY</arg>
+</arguments>
+<status status="PASS" endtime="20170707 22:31:40.771" starttime="20170707 22:31:40.770"></status>
+</kw>
+<kw name="Get Current Time Stamp" library="openbmc_ffdc_utils">
+<doc>Get the current time stamp data</doc>
+<assign>
+<var>${cur_time}</var>
+</assign>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>result_format=%Y-%m-%d %H:%M:%S:%f</arg>
+</arguments>
+<assign>
+<var>${cur_time}</var>
+</assign>
+<msg timestamp="20170707 22:31:40.772" level="INFO">${cur_time} = 2017-07-07 22:31:40:772059</msg>
+<status status="PASS" endtime="20170707 22:31:40.772" starttime="20170707 22:31:40.772"></status>
+</kw>
+<kw name="Get Strip String" library="openbmc_ffdc_list">
+<doc>########################################################################</doc>
+<arguments>
+<arg>${cur_time}</arg>
+</arguments>
+<assign>
+<var>${cur_time}</var>
+</assign>
+<msg timestamp="20170707 22:31:40.773" level="INFO">${cur_time} = 20170707223140772059</msg>
+<status status="PASS" endtime="20170707 22:31:40.773" starttime="20170707 22:31:40.773"></status>
+</kw>
+<msg timestamp="20170707 22:31:40.773" level="INFO">${cur_time} = 20170707223140772059</msg>
+<status status="PASS" endtime="20170707 22:31:40.773" starttime="20170707 22:31:40.771"></status>
+</kw>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${TEST_HISTORY}</arg>
+<arg>${cur_time}:${SUITE_NAME}:${TEST_NAME}:${TEST_STATUS}${\n}</arg>
+</arguments>
+<msg timestamp="20170707 22:31:40.774" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/test_history.txt"&gt;/home/fspcibld/logs/test_history.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170707 22:31:40.774" starttime="20170707 22:31:40.774"></status>
+</kw>
+<status status="PASS" endtime="20170707 22:31:40.774" starttime="20170707 22:31:40.765"></status>
+</kw>
+<status status="FAIL" endtime="20170707 22:31:40.775" starttime="20170707 22:29:16.817"></status>
+</kw>
+<msg timestamp="20170707 22:31:40.775" level="FAIL">Several failures occurred:
+
+1) Replacing variables from keyword return value failed: Resolving variable '${state.rsplit('.', 1)[1]}' failed: AttributeError: 'NoneType' object has no attribute 'rsplit'
+
+2) Several failures occurred:
+
+1) SSHException: No existing session
+
+2) SSHException: Key-exchange timed out waiting for key negotiation
+
+3) Could not get length of 'None'.
+
+4) Could not get length of 'None'.</msg>
+<status status="FAIL" endtime="20170707 22:31:40.775" starttime="20170707 22:29:16.807">Several failures occurred:
+
+1) Replacing variables from keyword return value failed: Resolving variable '${state.rsplit('.', 1)[1]}' failed: AttributeError: 'NoneType' object has no attribute 'rsplit'
+
+2) Several failures occurred:
+
+1) SSHException: No existing session
+
+2) SSHException: Key-exchange timed out waiting for key negotiation
+
+3) Could not get length of 'None'.
+
+4) Could not get length of 'None'.</status>
+</kw>
+<doc>Initiate a code update on the BMC.</doc>
+<tags>
+<tag>Initiate_Code_Update_BMC</tag>
+</tags>
+<status status="FAIL" endtime="20170707 22:31:40.776" critical="yes" starttime="20170707 22:28:46.741">SSHException: No existing session
+
+Also teardown failed:
+Several failures occurred:
+
+1) Replacing variables from keyword return value failed: Resolving variable '${state.rsplit('.', 1)[1]}' failed: AttributeError: 'NoneType' object has no attribute 'rsplit'
+
+2) Several failures occurred:
+
+1) SSHException: No existing session
+
+2) SSHException: Key-exchange timed out waiting for key negotiation
+
+3) Could not get length of 'None'.
+
+4) Could not get length of 'None'.</status>
+</test>
+<doc>Trigger code update to a target BMC.
+Execution Method :
+python -m robot -v OPENBMC_HOST:&lt;hostname&gt;
+-v FILE_PATH:&lt;path/*all.tar&gt; update_bmc.robot
+
+Code update method BMC using REST
+Update work flow sequence:
+- User input BMC File existence check
+- Ping Test and REST authentication
+- Set Host Power host setting Policy to RESTORE_LAST_STATE
+On reboot this policy would ensure the BMC comes
+online and stays at HOST_POWERED_OFF state.
+- Issue poweroff
+- Prune archived journal logs
+- Prepare for Update
+- Wait for BMC to come online clean
+- Wait for BMC_READY state
+- Apply preserve BMC Network setting
+- SCP image to BMC
+- Activate the flash image
+- Warm Reset BMC to activate code
+- Wait for BMC to come online time out 30 minutes
+- Version check post update
+- Identify REST url post update</doc>
+<status status="FAIL" endtime="20170707 22:31:40.777" starttime="20170707 22:28:45.693"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="0">Critical Tests</stat>
+<stat fail="1" pass="0">All Tests</stat>
+</total>
+<tag>
+<stat fail="1" pass="0">Initiate_Code_Update_BMC</stat>
+</tag>
+<suite>
+<stat fail="1" id="s1" name="Update Bmc" pass="0">Update Bmc</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20170707 22:30:06.885" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/state/host0//attr/CurrentHostState</msg>
+<msg timestamp="20170707 22:30:17.093" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/state/host0//attr/CurrentHostState</msg>
+<msg timestamp="20170707 22:30:27.509" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/state/host0//attr/CurrentHostState</msg>
+</errors>
+</robot>
