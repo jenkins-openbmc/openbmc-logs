@@ -1,0 +1,747 @@
+Started by upstream project "OpenBMC/automated-test/HW" build number 1374
+originally caused by:
+ Started by upstream project "OpenBMC/automated-test/CI" build number 1122
+ originally caused by:
+  Started by upstream project "OpenBMC/automated-test/Gerrit-trigger" build number 635
+  originally caused by:
+   Triggered by Gerrit: https://gerrit.openbmc-project.xyz/4398
+[EnvInject] - Loading node environment variables.
+Building remotely on tulpok01p2-ppc64le (docker ppc64le-docker) in workspace /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Done
+Set build name.
+New build name is '#1502-witherspoon-9.3.21.61'
+Next nodes: []
+[run-hardware-tests] $ /bin/bash -xe /tmp/hudson638572135515711330.sh
++ set -uo pipefail
++ DOCKER_IMG_NAME=openbmc/ubuntu-robot-qemu
++ WORKSPACE=/tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ mkdir -p /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ cd /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests
++ rm -Rf ./openbmc-build-scripts
++ rm -f './*.xml'
++ rm -f './*.html'
++ rm -Rf './logs/*'
++ git clone https://gerrit.openbmc-project.xyz/openbmc/openbmc-build-scripts
+Cloning into 'openbmc-build-scripts'...
++ cd openbmc-build-scripts
++ . ./scripts/build-qemu-robot-docker.sh
+++ set -uo pipefail
+++ DOCKER_IMG_NAME=openbmc/ubuntu-robot-qemu
++++ uname -m
+++ '[' ppc64le == ppc64le ']'
+++ DOCKER_BASE=ppc64le/
++++ cat
+++ Dockerfile='FROM ppc64le/ubuntu:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     python3     python3-dev     python3-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl     build-essential
+
+RUN easy_install     tox     pip     requests
+
+RUN pip install     json2yaml     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+
+RUN wget https://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.18/ipmitool-1.8.18.tar.bz2
+RUN tar xvfj ipmitool-*.tar.bz2
+RUN ./ipmitool-1.8.18/configure
+RUN make
+RUN make install
+
+RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+USER fspcibld
+ENV HOME /home/fspcibld
+RUN /bin/bash'
+++ docker build -t openbmc/ubuntu-robot-qemu -
+Sending build context to Docker daemon 3.072 kB
+Step 1 : FROM ppc64le/ubuntu:latest
+ ---> d2e29d5dd835
+Step 2 : ENV DEBIAN_FRONTEND noninteractive
+ ---> Using cache
+ ---> 6474ed415d91
+Step 3 : RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     python3     python3-dev     python3-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl     build-essential
+ ---> Using cache
+ ---> 032fa6145daa
+Step 4 : RUN easy_install     tox     pip     requests
+ ---> Using cache
+ ---> a57a6b117069
+Step 5 : RUN pip install     json2yaml     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+ ---> Using cache
+ ---> e4bcd277586a
+Step 6 : RUN wget https://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.18/ipmitool-1.8.18.tar.bz2
+ ---> Using cache
+ ---> 679c07be2964
+Step 7 : RUN tar xvfj ipmitool-*.tar.bz2
+ ---> Using cache
+ ---> b38a33c77bf2
+Step 8 : RUN ./ipmitool-1.8.18/configure
+ ---> Using cache
+ ---> 472b6228180c
+Step 9 : RUN make
+ ---> Using cache
+ ---> 7684aa69a2eb
+Step 10 : RUN make install
+ ---> Using cache
+ ---> 73a577b2ee9f
+Step 11 : RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+ ---> Using cache
+ ---> 9b3a4d67a4bd
+Step 12 : RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+ ---> Using cache
+ ---> 9d07f84d1a33
+Step 13 : USER fspcibld
+ ---> Using cache
+ ---> b60fb0bfd4c8
+Step 14 : ENV HOME /home/fspcibld
+ ---> Using cache
+ ---> 2f41c605bc5b
+Step 15 : RUN /bin/bash
+ ---> Using cache
+ ---> ce382e04cd8f
+Successfully built ce382e04cd8f
++ SSH_PORT=22
++ HTTPS_PORT=443
+++ getent hosts 9.3.21.61
+++ awk '{ print $1 }'
++ BMC_IP=9.3.21.61
++ docker run --user fspcibld --env HOME=/home/fspcibld --env IP_ADDR=9.3.21.61 --env SSH_PORT=22 --env HTTPS_PORT=443 --env 'ROBOT_TEST_CMD=tox -e witherspoon -- --argumentfile test_lists/HW_CI --exclude Check_For_Application_Failures tests' --workdir /home/fspcibld --volume /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/run-hardware-tests:/home/fspcibld --tty openbmc/ubuntu-robot-qemu /home/fspcibld/openbmc-build-scripts/scripts/run-robot.sh
+++ whoami
++ ROBOT_CODE_HOME=/tmp/fspcibld/6791/obmc-robot/
++ ROBOT_TEST_CMD='tox -e witherspoon -- --argumentfile test_lists/HW_CI --exclude Check_For_Application_Failures tests'
++ git clone https://github.com/openbmc/openbmc-test-automation.git /tmp/fspcibld/6791/obmc-robot/
+Cloning into '/tmp/fspcibld/6791/obmc-robot'...
+remote: Counting objects: 3286, done.[K
+remote: Compressing objects:   5% (1/18)   [Kremote: Compressing objects:  11% (2/18)   [Kremote: Compressing objects:  16% (3/18)   [Kremote: Compressing objects:  22% (4/18)   [Kremote: Compressing objects:  27% (5/18)   [Kremote: Compressing objects:  33% (6/18)   [Kremote: Compressing objects:  38% (7/18)   [Kremote: Compressing objects:  44% (8/18)   [Kremote: Compressing objects:  50% (9/18)   [Kremote: Compressing objects:  55% (10/18)   [Kremote: Compressing objects:  61% (11/18)   [Kremote: Compressing objects:  66% (12/18)   [Kremote: Compressing objects:  72% (13/18)   [Kremote: Compressing objects:  77% (14/18)   [Kremote: Compressing objects:  83% (15/18)   [Kremote: Compressing objects:  88% (16/18)   [Kremote: Compressing objects:  94% (17/18)   [Kremote: Compressing objects: 100% (18/18)   [Kremote: Compressing objects: 100% (18/18), done.[K
+Receiving objects:   0% (1/3286)   Receiving objects:   1% (33/3286)   Receiving objects:   2% (66/3286)   Receiving objects:   3% (99/3286)   Receiving objects:   4% (132/3286)   Receiving objects:   5% (165/3286)   Receiving objects:   6% (198/3286)   Receiving objects:   7% (231/3286)   Receiving objects:   8% (263/3286)   Receiving objects:   9% (296/3286)   Receiving objects:  10% (329/3286)   Receiving objects:  11% (362/3286)   Receiving objects:  12% (395/3286)   Receiving objects:  13% (428/3286)   Receiving objects:  14% (461/3286)   Receiving objects:  15% (493/3286)   Receiving objects:  16% (526/3286)   Receiving objects:  17% (559/3286)   Receiving objects:  18% (592/3286)   Receiving objects:  19% (625/3286)   Receiving objects:  20% (658/3286)   Receiving objects:  21% (691/3286)   Receiving objects:  22% (723/3286)   Receiving objects:  23% (756/3286)   Receiving objects:  24% (789/3286)   Receiving objects:  25% (822/3286)   Receiving objects:  26% (855/3286)   Receiving objects:  27% (888/3286)   Receiving objects:  28% (921/3286)   Receiving objects:  29% (953/3286)   Receiving objects:  30% (986/3286)   Receiving objects:  31% (1019/3286)   Receiving objects:  32% (1052/3286)   Receiving objects:  33% (1085/3286)   Receiving objects:  34% (1118/3286)   Receiving objects:  35% (1151/3286)   Receiving objects:  36% (1183/3286)   Receiving objects:  37% (1216/3286)   Receiving objects:  38% (1249/3286)   Receiving objects:  39% (1282/3286)   Receiving objects:  40% (1315/3286)   Receiving objects:  41% (1348/3286)   Receiving objects:  42% (1381/3286)   Receiving objects:  43% (1413/3286)   Receiving objects:  44% (1446/3286)   Receiving objects:  45% (1479/3286)   Receiving objects:  46% (1512/3286)   Receiving objects:  47% (1545/3286)   Receiving objects:  48% (1578/3286)   Receiving objects:  49% (1611/3286)   Receiving objects:  50% (1643/3286)   Receiving objects:  51% (1676/3286)   Receiving objects:  52% (1709/3286)   Receiving objects:  53% (1742/3286)   Receiving objects:  54% (1775/3286)   Receiving objects:  55% (1808/3286)   Receiving objects:  56% (1841/3286)   Receiving objects:  57% (1874/3286)   Receiving objects:  58% (1906/3286)   Receiving objects:  59% (1939/3286)   Receiving objects:  60% (1972/3286)   Receiving objects:  61% (2005/3286)   Receiving objects:  62% (2038/3286)   Receiving objects:  63% (2071/3286)   Receiving objects:  64% (2104/3286)   Receiving objects:  65% (2136/3286)   Receiving objects:  66% (2169/3286)   Receiving objects:  67% (2202/3286)   Receiving objects:  68% (2235/3286)   Receiving objects:  69% (2268/3286)   Receiving objects:  70% (2301/3286)   Receiving objects:  71% (2334/3286)   Receiving objects:  72% (2366/3286)   Receiving objects:  73% (2399/3286)   Receiving objects:  74% (2432/3286)   Receiving objects:  75% (2465/3286)   Receiving objects:  76% (2498/3286)   Receiving objects:  77% (2531/3286)   Receiving objects:  78% (2564/3286)   Receiving objects:  79% (2596/3286)   Receiving objects:  80% (2629/3286)   Receiving objects:  81% (2662/3286)   Receiving objects:  82% (2695/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  83% (2728/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  84% (2761/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  85% (2794/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  86% (2826/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  87% (2859/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  88% (2892/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  89% (2925/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  90% (2958/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  91% (2991/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  92% (3024/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  93% (3056/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  94% (3089/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  95% (3122/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  96% (3155/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  97% (3188/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  98% (3221/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects:  99% (3254/3286), 820.01 KiB | 1.52 MiB/s   remote: Total 3286 (delta 9), reused 5 (delta 5), pack-reused 3263[K
+Receiving objects: 100% (3286/3286), 820.01 KiB | 1.52 MiB/s   Receiving objects: 100% (3286/3286), 939.62 KiB | 1.52 MiB/s, done.
+Resolving deltas:   0% (0/2272)   Resolving deltas:   1% (23/2272)   Resolving deltas:   2% (46/2272)   Resolving deltas:   3% (69/2272)   Resolving deltas:   4% (91/2272)   Resolving deltas:   5% (116/2272)   Resolving deltas:   6% (137/2272)   Resolving deltas:   7% (160/2272)   Resolving deltas:   8% (186/2272)   Resolving deltas:   9% (210/2272)   Resolving deltas:  10% (228/2272)   Resolving deltas:  11% (252/2272)   Resolving deltas:  12% (274/2272)   Resolving deltas:  13% (305/2272)   Resolving deltas:  14% (329/2272)   Resolving deltas:  15% (357/2272)   Resolving deltas:  16% (369/2272)   Resolving deltas:  17% (390/2272)   Resolving deltas:  18% (411/2272)   Resolving deltas:  19% (442/2272)   Resolving deltas:  20% (455/2272)   Resolving deltas:  21% (478/2272)   Resolving deltas:  22% (504/2272)   Resolving deltas:  23% (530/2272)   Resolving deltas:  25% (575/2272)   Resolving deltas:  27% (616/2272)   Resolving deltas:  28% (652/2272)   Resolving deltas:  30% (687/2272)   Resolving deltas:  31% (707/2272)   Resolving deltas:  33% (759/2272)   Resolving deltas:  34% (775/2272)   Resolving deltas:  35% (799/2272)   Resolving deltas:  37% (844/2272)   Resolving deltas:  40% (923/2272)   Resolving deltas:  42% (974/2272)   Resolving deltas:  45% (1038/2272)   Resolving deltas:  47% (1073/2272)   Resolving deltas:  48% (1099/2272)   Resolving deltas:  49% (1114/2272)   Resolving deltas:  50% (1142/2272)   Resolving deltas:  55% (1272/2272)   Resolving deltas:  56% (1292/2272)   Resolving deltas:  58% (1319/2272)   Resolving deltas:  59% (1341/2272)   Resolving deltas:  60% (1385/2272)   Resolving deltas:  61% (1388/2272)   Resolving deltas:  62% (1409/2272)   Resolving deltas:  63% (1446/2272)   Resolving deltas:  65% (1486/2272)   Resolving deltas:  66% (1505/2272)   Resolving deltas:  67% (1524/2272)   Resolving deltas:  69% (1572/2272)   Resolving deltas:  70% (1595/2272)   Resolving deltas:  73% (1660/2272)   Resolving deltas:  74% (1686/2272)   Resolving deltas:  75% (1704/2272)   Resolving deltas:  76% (1734/2272)   Resolving deltas:  77% (1761/2272)   Resolving deltas:  78% (1774/2272)   Resolving deltas:  80% (1823/2272)   Resolving deltas:  81% (1846/2272)   Resolving deltas:  82% (1873/2272)   Resolving deltas:  84% (1913/2272)   Resolving deltas:  85% (1941/2272)   Resolving deltas:  87% (1983/2272)   Resolving deltas:  88% (2005/2272)   Resolving deltas:  89% (2024/2272)   Resolving deltas:  91% (2071/2272)   Resolving deltas:  92% (2091/2272)   Resolving deltas:  93% (2118/2272)   Resolving deltas:  94% (2156/2272)   Resolving deltas:  95% (2166/2272)   Resolving deltas:  97% (2205/2272)   Resolving deltas:  98% (2229/2272)   Resolving deltas:  99% (2252/2272)   Resolving deltas: 100% (2272/2272)   Resolving deltas: 100% (2272/2272), done.
+Checking connectivity... done.
++ cd /tmp/fspcibld/6791/obmc-robot/
++ chmod ugo+rw -R /tmp/fspcibld/6791/obmc-robot//LICENSE /tmp/fspcibld/6791/obmc-robot//README.md /tmp/fspcibld/6791/obmc-robot//bin /tmp/fspcibld/6791/obmc-robot//data /tmp/fspcibld/6791/obmc-robot//extended /tmp/fspcibld/6791/obmc-robot//gui /tmp/fspcibld/6791/obmc-robot//lib /tmp/fspcibld/6791/obmc-robot//mnfg /tmp/fspcibld/6791/obmc-robot//requirements.txt /tmp/fspcibld/6791/obmc-robot//syslib /tmp/fspcibld/6791/obmc-robot//systest /tmp/fspcibld/6791/obmc-robot//templates /tmp/fspcibld/6791/obmc-robot//test_lists /tmp/fspcibld/6791/obmc-robot//tests /tmp/fspcibld/6791/obmc-robot//tools /tmp/fspcibld/6791/obmc-robot//tox.ini /tmp/fspcibld/6791/obmc-robot//xcat
++ export OPENBMC_HOST=9.3.21.61
++ OPENBMC_HOST=9.3.21.61
++ export SSH_PORT=22
++ SSH_PORT=22
++ export HTTPS_PORT=443
++ HTTPS_PORT=443
+++ tox -e witherspoon -- --argumentfile test_lists/HW_CI --exclude Check_For_Application_Failures tests
++ 'witherspoon create: /tmp/fspcibld/6791/obmc-robot/.tox/witherspoon
+witherspoon installdeps: -r/tmp/fspcibld/6791/obmc-robot/requirements.txt
+witherspoon installed: asn1crypto==0.22.0,certifi==2017.4.17,cffi==1.10.0,chardet==3.0.4,cryptography==2.0,enum34==1.1.6,idna==2.5,ipaddress==1.0.18,paramiko==2.0.2,pyasn1==0.2.3,pycparser==2.18,requests==2.18.1,robotframework==3.0.2,robotframework-requests==0.4.7,robotframework-scplibrary==1.1.1,robotframework-sshlibrary==2.1.3,scp==0.10.2,six==1.10.0,urllib3==1.21.1
+witherspoon runtests: PYTHONHASHSEED='\''2513114100'\''
+witherspoon runtests: commands[0] | -mkdir -p /tmp/fspcibld/6791/obmc-robot/.tox/witherspoon/tmp
+witherspoon runtests: commands[1] | bash /tmp/fspcibld/6791/obmc-robot/tools/generate_argumentfile.sh
+witherspoon runtests: commands[2] | cp bin/ssh_pw /tmp/fspcibld/6791/obmc-robot/.tox/witherspoon/bin/ssh_pw
+witherspoon runtests: commands[3] | python -m robot.run --argumentfile /tmp/fspcibld/6791/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI --exclude Check_For_Application_Failures tests
+==============================================================================
+Tests :: Set metadata for test suite.                                         
+==============================================================================
+Tests.Security                                                                
+==============================================================================
+Tests.Security.Test Ssl :: This testsuite is for testing SSL connection to ...
+==============================================================================
+Test SSL Connection :: This testcase is for testing the SSL connec... URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+#(UTC) 2017/07/18 03:56:30.456241 -    6.795301 - Issuing: Get Test Dir and Name
+TEST_HISTORY:                                     /tmp/fspcibld/6791/obmc-robot/logs//test_history.txt
+| PASS |
+------------------------------------------------------------------------------
+Tests.Security.Test Ssl :: This testsuite is for testing SSL conne... | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Security                                                        | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Test Basic Poweron :: Test power on for HW CI.                          
+==============================================================================
+Power On Test :: Power off and on.                                    #(UTC) 2017/07/18 03:56:30.998063 -    0.541822 - **ERROR** The prior command failed.
+shell_rc:                                         0x00000001
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'\''data'\'': {u'\''data'\'': '\''xyz.openbmc_project.State.Host.Transition.Off'\''}, u'\''headers'\'': {u'\''Content-Type'\'': u'\''application/json'\''}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+#(UTC) 2017/07/18 04:02:39.571404 -  368.573341 - Issuing: Ping Host  9.3.21.61
+status_ping:                                      None
+#(UTC) 2017/07/18 04:02:42.608756 -    3.037352 - Collecting FFDC.
+#(UTC) 2017/07/18 04:02:42.619462 -    0.010706 - Issuing: Get Test Dir and Name
+ffdc_dir_path:                                    /tmp/fspcibld/6791/obmc-robot/logs/20170718040242610223_TestsTestBasicPoweron/20170718040242610223_PowerOnTest/
+ffdc_prefix:                                      20170718040242610223_
+#(UTC) 2017/07/18 04:02:42.650803 -    0.031341 - Issuing: Create Directory  /tmp/fspcibld/6791/obmc-robot/logs/20170718040242610223_TestsTestBasicPoweron/20170718040242610223_PowerOnTest/
+#(UTC) 2017/07/18 04:02:42.690170 -    0.039367 - Issuing: Header Message
+#(UTC) 2017/07/18 04:02:44.654845 -    1.964675 - Issuing: Call FFDC Methods  ffdc_function_list=
+#(UTC) 2017/07/18 04:02:44.711938 -    0.057093 - Issuing: SCP Coredump Files
+#(UTC) 2017/07/18 04:02:48.846972 -    4.135034 - Issuing: Collect eSEL Log
+#(UTC) 2017/07/18 04:02:49.983020 -    1.136048 - Issuing: OS FFDC Files
+#(UTC) 2017/07/18 04:02:50.028423 -    0.045403 - Issuing: BMC FFDC Get Requests
+#(UTC) 2017/07/18 04:02:55.459969 -    5.431546 - Issuing: BMC FFDC Manifest
+#(UTC) 2017/07/18 04:02:59.276488 -    3.816519 - Issuing: BMC FFDC Files
+#(UTC) 2017/07/18 04:03:04.069136 -    4.792648 - Finished collecting FFDC.
+TEST_HISTORY:                                     /tmp/fspcibld/6791/obmc-robot/logs//test_history.txt
+| FAIL |
+Keyword '\''Is Host Off'\'' failed after retrying for 6 minutes. The last error was: Off != Running
+------------------------------------------------------------------------------
+Tests.Test Basic Poweron :: Test power on for HW CI.                  | FAIL |
+1 critical test, 0 passed, 1 failed
+1 test total, 0 passed, 1 failed
+==============================================================================
+Tests :: Set metadata for test suite.                                 | FAIL |
+2 critical tests, 1 passed, 1 failed
+2 tests total, 1 passed, 1 failed
+==============================================================================
+Output:  /tmp/fspcibld/6791/obmc-robot/output.xml
+Log:     /tmp/fspcibld/6791/obmc-robot/log.html
+Report:  /tmp/fspcibld/6791/obmc-robot/report.html
+ERROR: InvocationError: '\''/tmp/fspcibld/6791/obmc-robot/.tox/witherspoon/bin/python -m robot.run --argumentfile /tmp/fspcibld/6791/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI --exclude Check_For_Application_Failures tests'\''
+___________________________________ summary ____________________________________
+ERROR:   witherspoon: commands failed'
+/home/fspcibld/openbmc-build-scripts/scripts/run-robot.sh: line 34: witherspoon create: /tmp/fspcibld/6791/obmc-robot/.tox/witherspoon
+witherspoon installdeps: -r/tmp/fspcibld/6791/obmc-robot/requirements.txt
+witherspoon installed: asn1crypto==0.22.0,certifi==2017.4.17,cffi==1.10.0,chardet==3.0.4,cryptography==2.0,enum34==1.1.6,idna==2.5,ipaddress==1.0.18,paramiko==2.0.2,pyasn1==0.2.3,pycparser==2.18,requests==2.18.1,robotframework==3.0.2,robotframework-requests==0.4.7,robotframework-scplibrary==1.1.1,robotframework-sshlibrary==2.1.3,scp==0.10.2,six==1.10.0,urllib3==1.21.1
+witherspoon runtests: PYTHONHASHSEED='2513114100'
+witherspoon runtests: commands[0] | -mkdir -p /tmp/fspcibld/6791/obmc-robot/.tox/witherspoon/tmp
+witherspoon runtests: commands[1] | bash /tmp/fspcibld/6791/obmc-robot/tools/generate_argumentfile.sh
+witherspoon runtests: commands[2] | cp bin/ssh_pw /tmp/fspcibld/6791/obmc-robot/.tox/witherspoon/bin/ssh_pw
+witherspoon runtests: commands[3] | python -m robot.run --argumentfile /tmp/fspcibld/6791/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI --exclude Check_For_Application_Failures tests
+==============================================================================
+Tests :: Set metadata for test suite.                                         
+==============================================================================
+Tests.Security                                                                
+==============================================================================
+Tests.Security.Test Ssl :: This testsuite is for testing SSL connection to ...
+==============================================================================
+Test SSL Connection :: This testcase is for testing the SSL connec... URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+#(UTC) 2017/07/18 03:56:30.456241 -    6.795301 - Issuing: Get Test Dir and Name
+TEST_HISTORY:                                     /tmp/fspcibld/6791/obmc-robot/logs//test_history.txt
+| PASS |
+------------------------------------------------------------------------------
+Tests.Security.Test Ssl :: This testsuite is for testing SSL conne... | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Security                                                        | PASS |
+1 critical test, 1 passed, 0 failed
+1 test total, 1 passed, 0 failed
+==============================================================================
+Tests.Test Basic Poweron :: Test power on for HW CI.                          
+==============================================================================
+Power On Test :: Power off and on.                                    #(UTC) 2017/07/18 03:56:30.998063 -    0.541822 - **ERROR** The prior command failed.
+shell_rc:                                         0x00000001
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'data': {u'data': 'xyz.openbmc_project.State.Host.Transition.Off'}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61:443/xyz/openbmc_project/state/host0//attr/CurrentHostState, method:Get, args:{}
+Response code:200, Content:{
+  "data": "xyz.openbmc_project.State.Host.HostState.Running", 
+  "message": "200 OK", 
+  "status": "ok"
+}
+#(UTC) 2017/07/18 04:02:39.571404 -  368.573341 - Issuing: Ping Host  9.3.21.61
+status_ping:                                      None
+#(UTC) 2017/07/18 04:02:42.608756 -    3.037352 - Collecting FFDC.
+#(UTC) 2017/07/18 04:02:42.619462 -    0.010706 - Issuing: Get Test Dir and Name
+ffdc_dir_path:                                    /tmp/fspcibld/6791/obmc-robot/logs/20170718040242610223_TestsTestBasicPoweron/20170718040242610223_PowerOnTest/
+ffdc_prefix:                                      20170718040242610223_
+#(UTC) 2017/07/18 04:02:42.650803 -    0.031341 - Issuing: Create Directory  /tmp/fspcibld/6791/obmc-robot/logs/20170718040242610223_TestsTestBasicPoweron/20170718040242610223_PowerOnTest/
+#(UTC) 2017/07/18 04:02:42.690170 -    0.039367 - Issuing: Header Message
+#(UTC) 2017/07/18 04:02:44.654845 -    1.964675 - Issuing: Call FFDC Methods  ffdc_function_list=
+#(UTC) 2017/07/18 04:02:44.711938 -    0.057093 - Issuing: SCP Coredump Files
+#(UTC) 2017/07/18 04:02:48.846972 -    4.135034 - Issuing: Collect eSEL Log
+#(UTC) 2017/07/18 04:02:49.983020 -    1.136048 - Issuing: OS FFDC Files
+#(UTC) 2017/07/18 04:02:50.028423 -    0.045403 - Issuing: BMC FFDC Get Requests
+#(UTC) 2017/07/18 04:02:55.459969 -    5.431546 - Issuing: BMC FFDC Manifest
+#(UTC) 2017/07/18 04:02:59.276488 -    3.816519 - Issuing: BMC FFDC Files
+#(UTC) 2017/07/18 04:03:04.069136 -    4.792648 - Finished collecting FFDC.
+TEST_HISTORY:                                     /tmp/fspcibld/6791/obmc-robot/logs//test_history.txt
+| FAIL |
+Keyword 'Is Host Off' failed after retrying for 6 minutes. The last error was: Off != Running
+------------------------------------------------------------------------------
+Tests.Test Basic Poweron :: Test power on for HW CI.                  | FAIL |
+1 critical test, 0 passed, 1 failed
+1 test total, 0 passed, 1 failed
+==============================================================================
+Tests :: Set metadata for test suite.                                 | FAIL |
+2 critical tests, 1 passed, 1 failed
+2 tests total, 1 passed, 1 failed
+==============================================================================
+Output:  /tmp/fspcibld/6791/obmc-robot/output.xml
+Log:     /tmp/fspcibld/6791/obmc-robot/log.html
+Report:  /tmp/fspcibld/6791/obmc-robot/report.html
+ERROR: InvocationError: '/tmp/fspcibld/6791/obmc-robot/.tox/witherspoon/bin/python -m robot.run --argumentfile /tmp/fspcibld/6791/obmc-robot/.tox/witherspoon/tmp/argument_file.txt --argumentfile test_lists/HW_CI --exclude Check_For_Application_Failures tests'
+___________________________________ summary ____________________________________
+ERROR:   witherspoon: commands failed: File name too long
++ cp /tmp/fspcibld/6791/obmc-robot//output.xml /home/fspcibld/
++ cp /tmp/fspcibld/6791/obmc-robot//log.html /tmp/fspcibld/6791/obmc-robot//report.html /home/fspcibld/
++ '[' -d logs ']'
++ cp -Rf /tmp/fspcibld/6791/obmc-robot//logs /home/fspcibld/
+Set build name.
+New build name is '#1502-witherspoon-9.3.21.61'
+Variable with name 'BUILD_DISPLAY_NAME' already exists, current value: '#1502-witherspoon-9.3.21.61', new value: '#1502-witherspoon-9.3.21.61'
+Robot results publisher started...
+-Parsing output xml:
+Done!
+-Copying log files to build dir:
+Done!
+-Assigning results to build:
+Done!
+-Checking thresholds:
+Done!
+Done publishing Robot results.
+Build step 'Publish Robot Framework test results' changed build result to FAILURE
+[PostBuildScript] - Execution post build scripts.
+[run-hardware-tests] $ /bin/bash -xe /tmp/hudson46987005477409280.sh
++ curl -s http://tulpok01p4.aus.stglabs.ibm.com:8080/jenkins/job/OpenBMC/job/automated-test/job/helper-jobs/job/run-hardware-tests/1502//consoleText
