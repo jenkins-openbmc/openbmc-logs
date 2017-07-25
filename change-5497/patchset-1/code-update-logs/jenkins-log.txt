@@ -1,0 +1,217 @@
+Started by upstream project "OpenBMC/automated-test/HW" build number 1495
+originally caused by:
+ Started by upstream project "OpenBMC/automated-test/CI" build number 1227
+ originally caused by:
+  Started by upstream project "OpenBMC/automated-test/Gerrit-trigger" build number 727
+  originally caused by:
+   Retriggered by user andrewg for Gerrit: https://gerrit.openbmc-project.xyz/5497
+[EnvInject] - Loading node environment variables.
+Building remotely on tulpok01p2-ppc64le (docker ppc64le-docker) in workspace /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update
+Set build name.
+New build name is '#798-9.3.21.61'
+Next nodes: []
+[code-update] $ /bin/bash -xe /tmp/hudson2506699865090452145.sh
++ set -uo pipefail
++ DOCKER_IMG_NAME=openbmc/ubuntu-obmc-code-update
++ WORKSPACE=/tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update
++ mkdir -p /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update
++ cd /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update
++ rm -Rf ./openbmc-build-scripts
++ rm -Rf ./openbmc-test-automation
++ git clone https://gerrit.openbmc-project.xyz/openbmc/openbmc-build-scripts
+Cloning into 'openbmc-build-scripts'...
++ cd openbmc-build-scripts
++ . ./scripts/build-qemu-robot-docker.sh
+++ set -uo pipefail
+++ DOCKER_IMG_NAME=openbmc/ubuntu-robot-qemu
++++ uname -m
+++ '[' ppc64le == ppc64le ']'
+++ DOCKER_BASE=ppc64le/
++++ cat
+++ Dockerfile='FROM ppc64le/ubuntu:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     python3     python3-dev     python3-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl     build-essential
+
+RUN easy_install     tox     pip     requests
+
+RUN pip install     json2yaml     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+
+RUN wget https://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.18/ipmitool-1.8.18.tar.bz2
+RUN tar xvfj ipmitool-*.tar.bz2
+RUN ./ipmitool-1.8.18/configure
+RUN make
+RUN make install
+
+RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+USER fspcibld
+ENV HOME /home/fspcibld
+RUN /bin/bash'
+++ docker build -t openbmc/ubuntu-robot-qemu -
+Sending build context to Docker daemon 3.072 kB
+Step 1 : FROM ppc64le/ubuntu:latest
+ ---> d2e29d5dd835
+Step 2 : ENV DEBIAN_FRONTEND noninteractive
+ ---> Using cache
+ ---> 6474ed415d91
+Step 3 : RUN apt-get update && apt-get install -yy     debianutils     gawk     git     python     python-dev     python-setuptools     python3     python3-dev     python3-setuptools     socat     texinfo     wget     gcc     libffi-dev     libssl-dev     xterm     mwm     ssh     vim     iputils-ping     sudo     cpio     unzip     diffstat     expect     curl     build-essential
+ ---> Using cache
+ ---> 032fa6145daa
+Step 4 : RUN easy_install     tox     pip     requests
+ ---> Using cache
+ ---> a57a6b117069
+Step 5 : RUN pip install     json2yaml     robotframework     robotframework-requests     robotframework-sshlibrary     robotframework-scplibrary
+ ---> Using cache
+ ---> e4bcd277586a
+Step 6 : RUN wget https://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.18/ipmitool-1.8.18.tar.bz2
+ ---> Using cache
+ ---> 679c07be2964
+Step 7 : RUN tar xvfj ipmitool-*.tar.bz2
+ ---> Using cache
+ ---> b38a33c77bf2
+Step 8 : RUN ./ipmitool-1.8.18/configure
+ ---> Using cache
+ ---> 472b6228180c
+Step 9 : RUN make
+ ---> Using cache
+ ---> 7684aa69a2eb
+Step 10 : RUN make install
+ ---> Using cache
+ ---> 73a577b2ee9f
+Step 11 : RUN grep -q 116 /etc/group || groupadd -g 116 fspcibld
+ ---> Using cache
+ ---> 9b3a4d67a4bd
+Step 12 : RUN grep -q 57457 /etc/passwd || useradd -d /home/fspcibld -m -u 57457 -g 116                     fspcibld
+ ---> Using cache
+ ---> 9d07f84d1a33
+Step 13 : USER fspcibld
+ ---> Using cache
+ ---> b60fb0bfd4c8
+Step 14 : ENV HOME /home/fspcibld
+ ---> Using cache
+ ---> 2f41c605bc5b
+Step 15 : RUN /bin/bash
+ ---> Using cache
+ ---> ce382e04cd8f
+Successfully built ce382e04cd8f
++ cd /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update
++ git clone https://github.com/openbmc/openbmc-test-automation.git
+Cloning into 'openbmc-test-automation'...
++ SHORT_BMC_IMG_NAME=witherspoon-20170725180850.all.tar
++ '[' '!' -f ./witherspoon-20170725180850.all.tar ']'
++ echo 'Already have downloaded witherspoon-20170725180850.all.tar'
+Already have downloaded witherspoon-20170725180850.all.tar
++ BMC_IP=9.3.21.61
++ DEFAULT_UPDATE=0
++ docker run --user fspcibld --env HOME=/home/fspcibld --workdir /home/fspcibld --volume /tmp/fr58p01-slave/workspace/OpenBMC/automated-test/helper-jobs/code-update:/home/fspcibld --tty openbmc/ubuntu-robot-qemu python -m robot -v OPENBMC_HOST:9.3.21.61 -v FILE_PATH:/home/fspcibld/witherspoon-20170725180850.all.tar -v FORCE_UPDATE:0 --include Initiate_Code_Update_BMC /home/fspcibld/openbmc-test-automation/extended/code_update/update_bmc.robot
+==============================================================================
+Update Bmc :: Trigger code update to a target BMC.                            
+==============================================================================
+Initiate Code Update BMC :: Initiate a code update on the BMC.        [32m.[0m[32m.[0m
+Boot Count: 0
+
+Boot Time: 1501006526
+URI:https://9.3.21.61/xyz/openbmc_project/state/host0//attr/RequestedHostTransition, method:Put, args:{u'data': {u'data': 'xyz.openbmc_project.State.Host.Transition.Off'}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+URI:https://9.3.21.61/org/openbmc/settings/host0/attr/power_policy, method:Put, args:{u'data': {u'data': u'RESTORE_LAST_STATE'}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+                                                                              [ [33mWARN[0m ] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x3fff752a7790>: Failed to establish a new connection: [Errno 111] Connection refused',)': /login
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x3fff7529d0d0>: Failed to establish a new connection: [Errno 111] Connection refused',)': /login
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x3fff75254b10>: Failed to establish a new connection: [Errno 111] Connection refused',)': /login
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<urllib3.connection.VerifiedHTTPSConnection object at 0x3fff772ec950>, 'Connection to 9.3.21.61 timed out. (connect timeout=20.0)')': /login
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<urllib3.connection.VerifiedHTTPSConnection object at 0x3fff772ec810>, 'Connection to 9.3.21.61 timed out. (connect timeout=20.0)')': /login
+Initiate Code Update BMC :: Initiate a code update on the BMC.        
+Boot Count: 1
+
+Boot Time: 1501011777
+[32m.[0mURI:https://9.3.21.61/org/openbmc/control/flash/bmc/attr/preserve_network_settings, method:Put, args:{u'data': {u'data': 1}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+[32m.[0m[32m.[0m[32m.[0mWitherspoon
+URI:https://9.3.21.61/org/openbmc/settings/host0/attr/power_policy, method:Put, args:{u'data': {u'data': 'RESTORE_LAST_STATE'}, u'headers': {u'Content-Type': u'application/json'}}
+Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}
+
+status_ping:                                      None
+#(UTC) 2017/07/25 19:56:15.772981 -    3.143997 - Collecting FFDC.
+#(UTC) 2017/07/25 19:56:15.805929 -    0.032948 - Issuing: Get Test Dir and Name
+ffdc_dir_path:                                    /home/fspcibld/logs/20170725195615783178_UpdateBmc/20170725195615783178_InitiateCodeUpdateBMC/
+ffdc_prefix:                                      9.3.21.61.170725.195612.
+#(UTC) 2017/07/25 19:56:15.842951 -    0.037022 - Issuing: Create Directory  /home/fspcibld/logs/20170725195615783178_UpdateBmc/20170725195615783178_InitiateCodeUpdateBMC/
+Witherspoon
+#(UTC) 2017/07/25 19:58:12.726393 -   64.757834 - Finished collecting FFDC.
+#(UTC) 2017/07/25 19:59:33.068501 -   80.342108 - **ERROR** Boot failures exceed the boot failure threshold:
+boot_fail:                                        1
+boot_fail_threshold:                              0
+
+[31mF[0m                                                                              [ [33mWARN[0m ] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/state/host0//attr/CurrentHostState
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/state/host0//attr/CurrentHostState
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/state/host0//attr/CurrentHostState
+Initiate Code Update BMC :: Initiate a code update on the BMC.        status_ping:                                      None
+#(UTC) 2017/07/25 20:00:56.859469 -   83.790968 - Collecting FFDC.
+#(UTC) 2017/07/25 20:00:56.862787 -    0.003318 - Issuing: Get Test Dir and Name
+ffdc_dir_path:                                    /home/fspcibld/logs/20170725200056861164_UpdateBmc/20170725200056861164_InitiateCodeUpdateBMC/
+ffdc_prefix:                                      20170725200056861164_
+#(UTC) 2017/07/25 20:00:56.882116 -    0.019329 - Issuing: Create Directory  /home/fspcibld/logs/20170725200056861164_UpdateBmc/20170725200056861164_InitiateCodeUpdateBMC/
+Witherspoon
+                                                                              [ [33mWARN[0m ] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/logging/entry/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/logging/entry/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/logging/entry/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /org/openbmc/sensors/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /org/openbmc/sensors/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /org/openbmc/sensors/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/inventory/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/inventory/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/inventory/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /org/openbmc/records/events/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /org/openbmc/records/events/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /org/openbmc/records/events/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /org/openbmc/control/led/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /org/openbmc/control/led/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /org/openbmc/control/led/enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/logging/entry//enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/logging/entry//enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.                                                                                      [ [33mWARN[0m ] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='9.3.21.61', port=443): Read timed out. (read timeout=10.0)",)': /xyz/openbmc_project/logging/entry//enumerate
+Initiate Code Update BMC :: Initiate a code update on the BMC.        #(UTC) 2017/07/25 20:10:08.519913 -  134.404934 - Finished collecting FFDC.
+TEST_HISTORY:                                     /home/fspcibld/logs//test_history.txt
+Replacing variables from keyword return value failed: Resolving variable '${state.rsplit('.', 1)[1]}' failed: AttributeError: 'NoneType' object has no attribute 'rsplit'
+[31mF[0m                                                                              Initiate Code Update BMC :: Initiate a code update on the BMC.        | [31mFAIL[0m |
+#(UTC) 2017/07/25 19:59:33.068501 -   80.342108 - **ERROR** Boot failures exceed the boot failure threshold:
+boot_fail:                                        1
+boot_fail_threshold:                              0
+
+
+Also teardown failed:
+Replacing variables from keyword return value failed: Resolving variable '${state.rsplit('.', 1)[1]}' failed: AttributeError: 'NoneType' object has no attribute 'rsplit'
+------------------------------------------------------------------------------
+Update Bmc :: Trigger code update to a target BMC.                    | [31mFAIL[0m |
+1 critical test, 0 passed, 1 failed
+1 test total, 0 passed, 1 failed
+==============================================================================
+Output:  /home/fspcibld/output.xml
+Log:     /home/fspcibld/log.html
+Report:  /home/fspcibld/report.html
+Build step 'Execute shell' marked build as failure
+Set build name.
+New build name is '#798-9.3.21.61'
+Variable with name 'BUILD_DISPLAY_NAME' already exists, current value: '#798-9.3.21.61', new value: '#798-9.3.21.61'
+Archiving artifacts
+[PostBuildScript] - Execution post build scripts.
+[code-update] $ /bin/bash -xe /tmp/hudson3787945525222876914.sh
++ curl -s http://tulpok01p4.aus.stglabs.ibm.com:8080/jenkins/job/OpenBMC/job/automated-test/job/helper-jobs/job/code-update/798//consoleText
