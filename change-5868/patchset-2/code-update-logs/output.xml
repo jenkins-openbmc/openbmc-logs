@@ -1,0 +1,4092 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170810 04:31:32.544" generator="Robot 3.0.2 (Python 2.7.12 on linux2)">
+<suite source="/home/fspcibld/openbmc-test-automation/extended/code_update/code_update.robot" id="s1" name="Code Update">
+<test id="s1-t1" name="REST Host Code Update">
+<kw type="setup" name="Code Update Setup">
+<doc>Do code update test case setup.</doc>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'true' == '${DELETE_OLD_PNOR_IMAGES}'</arg>
+<arg>Delete All PNOR Images</arg>
+</arguments>
+<kw name="Delete All Pnor Images" library="code_update">
+<doc>Delete all PNOR images from the BMC.</doc>
+<kw name="Read Properties" library="rest_client">
+<arguments>
+<arg>/xyz/openbmc_project/software/enumerate</arg>
+</arguments>
+<kw name="OpenBMC Get Request" library="rest_client">
+<arguments>
+<arg>${uri}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:31:33.165" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:31:33.165" starttime="20170810 04:31:33.165"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.166" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:31:33.166" starttime="20170810 04:31:33.166"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.167" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:31:33.167" starttime="20170810 04:31:33.166"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.168" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:31:33.168" starttime="20170810 04:31:33.167"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:33.349" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:31:33.350" starttime="20170810 04:31:33.168"></status>
+</kw>
+<msg timestamp="20170810 04:31:33.350" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:31:33.350" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:33.350" starttime="20170810 04:31:33.168"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:33.350" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:33.351" starttime="20170810 04:31:33.350"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:33.351" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:33.351" starttime="20170810 04:31:33.351"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:33.351" starttime="20170810 04:31:33.164"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:33.351" starttime="20170810 04:31:33.164"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:33.352" starttime="20170810 04:31:33.163"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.352" level="INFO">${base_uri} = /xyz/openbmc_project/software/enumerate</msg>
+<status status="PASS" endtime="20170810 04:31:33.352" starttime="20170810 04:31:33.352"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Get</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:31:33.353" starttime="20170810 04:31:33.353"></status>
+</kw>
+<kw name="Get Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.501" level="INFO">Get Request using : alias=openbmc, uri=/xyz/openbmc_project/software/enumerate, headers=None json=None</msg>
+<msg timestamp="20170810 04:31:33.501" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:33.502" starttime="20170810 04:31:33.353"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:31:33.502" starttime="20170810 04:31:33.502"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:31:33.503" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:31:33.503" starttime="20170810 04:31:33.502"></status>
+</kw>
+<msg timestamp="20170810 04:31:33.503" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:33.503" starttime="20170810 04:31:33.162"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:33.504" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:33.504" starttime="20170810 04:31:33.503"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary.RequestsKeywords">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${content}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.505" level="INFO">To JSON using : content={
+  "data": {
+    "/xyz/openbmc_project/software/2b6dcac8": {
+      "Activation": "xyz.openbmc_project.Software.Activation.Activations.Active", 
+      "ExtendedVersion": "op-build-v1.18-35-g04a11fe,buildroot-2017.05-163-g8035745,skiboot-07937c7,hostboot-faac61e,linux-4.12.3-openpower1-p593bf1b,petitboot-v1.5.1-p1b1d3ef,machine-xml-5575e7e-p28bf2dc,occ-d650501,hostboot-binaries-883d218,capp-ucode-9c73e9f,sbe-02021c6-pea3c159", 
+      "Path": "", 
+      "Priority": 0, 
+      "Purpose": "xyz.openbmc_project.Software.Version.VersionPurpose.Host", 
+      "RequestedActivation": "xyz.openbmc_project.Software.Activation.RequestedActivations.None", 
+      "Version": "IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11"
+    }, 
+    "/xyz/openbmc_project/software/34a0869e": {
+      "Activation": "xyz.openbmc_project.Software.Activation.Activations.Active", 
+      "Path": "", 
+      "Purpose": "xyz.openbmc_project.Software.Version.VersionPurpose.BMC", 
+      "RequestedActivation": "xyz.openbmc_project.Software.Activation.RequestedActivations.None", 
+      "Version": "v1.99.8-209-g68ccdfc"
+    }
+  }, 
+  "message": "200 OK", 
+  "status": "ok"
+} </msg>
+<msg timestamp="20170810 04:31:33.505" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170810 04:31:33.505" level="INFO">${content} = {u'status': u'ok', u'message': u'200 OK', u'data': {u'/xyz/openbmc_project/software/34a0869e': {u'Path': u'', u'Activation': u'xyz.openbmc_project.Software.Activation.Activations.Active', u'RequestedA...</msg>
+<status status="PASS" endtime="20170810 04:31:33.505" starttime="20170810 04:31:33.504"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:33.505" starttime="20170810 04:31:33.162"></status>
+</kw>
+<kw name="Call Method" library="rest_client">
+<arguments>
+<arg>/xyz/openbmc_project/software/2b6dcac8</arg>
+<arg>delete</arg>
+<arg>data={"data":[]}</arg>
+</arguments>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.522" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8</msg>
+<status status="PASS" endtime="20170810 04:31:33.522" starttime="20170810 04:31:33.522"></status>
+</kw>
+<kw name="OpenBMC Post Request" library="rest_client">
+<arguments>
+<arg>${base_uri}/action/${method}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+<arg>&amp;{kwargs}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:31:33.525" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:31:33.525" starttime="20170810 04:31:33.524"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.526" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:31:33.526" starttime="20170810 04:31:33.525"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.526" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:31:33.526" starttime="20170810 04:31:33.526"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.527" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:31:33.527" starttime="20170810 04:31:33.527"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:33.703" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:31:33.703" starttime="20170810 04:31:33.528"></status>
+</kw>
+<msg timestamp="20170810 04:31:33.703" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:31:33.703" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:33.703" starttime="20170810 04:31:33.527"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:33.704" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:33.704" starttime="20170810 04:31:33.704"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:33.705" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:33.705" starttime="20170810 04:31:33.704"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:33.705" starttime="20170810 04:31:33.524"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:33.705" starttime="20170810 04:31:33.524"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:33.706" starttime="20170810 04:31:33.523"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.706" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8/action/delete</msg>
+<status status="PASS" endtime="20170810 04:31:33.706" starttime="20170810 04:31:33.706"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:31:33.707" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:31:33.707" starttime="20170810 04:31:33.706"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${kwargs}</arg>
+<arg>headers</arg>
+<arg>${headers}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:31:33.707" starttime="20170810 04:31:33.707"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Post</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:31:33.708" starttime="20170810 04:31:33.708"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:31:34.191" level="INFO">Post Request using : alias=openbmc, uri=/xyz/openbmc_project/software/2b6dcac8/action/delete, data={"data":[]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<msg timestamp="20170810 04:31:34.191" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:34.191" starttime="20170810 04:31:33.708"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:31:34.192" starttime="20170810 04:31:34.192"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:31:34.193" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:31:34.193" starttime="20170810 04:31:34.192"></status>
+</kw>
+<msg timestamp="20170810 04:31:34.193" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:34.193" starttime="20170810 04:31:33.522"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:34.193" starttime="20170810 04:31:33.521"></status>
+</kw>
+<kw name="Call Method" library="rest_client">
+<arguments>
+<arg>/xyz/openbmc_project/software/2b6dcac8</arg>
+<arg>delete</arg>
+<arg>data={"data":[]}</arg>
+</arguments>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:31:34.210" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8</msg>
+<status status="PASS" endtime="20170810 04:31:34.210" starttime="20170810 04:31:34.210"></status>
+</kw>
+<kw name="OpenBMC Post Request" library="rest_client">
+<arguments>
+<arg>${base_uri}/action/${method}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+<arg>&amp;{kwargs}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:31:34.213" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:31:34.213" starttime="20170810 04:31:34.213"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:31:34.214" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:31:34.214" starttime="20170810 04:31:34.214"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:31:34.215" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:31:34.215" starttime="20170810 04:31:34.214"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:31:34.215" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:31:34.215" starttime="20170810 04:31:34.215"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:34.571" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:31:34.571" starttime="20170810 04:31:34.216"></status>
+</kw>
+<msg timestamp="20170810 04:31:34.571" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:31:34.571" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:34.571" starttime="20170810 04:31:34.216"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:34.572" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:34.572" starttime="20170810 04:31:34.571"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:34.573" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:34.573" starttime="20170810 04:31:34.572"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:34.573" starttime="20170810 04:31:34.212"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:34.573" starttime="20170810 04:31:34.212"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:34.573" starttime="20170810 04:31:34.211"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:31:34.574" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8/action/delete</msg>
+<status status="PASS" endtime="20170810 04:31:34.574" starttime="20170810 04:31:34.573"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:31:34.574" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:31:34.574" starttime="20170810 04:31:34.574"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${kwargs}</arg>
+<arg>headers</arg>
+<arg>${headers}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:31:34.575" starttime="20170810 04:31:34.574"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Post</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:31:34.575" starttime="20170810 04:31:34.575"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:31:34.620" level="INFO">Post Request using : alias=openbmc, uri=/xyz/openbmc_project/software/2b6dcac8/action/delete, data={"data":[]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<msg timestamp="20170810 04:31:34.620" level="INFO">${ret} = &lt;Response [404]&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:34.620" starttime="20170810 04:31:34.576"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:31:34.621" starttime="20170810 04:31:34.620"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:31:34.621" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:31:34.621" starttime="20170810 04:31:34.621"></status>
+</kw>
+<msg timestamp="20170810 04:31:34.621" level="INFO">${resp} = &lt;Response [404]&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:34.621" starttime="20170810 04:31:34.210"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:34.622" starttime="20170810 04:31:34.209"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:34.622" starttime="20170810 04:31:33.069"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:34.622" starttime="20170810 04:31:33.068"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:34.622" starttime="20170810 04:31:33.068"></status>
+</kw>
+<kw name="File Should Exist" library="OperatingSystem">
+<doc>Fails unless the given ``path`` points to an existing file.</doc>
+<arguments>
+<arg>${IMAGE_FILE_PATH}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:34.622" html="yes" level="INFO">File '&lt;a href="file:///home/fspcibld/witherspoon_910_golden.pnor.squashfs.tar"&gt;/home/fspcibld/witherspoon_910_golden.pnor.squashfs.tar&lt;/a&gt;' exists.</msg>
+<status status="PASS" endtime="20170810 04:31:34.623" starttime="20170810 04:31:34.622"></status>
+</kw>
+<kw name="Get Version Tar" library="test_uploadimage">
+<doc>Read the image version from the MANIFEST inside the tarball.</doc>
+<arguments>
+<arg>${IMAGE_FILE_PATH}</arg>
+</arguments>
+<assign>
+<var>${IMAGE_VERSION}</var>
+</assign>
+<msg timestamp="20170810 04:31:34.630" level="INFO">${IMAGE_VERSION} = IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11</msg>
+<status status="PASS" endtime="20170810 04:31:34.630" starttime="20170810 04:31:34.623"></status>
+</kw>
+<kw name="Get Binary File" library="OperatingSystem">
+<doc>Returns the contents of a specified file.</doc>
+<arguments>
+<arg>${IMAGE_FILE_PATH}</arg>
+</arguments>
+<assign>
+<var>${image_data}</var>
+</assign>
+<msg timestamp="20170810 04:31:34.631" html="yes" level="INFO">Getting file '&lt;a href="file:///home/fspcibld/witherspoon_910_golden.pnor.squashfs.tar"&gt;/home/fspcibld/witherspoon_910_golden.pnor.squashfs.tar&lt;/a&gt;'.</msg>
+<msg timestamp="20170810 04:31:46.419" level="INFO">${image_data} = MANIFEST0000664075750014206770000000060613141752257011561 0...</msg>
+<status status="PASS" endtime="20170810 04:31:46.419" starttime="20170810 04:31:34.630"></status>
+</kw>
+<kw name="Upload Image To BMC" library="rest_client">
+<arguments>
+<arg>/upload/image</arg>
+<arg>data=${image_data}</arg>
+</arguments>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:31:46.422" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:31:46.423" starttime="20170810 04:31:46.422"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:31:46.423" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:31:46.423" starttime="20170810 04:31:46.423"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:31:46.424" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:31:46.424" starttime="20170810 04:31:46.424"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:31:46.425" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:31:46.425" starttime="20170810 04:31:46.424"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:46.875" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:31:46.875" starttime="20170810 04:31:46.426"></status>
+</kw>
+<msg timestamp="20170810 04:31:46.875" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:31:46.875" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:46.875" starttime="20170810 04:31:46.425"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:46.876" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:46.876" starttime="20170810 04:31:46.875"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:31:46.876" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:31:46.876" starttime="20170810 04:31:46.876"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:46.877" starttime="20170810 04:31:46.421"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:46.877" starttime="20170810 04:31:46.421"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:31:46.877" starttime="20170810 04:31:46.420"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:31:46.877" level="INFO">${base_uri} = /upload/image</msg>
+<status status="PASS" endtime="20170810 04:31:46.877" starttime="20170810 04:31:46.877"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/octet-stream</arg>
+<arg>Accept=application/octet-stream</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:31:46.878" level="INFO">${headers} = {u'Content-Type': u'application/octet-stream', u'Accept': u'application/octet-stream'}</msg>
+<status status="PASS" endtime="20170810 04:31:46.878" starttime="20170810 04:31:46.878"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${kwargs}</arg>
+<arg>headers</arg>
+<arg>${headers}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:31:46.879" starttime="20170810 04:31:46.878"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Post</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:31:46.879" starttime="20170810 04:31:46.879"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:32:00.036" level="INFO">Post Request using : alias=openbmc, uri=/upload/image, data=&lt;application/octet-stream&gt;, headers={u'Content-Type': u'application/octet-stream', u'Accept': u'application/octet-stream'}, files=None, allow_redirects=True </msg>
+<msg timestamp="20170810 04:32:00.036" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:00.036" starttime="20170810 04:31:46.880"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:00.037" starttime="20170810 04:32:00.037"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${ret.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:00.038" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:00.038" starttime="20170810 04:32:00.037"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:32:00.038" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:32:00.038" starttime="20170810 04:32:00.038"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:00.038" starttime="20170810 04:31:46.420"></status>
+</kw>
+<kw name="Verify Image Upload" library="test_uploadimage">
+<doc>Verify the image was uploaded correctly and that it created</doc>
+<assign>
+<var>${ret}</var>
+</assign>
+<kw name="Open Connection And Log In" library="connection_client">
+<doc>Opens a connection with the given arguments, and logs in.</doc>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<assign>
+<var>${has_host}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<msg timestamp="20170810 04:32:00.045" level="FAIL">Dictionary does not contain key 'host'.</msg>
+<status status="FAIL" endtime="20170810 04:32:00.045" starttime="20170810 04:32:00.045"></status>
+</kw>
+<msg timestamp="20170810 04:32:00.045" level="INFO">${has_host} = False</msg>
+<status status="PASS" endtime="20170810 04:32:00.045" starttime="20170810 04:32:00.044"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${has_host} == ${FALSE}</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:00.046" starttime="20170810 04:32:00.046"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:00.046" starttime="20170810 04:32:00.045"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and '${HTTPS_PORT}' != '${EMPTY}'</arg>
+<arg>User input SSH and HTTPs Ports</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:00.047" starttime="20170810 04:32:00.047"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<assign>
+<var>${has_port}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<msg timestamp="20170810 04:32:00.048" level="FAIL">Dictionary does not contain key 'port'.</msg>
+<status status="FAIL" endtime="20170810 04:32:00.048" starttime="20170810 04:32:00.048"></status>
+</kw>
+<msg timestamp="20170810 04:32:00.048" level="INFO">${has_port} = False</msg>
+<status status="PASS" endtime="20170810 04:32:00.048" starttime="20170810 04:32:00.047"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and ${has_port} == ${FALSE}</arg>
+<arg>Run Keywords</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>port=${SSH_PORT}</arg>
+<arg>AND</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+<arg>ELSE</arg>
+<arg>Run Keyword</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Run Keyword" library="BuiltIn">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:00.051" starttime="20170810 04:32:00.050"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:00.051" starttime="20170810 04:32:00.050"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:00.051" starttime="20170810 04:32:00.049"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${username}</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:00.051" level="INFO">Logging into '9.41.166.169:22' as 'root'.</msg>
+<msg timestamp="20170810 04:32:02.893" level="INFO">Read output: root@witherspoon:~#</msg>
+<status status="PASS" endtime="20170810 04:32:02.893" starttime="20170810 04:32:00.051"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:02.894" starttime="20170810 04:32:00.043"></status>
+</kw>
+<kw name="Execute Command On BMC" library="utils">
+<doc>Execute given command on BMC and return output.</doc>
+<arguments>
+<arg>ls -d /tmp/images/*/</arg>
+</arguments>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>${command}</arg>
+<arg>return_stderr=True</arg>
+</arguments>
+<assign>
+<var>${stdout}</var>
+<var>${stderr}</var>
+</assign>
+<msg timestamp="20170810 04:32:02.909" level="INFO">Executing command 'ls -d /tmp/images/*/'.</msg>
+<msg timestamp="20170810 04:32:03.106" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20170810 04:32:03.106" level="INFO">${stdout} = /tmp/images/2b6dcac8/</msg>
+<msg timestamp="20170810 04:32:03.106" level="INFO">${stderr} = </msg>
+<status status="PASS" endtime="20170810 04:32:03.106" starttime="20170810 04:32:02.909"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${stderr}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:03.107" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20170810 04:32:03.107" starttime="20170810 04:32:03.107"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:03.107" starttime="20170810 04:32:02.908"></status>
+</kw>
+<kw name="Open Connection And Log In" library="connection_client">
+<doc>Opens a connection with the given arguments, and logs in.</doc>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<assign>
+<var>${has_host}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<msg timestamp="20170810 04:32:03.112" level="FAIL">Dictionary does not contain key 'host'.</msg>
+<status status="FAIL" endtime="20170810 04:32:03.112" starttime="20170810 04:32:03.112"></status>
+</kw>
+<msg timestamp="20170810 04:32:03.112" level="INFO">${has_host} = False</msg>
+<status status="PASS" endtime="20170810 04:32:03.112" starttime="20170810 04:32:03.111"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${has_host} == ${FALSE}</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:03.113" starttime="20170810 04:32:03.113"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:03.113" starttime="20170810 04:32:03.112"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and '${HTTPS_PORT}' != '${EMPTY}'</arg>
+<arg>User input SSH and HTTPs Ports</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:03.114" starttime="20170810 04:32:03.114"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<assign>
+<var>${has_port}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<msg timestamp="20170810 04:32:03.115" level="FAIL">Dictionary does not contain key 'port'.</msg>
+<status status="FAIL" endtime="20170810 04:32:03.115" starttime="20170810 04:32:03.115"></status>
+</kw>
+<msg timestamp="20170810 04:32:03.115" level="INFO">${has_port} = False</msg>
+<status status="PASS" endtime="20170810 04:32:03.115" starttime="20170810 04:32:03.114"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and ${has_port} == ${FALSE}</arg>
+<arg>Run Keywords</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>port=${SSH_PORT}</arg>
+<arg>AND</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+<arg>ELSE</arg>
+<arg>Run Keyword</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Run Keyword" library="BuiltIn">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:03.117" starttime="20170810 04:32:03.117"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:03.117" starttime="20170810 04:32:03.116"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:03.117" starttime="20170810 04:32:03.115"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${username}</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:03.118" level="INFO">Logging into '9.41.166.169:22' as 'root'.</msg>
+<msg timestamp="20170810 04:32:06.060" level="INFO">Read output: root@witherspoon:~#</msg>
+<status status="PASS" endtime="20170810 04:32:06.060" starttime="20170810 04:32:03.117"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:06.060" starttime="20170810 04:32:03.110"></status>
+</kw>
+<kw name="Execute Command On BMC" library="utils">
+<doc>Execute given command on BMC and return output.</doc>
+<arguments>
+<arg>cat /tmp/images/2b6dcac8/MANIFEST | grep "version="</arg>
+</arguments>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>${command}</arg>
+<arg>return_stderr=True</arg>
+</arguments>
+<assign>
+<var>${stdout}</var>
+<var>${stderr}</var>
+</assign>
+<msg timestamp="20170810 04:32:06.076" level="INFO">Executing command 'cat /tmp/images/2b6dcac8/MANIFEST | grep "version="'.</msg>
+<msg timestamp="20170810 04:32:06.496" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20170810 04:32:06.496" level="INFO">${stdout} = version=IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11
+extended_version=op-build-v1.18-35-g04a11fe,buildroot-2017.05-163-g8035745,skiboot-07937c7,hostboot-faac61e,linux-4.12.3-openpower1-p593bf1b,petitboo...</msg>
+<msg timestamp="20170810 04:32:06.496" level="INFO">${stderr} = </msg>
+<status status="PASS" endtime="20170810 04:32:06.496" starttime="20170810 04:32:06.076"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${stderr}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:06.497" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20170810 04:32:06.497" starttime="20170810 04:32:06.497"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:06.498" starttime="20170810 04:32:06.075"></status>
+</kw>
+<msg timestamp="20170810 04:32:06.498" level="INFO">${version_id} = 2b6dcac8</msg>
+<kw name="Open Connection And Log In" library="connection_client">
+<doc>Opens a connection with the given arguments, and logs in.</doc>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<assign>
+<var>${has_host}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<msg timestamp="20170810 04:32:06.503" level="FAIL">Dictionary does not contain key 'host'.</msg>
+<status status="FAIL" endtime="20170810 04:32:06.503" starttime="20170810 04:32:06.502"></status>
+</kw>
+<msg timestamp="20170810 04:32:06.503" level="INFO">${has_host} = False</msg>
+<status status="PASS" endtime="20170810 04:32:06.503" starttime="20170810 04:32:06.502"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${has_host} == ${FALSE}</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:06.504" starttime="20170810 04:32:06.504"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:06.504" starttime="20170810 04:32:06.503"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and '${HTTPS_PORT}' != '${EMPTY}'</arg>
+<arg>User input SSH and HTTPs Ports</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:06.505" starttime="20170810 04:32:06.504"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<assign>
+<var>${has_port}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<msg timestamp="20170810 04:32:06.506" level="FAIL">Dictionary does not contain key 'port'.</msg>
+<status status="FAIL" endtime="20170810 04:32:06.506" starttime="20170810 04:32:06.505"></status>
+</kw>
+<msg timestamp="20170810 04:32:06.506" level="INFO">${has_port} = False</msg>
+<status status="PASS" endtime="20170810 04:32:06.506" starttime="20170810 04:32:06.505"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and ${has_port} == ${FALSE}</arg>
+<arg>Run Keywords</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>port=${SSH_PORT}</arg>
+<arg>AND</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+<arg>ELSE</arg>
+<arg>Run Keyword</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Run Keyword" library="BuiltIn">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:06.508" starttime="20170810 04:32:06.507"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:06.508" starttime="20170810 04:32:06.507"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:06.508" starttime="20170810 04:32:06.506"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${username}</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:06.508" level="INFO">Logging into '9.41.166.169:22' as 'root'.</msg>
+<msg timestamp="20170810 04:32:08.254" level="INFO">Read output: root@witherspoon:~#</msg>
+<status status="PASS" endtime="20170810 04:32:08.254" starttime="20170810 04:32:06.508"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:08.255" starttime="20170810 04:32:06.501"></status>
+</kw>
+<kw name="Open Connection And Log In" library="connection_client">
+<doc>Opens a connection with the given arguments, and logs in.</doc>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<assign>
+<var>${has_host}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<msg timestamp="20170810 04:32:08.260" level="FAIL">Dictionary does not contain key 'host'.</msg>
+<status status="FAIL" endtime="20170810 04:32:08.260" starttime="20170810 04:32:08.259"></status>
+</kw>
+<msg timestamp="20170810 04:32:08.260" level="INFO">${has_host} = False</msg>
+<status status="PASS" endtime="20170810 04:32:08.260" starttime="20170810 04:32:08.259"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${has_host} == ${FALSE}</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:08.261" starttime="20170810 04:32:08.261"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:08.261" starttime="20170810 04:32:08.260"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and '${HTTPS_PORT}' != '${EMPTY}'</arg>
+<arg>User input SSH and HTTPs Ports</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:08.262" starttime="20170810 04:32:08.261"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<assign>
+<var>${has_port}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<msg timestamp="20170810 04:32:08.263" level="FAIL">Dictionary does not contain key 'port'.</msg>
+<status status="FAIL" endtime="20170810 04:32:08.263" starttime="20170810 04:32:08.262"></status>
+</kw>
+<msg timestamp="20170810 04:32:08.263" level="INFO">${has_port} = False</msg>
+<status status="PASS" endtime="20170810 04:32:08.263" starttime="20170810 04:32:08.262"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and ${has_port} == ${FALSE}</arg>
+<arg>Run Keywords</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>port=${SSH_PORT}</arg>
+<arg>AND</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+<arg>ELSE</arg>
+<arg>Run Keyword</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Run Keyword" library="BuiltIn">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:08.265" starttime="20170810 04:32:08.264"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:08.265" starttime="20170810 04:32:08.264"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:08.265" starttime="20170810 04:32:08.263"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${username}</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:08.265" level="INFO">Logging into '9.41.166.169:22' as 'root'.</msg>
+<msg timestamp="20170810 04:32:10.676" level="INFO">Read output: root@witherspoon:~#</msg>
+<status status="PASS" endtime="20170810 04:32:10.677" starttime="20170810 04:32:08.265"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:10.677" starttime="20170810 04:32:08.258"></status>
+</kw>
+<kw name="Execute Command On BMC" library="utils">
+<doc>Execute given command on BMC and return output.</doc>
+<arguments>
+<arg>cat /tmp/images/2b6dcac8/MANIFEST | grep "purpose="</arg>
+</arguments>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>${command}</arg>
+<arg>return_stderr=True</arg>
+</arguments>
+<assign>
+<var>${stdout}</var>
+<var>${stderr}</var>
+</assign>
+<msg timestamp="20170810 04:32:10.693" level="INFO">Executing command 'cat /tmp/images/2b6dcac8/MANIFEST | grep "purpose="'.</msg>
+<msg timestamp="20170810 04:32:10.961" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20170810 04:32:10.961" level="INFO">${stdout} = purpose=xyz.openbmc_project.Software.Version.VersionPurpose.Host</msg>
+<msg timestamp="20170810 04:32:10.962" level="INFO">${stderr} = </msg>
+<status status="PASS" endtime="20170810 04:32:10.962" starttime="20170810 04:32:10.692"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${stderr}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:10.962" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20170810 04:32:10.962" starttime="20170810 04:32:10.962"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:10.962" starttime="20170810 04:32:10.692"></status>
+</kw>
+<kw name="Read Attribute" library="rest_client">
+<arguments>
+<arg>/xyz/openbmc_project/software/2b6dcac8</arg>
+<arg>Activation</arg>
+</arguments>
+<kw name="OpenBMC Get Request" library="rest_client">
+<arguments>
+<arg>${uri}/attr/${attr}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:32:10.980" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:32:10.980" starttime="20170810 04:32:10.980"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:32:10.981" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:32:10.981" starttime="20170810 04:32:10.981"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:32:10.982" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:32:10.982" starttime="20170810 04:32:10.981"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:32:10.982" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:32:10.982" starttime="20170810 04:32:10.982"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.165" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:32:11.165" starttime="20170810 04:32:10.983"></status>
+</kw>
+<msg timestamp="20170810 04:32:11.165" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:32:11.165" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.165" starttime="20170810 04:32:10.983"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.166" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.166" starttime="20170810 04:32:11.165"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.166" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.166" starttime="20170810 04:32:11.166"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:11.167" starttime="20170810 04:32:10.979"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:11.167" starttime="20170810 04:32:10.979"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:11.167" starttime="20170810 04:32:10.978"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.167" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8/attr/Activation</msg>
+<status status="PASS" endtime="20170810 04:32:11.167" starttime="20170810 04:32:11.167"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Get</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:11.168" starttime="20170810 04:32:11.168"></status>
+</kw>
+<kw name="Get Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.296" level="INFO">Get Request using : alias=openbmc, uri=/xyz/openbmc_project/software/2b6dcac8/attr/Activation, headers=None json=None</msg>
+<msg timestamp="20170810 04:32:11.296" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.296" starttime="20170810 04:32:11.168"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:11.297" starttime="20170810 04:32:11.297"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:32:11.298" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:32:11.298" starttime="20170810 04:32:11.297"></status>
+</kw>
+<msg timestamp="20170810 04:32:11.298" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.298" starttime="20170810 04:32:10.977"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.298" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.299" starttime="20170810 04:32:11.298"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary.RequestsKeywords">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${content}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.299" level="INFO">To JSON using : content={
+  "data": "xyz.openbmc_project.Software.Activation.Activations.Ready", 
+  "message": "200 OK", 
+  "status": "ok"
+} </msg>
+<msg timestamp="20170810 04:32:11.299" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170810 04:32:11.299" level="INFO">${content} = {u'status': u'ok', u'message': u'200 OK', u'data': u'xyz.openbmc_project.Software.Activation.Activations.Ready'}</msg>
+<status status="PASS" endtime="20170810 04:32:11.299" starttime="20170810 04:32:11.299"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:11.300" starttime="20170810 04:32:10.977"></status>
+</kw>
+<msg timestamp="20170810 04:32:11.300" level="INFO">${ret} = True</msg>
+<status status="PASS" endtime="20170810 04:32:11.300" starttime="20170810 04:32:00.039"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:11.300" starttime="20170810 04:32:11.300"></status>
+</kw>
+<kw name="Read Properties" library="rest_client">
+<arguments>
+<arg>${SOFTWARE_VERSION_URI}${version_id}</arg>
+</arguments>
+<assign>
+<var>${software_state}</var>
+</assign>
+<kw name="OpenBMC Get Request" library="rest_client">
+<arguments>
+<arg>${uri}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.303" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:32:11.304" starttime="20170810 04:32:11.303"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.305" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:32:11.305" starttime="20170810 04:32:11.304"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.306" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:32:11.306" starttime="20170810 04:32:11.305"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.306" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:32:11.306" starttime="20170810 04:32:11.306"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.564" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:32:11.565" starttime="20170810 04:32:11.307"></status>
+</kw>
+<msg timestamp="20170810 04:32:11.565" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:32:11.565" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.565" starttime="20170810 04:32:11.307"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.566" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.566" starttime="20170810 04:32:11.565"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.566" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.566" starttime="20170810 04:32:11.566"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:11.566" starttime="20170810 04:32:11.303"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:11.566" starttime="20170810 04:32:11.302"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:11.567" starttime="20170810 04:32:11.302"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.567" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8</msg>
+<status status="PASS" endtime="20170810 04:32:11.567" starttime="20170810 04:32:11.567"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Get</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:11.568" starttime="20170810 04:32:11.568"></status>
+</kw>
+<kw name="Get Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.699" level="INFO">Get Request using : alias=openbmc, uri=/xyz/openbmc_project/software/2b6dcac8, headers=None json=None</msg>
+<msg timestamp="20170810 04:32:11.699" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.699" starttime="20170810 04:32:11.568"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:11.700" starttime="20170810 04:32:11.700"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:32:11.701" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:32:11.701" starttime="20170810 04:32:11.700"></status>
+</kw>
+<msg timestamp="20170810 04:32:11.701" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.701" starttime="20170810 04:32:11.301"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.702" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.702" starttime="20170810 04:32:11.701"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary.RequestsKeywords">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${content}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.702" level="INFO">To JSON using : content={
+  "data": {
+    "Activation": "xyz.openbmc_project.Software.Activation.Activations.Ready", 
+    "ExtendedVersion": "op-build-v1.18-35-g04a11fe,buildroot-2017.05-163-g8035745,skiboot-07937c7,hostboot-faac61e,linux-4.12.3-openpower1-p593bf1b,petitboot-v1.5.1-p1b1d3ef,machine-xml-5575e7e-p28bf2dc,occ-d650501,hostboot-binaries-883d218,capp-ucode-9c73e9f,sbe-02021c6-pea3c159", 
+    "Path": "/tmp/images/2b6dcac8", 
+    "Purpose": "xyz.openbmc_project.Software.Version.VersionPurpose.Host", 
+    "RequestedActivation": "xyz.openbmc_project.Software.Activation.RequestedActivations.None", 
+    "Version": "IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11"
+  }, 
+  "message": "200 OK", 
+  "status": "ok"
+} </msg>
+<msg timestamp="20170810 04:32:11.702" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170810 04:32:11.702" level="INFO">${content} = {u'status': u'ok', u'message': u'200 OK', u'data': {u'Activation': u'xyz.openbmc_project.Software.Activation.Activations.Ready', u'Version': u'IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11', u'Purpose': ...</msg>
+<status status="PASS" endtime="20170810 04:32:11.702" starttime="20170810 04:32:11.702"></status>
+</kw>
+<msg timestamp="20170810 04:32:11.703" level="INFO">${software_state} = {u'Activation': u'xyz.openbmc_project.Software.Activation.Activations.Ready', u'Version': u'IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11', u'Purpose': u'xyz.openbmc_project.Software.Version.VersionPurpo...</msg>
+<status status="PASS" endtime="20170810 04:32:11.703" starttime="20170810 04:32:11.301"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>&amp;{software_state}[Activation]</arg>
+<arg>${READY}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.704" level="INFO">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'str'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:11.704" starttime="20170810 04:32:11.703"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=${REQUESTED_ACTIVE}</arg>
+</arguments>
+<assign>
+<var>${args}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.704" level="INFO">${args} = {u'data': 'xyz.openbmc_project.Software.Activation.RequestedActivations.Active'}</msg>
+<status status="PASS" endtime="20170810 04:32:11.704" starttime="20170810 04:32:11.704"></status>
+</kw>
+<kw name="Write Attribute" library="rest_client">
+<arguments>
+<arg>${SOFTWARE_VERSION_URI}${version_id}</arg>
+<arg>RequestedActivation</arg>
+<arg>data=${args}</arg>
+</arguments>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.706" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8</msg>
+<status status="PASS" endtime="20170810 04:32:11.706" starttime="20170810 04:32:11.705"></status>
+</kw>
+<kw name="OpenBMC Put Request" library="rest_client">
+<arguments>
+<arg>${base_uri}/attr/${attr}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>&amp;{kwargs}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:32:11.711" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:32:11.712" starttime="20170810 04:32:11.711"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.713" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:32:11.713" starttime="20170810 04:32:11.712"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.713" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:32:11.714" starttime="20170810 04:32:11.713"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:32:11.714" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:32:11.715" starttime="20170810 04:32:11.714"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:12.385" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:32:12.385" starttime="20170810 04:32:11.716"></status>
+</kw>
+<msg timestamp="20170810 04:32:12.385" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:32:12.385" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:12.385" starttime="20170810 04:32:11.715"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:12.386" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:12.386" starttime="20170810 04:32:12.386"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:12.387" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:12.387" starttime="20170810 04:32:12.386"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:12.387" starttime="20170810 04:32:11.710"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:12.387" starttime="20170810 04:32:11.709"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:12.388" starttime="20170810 04:32:11.707"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:32:12.388" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8/attr/RequestedActivation</msg>
+<status status="PASS" endtime="20170810 04:32:12.388" starttime="20170810 04:32:12.388"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:32:12.389" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:32:12.389" starttime="20170810 04:32:12.388"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${kwargs}</arg>
+<arg>headers</arg>
+<arg>${headers}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:12.389" starttime="20170810 04:32:12.389"></status>
+</kw>
+<kw name="Log Request" library="rest_client">
+<arguments>
+<arg>method=Put</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>URI:</arg>
+<arg>${AUTH_URI}</arg>
+<arg>${kwargs["base_uri"]}</arg>
+<arg>, method:</arg>
+<arg>${kwargs["method"]}</arg>
+<arg>, args:</arg>
+<arg>${kwargs["args"]}</arg>
+</arguments>
+<assign>
+<var>${msg}</var>
+</assign>
+<msg timestamp="20170810 04:32:12.391" level="INFO">${msg} = URI:https://9.41.166.169/xyz/openbmc_project/software/2b6dcac8/attr/RequestedActivation, method:Put, args:{u'data': {u'data': 'xyz.openbmc_project.Software.Activation.RequestedActivations.Active'}, u'...</msg>
+<status status="PASS" endtime="20170810 04:32:12.391" starttime="20170810 04:32:12.390"></status>
+</kw>
+<kw name="Logging" library="rest_client">
+<arguments>
+<arg>${msg}</arg>
+<arg>console=True</arg>
+</arguments>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${msg}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20170810 04:32:12.392" level="INFO">URI:https://9.41.166.169/xyz/openbmc_project/software/2b6dcac8/attr/RequestedActivation, method:Put, args:{u'data': {u'data': 'xyz.openbmc_project.Software.Activation.RequestedActivations.Active'}, u'headers': {u'Content-Type': u'application/json'}}</msg>
+<status status="PASS" endtime="20170810 04:32:12.392" starttime="20170810 04:32:12.392"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:12.392" starttime="20170810 04:32:12.391"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:12.392" starttime="20170810 04:32:12.390"></status>
+</kw>
+<kw name="Put Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a PUT request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:32:12.878" level="INFO">Put Request using : alias=openbmc, uri=/xyz/openbmc_project/software/2b6dcac8/attr/RequestedActivation, data={"data": "xyz.openbmc_project.Software.Activation.RequestedActivations.Active"},                     headers={u'Content-Type': u'application/json'}, allow_redirects=True </msg>
+<msg timestamp="20170810 04:32:12.878" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:12.878" starttime="20170810 04:32:12.393"></status>
+</kw>
+<kw name="Log Response" library="rest_client">
+<arguments>
+<arg>${ret}</arg>
+</arguments>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>Response code:</arg>
+<arg>${resp.status_code}</arg>
+<arg>, Content:</arg>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${msg}</var>
+</assign>
+<msg timestamp="20170810 04:32:12.880" level="INFO">${msg} = Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}</msg>
+<status status="PASS" endtime="20170810 04:32:12.880" starttime="20170810 04:32:12.879"></status>
+</kw>
+<kw name="Logging" library="rest_client">
+<arguments>
+<arg>${msg}</arg>
+<arg>console=True</arg>
+</arguments>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${msg}</arg>
+<arg>console=True</arg>
+</arguments>
+<msg timestamp="20170810 04:32:12.881" level="INFO">Response code:200, Content:{
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+}</msg>
+<status status="PASS" endtime="20170810 04:32:12.881" starttime="20170810 04:32:12.880"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:12.881" starttime="20170810 04:32:12.880"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:12.881" starttime="20170810 04:32:12.878"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:32:12.881" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:32:12.881" starttime="20170810 04:32:12.881"></status>
+</kw>
+<msg timestamp="20170810 04:32:12.882" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:12.882" starttime="20170810 04:32:11.706"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:12.882" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:12.882" starttime="20170810 04:32:12.882"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary.RequestsKeywords">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${json}</var>
+</assign>
+<msg timestamp="20170810 04:32:12.884" level="INFO">To JSON using : content={
+  "data": null, 
+  "message": "200 OK", 
+  "status": "ok"
+} </msg>
+<msg timestamp="20170810 04:32:12.884" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170810 04:32:12.885" level="INFO">${json} = {u'status': u'ok', u'message': u'200 OK', u'data': None}</msg>
+<status status="PASS" endtime="20170810 04:32:12.885" starttime="20170810 04:32:12.883"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:12.885" starttime="20170810 04:32:11.705"></status>
+</kw>
+<kw name="Read Properties" library="rest_client">
+<arguments>
+<arg>${SOFTWARE_VERSION_URI}${version_id}</arg>
+</arguments>
+<assign>
+<var>${software_state}</var>
+</assign>
+<kw name="OpenBMC Get Request" library="rest_client">
+<arguments>
+<arg>${uri}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:32:12.888" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:32:12.889" starttime="20170810 04:32:12.888"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:32:12.890" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:32:12.890" starttime="20170810 04:32:12.889"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:32:12.890" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:32:12.890" starttime="20170810 04:32:12.890"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:32:12.891" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:32:12.891" starttime="20170810 04:32:12.891"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:13.118" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:32:13.118" starttime="20170810 04:32:12.892"></status>
+</kw>
+<msg timestamp="20170810 04:32:13.118" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:32:13.118" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:13.118" starttime="20170810 04:32:12.891"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:13.119" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:13.119" starttime="20170810 04:32:13.119"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:13.120" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:13.120" starttime="20170810 04:32:13.120"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:13.120" starttime="20170810 04:32:12.887"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:13.120" starttime="20170810 04:32:12.887"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:13.121" starttime="20170810 04:32:12.886"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:32:13.122" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8</msg>
+<status status="PASS" endtime="20170810 04:32:13.122" starttime="20170810 04:32:13.121"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Get</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:13.123" starttime="20170810 04:32:13.122"></status>
+</kw>
+<kw name="Get Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:32:13.763" level="INFO">Get Request using : alias=openbmc, uri=/xyz/openbmc_project/software/2b6dcac8, headers=None json=None</msg>
+<msg timestamp="20170810 04:32:13.763" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:13.763" starttime="20170810 04:32:13.123"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:13.764" starttime="20170810 04:32:13.763"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:32:13.764" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:32:13.764" starttime="20170810 04:32:13.764"></status>
+</kw>
+<msg timestamp="20170810 04:32:13.764" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:13.764" starttime="20170810 04:32:12.886"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:13.765" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:13.765" starttime="20170810 04:32:13.765"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary.RequestsKeywords">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${content}</var>
+</assign>
+<msg timestamp="20170810 04:32:13.766" level="INFO">To JSON using : content={
+  "data": {
+    "Activation": "xyz.openbmc_project.Software.Activation.Activations.Activating", 
+    "ExtendedVersion": "op-build-v1.18-35-g04a11fe,buildroot-2017.05-163-g8035745,skiboot-07937c7,hostboot-faac61e,linux-4.12.3-openpower1-p593bf1b,petitboot-v1.5.1-p1b1d3ef,machine-xml-5575e7e-p28bf2dc,occ-d650501,hostboot-binaries-883d218,capp-ucode-9c73e9f,sbe-02021c6-pea3c159", 
+    "Path": "/tmp/images/2b6dcac8", 
+    "Progress": 10, 
+    "Purpose": "xyz.openbmc_project.Software.Version.VersionPurpose.Host", 
+    "RequestedActivation": "xyz.openbmc_project.Software.Activation.RequestedActivations.Active", 
+    "Version": "IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11"
+  }, 
+  "message": "200 OK", 
+  "status": "ok"
+} </msg>
+<msg timestamp="20170810 04:32:13.766" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170810 04:32:13.766" level="INFO">${content} = {u'status': u'ok', u'message': u'200 OK', u'data': {u'Activation': u'xyz.openbmc_project.Software.Activation.Activations.Activating', u'Version': u'IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11', u'Purpo...</msg>
+<status status="PASS" endtime="20170810 04:32:13.766" starttime="20170810 04:32:13.765"></status>
+</kw>
+<msg timestamp="20170810 04:32:13.766" level="INFO">${software_state} = {u'Activation': u'xyz.openbmc_project.Software.Activation.Activations.Activating', u'Version': u'IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11', u'Purpose': u'xyz.openbmc_project.Software.Version.Version...</msg>
+<status status="PASS" endtime="20170810 04:32:13.766" starttime="20170810 04:32:12.885"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>&amp;{software_state}[RequestedActivation]</arg>
+<arg>${REQUESTED_ACTIVE}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:13.768" level="INFO">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'str'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:13.768" starttime="20170810 04:32:13.767"></status>
+</kw>
+<kw name="Wait For Activation State Change" library="code_update">
+<doc>Wait for the current activation state of ${version_id} to</doc>
+<arguments>
+<arg>${version_id}</arg>
+<arg>${ACTIVATING}</arg>
+</arguments>
+<kw name="Open Connection And Log In" library="connection_client">
+<doc>Opens a connection with the given arguments, and logs in.</doc>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<assign>
+<var>${has_host}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<msg timestamp="20170810 04:32:13.774" level="FAIL">Dictionary does not contain key 'host'.</msg>
+<status status="FAIL" endtime="20170810 04:32:13.774" starttime="20170810 04:32:13.773"></status>
+</kw>
+<msg timestamp="20170810 04:32:13.774" level="INFO">${has_host} = False</msg>
+<status status="PASS" endtime="20170810 04:32:13.774" starttime="20170810 04:32:13.773"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${has_host} == ${FALSE}</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:13.775" starttime="20170810 04:32:13.775"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:13.775" starttime="20170810 04:32:13.774"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and '${HTTPS_PORT}' != '${EMPTY}'</arg>
+<arg>User input SSH and HTTPs Ports</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:13.776" starttime="20170810 04:32:13.775"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<assign>
+<var>${has_port}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<msg timestamp="20170810 04:32:13.777" level="FAIL">Dictionary does not contain key 'port'.</msg>
+<status status="FAIL" endtime="20170810 04:32:13.777" starttime="20170810 04:32:13.777"></status>
+</kw>
+<msg timestamp="20170810 04:32:13.777" level="INFO">${has_port} = False</msg>
+<status status="PASS" endtime="20170810 04:32:13.777" starttime="20170810 04:32:13.776"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and ${has_port} == ${FALSE}</arg>
+<arg>Run Keywords</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>port=${SSH_PORT}</arg>
+<arg>AND</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+<arg>ELSE</arg>
+<arg>Run Keyword</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Run Keyword" library="BuiltIn">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:13.781" starttime="20170810 04:32:13.778"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:13.781" starttime="20170810 04:32:13.778"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:13.781" starttime="20170810 04:32:13.777"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${username}</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:13.782" level="INFO">Logging into '9.41.166.169:22' as 'root'.</msg>
+<msg timestamp="20170810 04:32:16.462" level="INFO">Read output: root@witherspoon:~#</msg>
+<status status="PASS" endtime="20170810 04:32:16.462" starttime="20170810 04:32:13.782"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:16.462" starttime="20170810 04:32:13.772"></status>
+</kw>
+<kw name="Read Properties" library="rest_client">
+<arguments>
+<arg>/xyz/openbmc_project/software/2b6dcac8</arg>
+</arguments>
+<kw name="OpenBMC Get Request" library="rest_client">
+<arguments>
+<arg>${uri}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:32:16.480" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:32:16.480" starttime="20170810 04:32:16.480"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:32:16.481" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:32:16.481" starttime="20170810 04:32:16.481"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:32:16.482" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:32:16.482" starttime="20170810 04:32:16.481"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:32:16.483" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:32:16.483" starttime="20170810 04:32:16.482"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:16.665" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:32:16.665" starttime="20170810 04:32:16.483"></status>
+</kw>
+<msg timestamp="20170810 04:32:16.665" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:32:16.665" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:16.665" starttime="20170810 04:32:16.483"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:16.666" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:16.666" starttime="20170810 04:32:16.666"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:16.667" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:16.667" starttime="20170810 04:32:16.667"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:16.667" starttime="20170810 04:32:16.479"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:16.668" starttime="20170810 04:32:16.479"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:16.668" starttime="20170810 04:32:16.478"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:32:16.668" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8</msg>
+<status status="PASS" endtime="20170810 04:32:16.668" starttime="20170810 04:32:16.668"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Get</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:16.669" starttime="20170810 04:32:16.669"></status>
+</kw>
+<kw name="Get Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:32:16.812" level="INFO">Get Request using : alias=openbmc, uri=/xyz/openbmc_project/software/2b6dcac8, headers=None json=None</msg>
+<msg timestamp="20170810 04:32:16.812" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:16.812" starttime="20170810 04:32:16.669"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:32:16.813" starttime="20170810 04:32:16.812"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:32:16.813" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:32:16.813" starttime="20170810 04:32:16.813"></status>
+</kw>
+<msg timestamp="20170810 04:32:16.813" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:16.814" starttime="20170810 04:32:16.478"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:32:16.814" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:32:16.814" starttime="20170810 04:32:16.814"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary.RequestsKeywords">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${content}</var>
+</assign>
+<msg timestamp="20170810 04:32:16.815" level="INFO">To JSON using : content={
+  "data": {
+    "Activation": "xyz.openbmc_project.Software.Activation.Activations.Activating", 
+    "ExtendedVersion": "op-build-v1.18-35-g04a11fe,buildroot-2017.05-163-g8035745,skiboot-07937c7,hostboot-faac61e,linux-4.12.3-openpower1-p593bf1b,petitboot-v1.5.1-p1b1d3ef,machine-xml-5575e7e-p28bf2dc,occ-d650501,hostboot-binaries-883d218,capp-ucode-9c73e9f,sbe-02021c6-pea3c159", 
+    "Path": "/tmp/images/2b6dcac8", 
+    "Progress": 10, 
+    "Purpose": "xyz.openbmc_project.Software.Version.VersionPurpose.Host", 
+    "RequestedActivation": "xyz.openbmc_project.Software.Activation.RequestedActivations.Active", 
+    "Version": "IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11"
+  }, 
+  "message": "200 OK", 
+  "status": "ok"
+} </msg>
+<msg timestamp="20170810 04:32:16.815" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170810 04:32:16.815" level="INFO">${content} = {u'status': u'ok', u'message': u'200 OK', u'data': {u'Activation': u'xyz.openbmc_project.Software.Activation.Activations.Activating', u'Version': u'IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11', u'Purpo...</msg>
+<status status="PASS" endtime="20170810 04:32:16.815" starttime="20170810 04:32:16.814"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:32:16.815" starttime="20170810 04:32:16.477"></status>
+</kw>
+<kw name="Read Properties" library="rest_client">
+<arguments>
+<arg>/xyz/openbmc_project/software/2b6dcac8</arg>
+</arguments>
+<kw name="OpenBMC Get Request" library="rest_client">
+<arguments>
+<arg>${uri}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:33:16.836" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:33:16.836" starttime="20170810 04:33:16.835"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:33:16.837" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:33:16.837" starttime="20170810 04:33:16.837"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:33:16.838" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:33:16.838" starttime="20170810 04:33:16.838"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:33:16.839" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:33:16.839" starttime="20170810 04:33:16.839"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.018" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:33:17.018" starttime="20170810 04:33:16.840"></status>
+</kw>
+<msg timestamp="20170810 04:33:17.018" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:33:17.018" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.018" starttime="20170810 04:33:16.840"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.019" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.019" starttime="20170810 04:33:17.018"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.019" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.019" starttime="20170810 04:33:17.019"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.020" starttime="20170810 04:33:16.835"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.020" starttime="20170810 04:33:16.834"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.020" starttime="20170810 04:33:16.834"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:33:17.020" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8</msg>
+<status status="PASS" endtime="20170810 04:33:17.020" starttime="20170810 04:33:17.020"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Get</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:17.021" starttime="20170810 04:33:17.021"></status>
+</kw>
+<kw name="Get Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:33:17.153" level="INFO">Get Request using : alias=openbmc, uri=/xyz/openbmc_project/software/2b6dcac8, headers=None json=None</msg>
+<msg timestamp="20170810 04:33:17.153" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.153" starttime="20170810 04:33:17.021"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:17.154" starttime="20170810 04:33:17.153"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:33:17.154" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:33:17.154" starttime="20170810 04:33:17.154"></status>
+</kw>
+<msg timestamp="20170810 04:33:17.154" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.154" starttime="20170810 04:33:16.833"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.155" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.155" starttime="20170810 04:33:17.155"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary.RequestsKeywords">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${content}</var>
+</assign>
+<msg timestamp="20170810 04:33:17.156" level="INFO">To JSON using : content={
+  "data": {
+    "Activation": "xyz.openbmc_project.Software.Activation.Activations.Active", 
+    "ExtendedVersion": "op-build-v1.18-35-g04a11fe,buildroot-2017.05-163-g8035745,skiboot-07937c7,hostboot-faac61e,linux-4.12.3-openpower1-p593bf1b,petitboot-v1.5.1-p1b1d3ef,machine-xml-5575e7e-p28bf2dc,occ-d650501,hostboot-binaries-883d218,capp-ucode-9c73e9f,sbe-02021c6-pea3c159", 
+    "Path": "/tmp/images/2b6dcac8", 
+    "Priority": 0, 
+    "Purpose": "xyz.openbmc_project.Software.Version.VersionPurpose.Host", 
+    "RequestedActivation": "xyz.openbmc_project.Software.Activation.RequestedActivations.Active", 
+    "Version": "IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11"
+  }, 
+  "message": "200 OK", 
+  "status": "ok"
+} </msg>
+<msg timestamp="20170810 04:33:17.156" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170810 04:33:17.156" level="INFO">${content} = {u'status': u'ok', u'message': u'200 OK', u'data': {u'Activation': u'xyz.openbmc_project.Software.Activation.Activations.Active', u'Priority': 0, u'Version': u'IBM-witherspoon-sequoia-ibm-OP9_v1.18_1....</msg>
+<status status="PASS" endtime="20170810 04:33:17.156" starttime="20170810 04:33:17.155"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.156" starttime="20170810 04:33:16.833"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.156" starttime="20170810 04:32:13.768"></status>
+</kw>
+<kw name="Read Properties" library="rest_client">
+<arguments>
+<arg>${SOFTWARE_VERSION_URI}${version_id}</arg>
+</arguments>
+<assign>
+<var>${software_state}</var>
+</assign>
+<kw name="OpenBMC Get Request" library="rest_client">
+<arguments>
+<arg>${uri}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.159" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:33:17.160" starttime="20170810 04:33:17.159"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:33:17.160" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:33:17.161" starttime="20170810 04:33:17.160"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:33:17.161" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:33:17.161" starttime="20170810 04:33:17.161"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:33:17.162" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:33:17.162" starttime="20170810 04:33:17.161"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.413" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:33:17.413" starttime="20170810 04:33:17.163"></status>
+</kw>
+<msg timestamp="20170810 04:33:17.413" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:33:17.413" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.413" starttime="20170810 04:33:17.162"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.414" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.414" starttime="20170810 04:33:17.414"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.415" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.415" starttime="20170810 04:33:17.414"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.415" starttime="20170810 04:33:17.159"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.415" starttime="20170810 04:33:17.158"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.415" starttime="20170810 04:33:17.158"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:33:17.416" level="INFO">${base_uri} = /xyz/openbmc_project/software/2b6dcac8</msg>
+<status status="PASS" endtime="20170810 04:33:17.416" starttime="20170810 04:33:17.415"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Get</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:17.417" starttime="20170810 04:33:17.416"></status>
+</kw>
+<kw name="Get Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:33:17.550" level="INFO">Get Request using : alias=openbmc, uri=/xyz/openbmc_project/software/2b6dcac8, headers=None json=None</msg>
+<msg timestamp="20170810 04:33:17.550" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.550" starttime="20170810 04:33:17.417"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:17.551" starttime="20170810 04:33:17.551"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:33:17.551" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:33:17.551" starttime="20170810 04:33:17.551"></status>
+</kw>
+<msg timestamp="20170810 04:33:17.552" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.552" starttime="20170810 04:33:17.157"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.552" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.552" starttime="20170810 04:33:17.552"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary.RequestsKeywords">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${content}</var>
+</assign>
+<msg timestamp="20170810 04:33:17.553" level="INFO">To JSON using : content={
+  "data": {
+    "Activation": "xyz.openbmc_project.Software.Activation.Activations.Active", 
+    "ExtendedVersion": "op-build-v1.18-35-g04a11fe,buildroot-2017.05-163-g8035745,skiboot-07937c7,hostboot-faac61e,linux-4.12.3-openpower1-p593bf1b,petitboot-v1.5.1-p1b1d3ef,machine-xml-5575e7e-p28bf2dc,occ-d650501,hostboot-binaries-883d218,capp-ucode-9c73e9f,sbe-02021c6-pea3c159", 
+    "Path": "/tmp/images/2b6dcac8", 
+    "Priority": 0, 
+    "Purpose": "xyz.openbmc_project.Software.Version.VersionPurpose.Host", 
+    "RequestedActivation": "xyz.openbmc_project.Software.Activation.RequestedActivations.Active", 
+    "Version": "IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11"
+  }, 
+  "message": "200 OK", 
+  "status": "ok"
+} </msg>
+<msg timestamp="20170810 04:33:17.553" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170810 04:33:17.553" level="INFO">${content} = {u'status': u'ok', u'message': u'200 OK', u'data': {u'Activation': u'xyz.openbmc_project.Software.Activation.Activations.Active', u'Priority': 0, u'Version': u'IBM-witherspoon-sequoia-ibm-OP9_v1.18_1....</msg>
+<status status="PASS" endtime="20170810 04:33:17.553" starttime="20170810 04:33:17.553"></status>
+</kw>
+<msg timestamp="20170810 04:33:17.553" level="INFO">${software_state} = {u'Activation': u'xyz.openbmc_project.Software.Activation.Activations.Active', u'Priority': 0, u'Version': u'IBM-witherspoon-sequoia-ibm-OP9_v1.18_1.11', u'Purpose': u'xyz.openbmc_project.Software.Ver...</msg>
+<status status="PASS" endtime="20170810 04:33:17.553" starttime="20170810 04:33:17.156"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>&amp;{software_state}[Activation]</arg>
+<arg>${ACTIVE}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.554" level="INFO">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'str'&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:17.554" starttime="20170810 04:33:17.554"></status>
+</kw>
+<kw type="teardown" name="Code Update Teardown">
+<doc>Do code update test case teardown.</doc>
+<kw name="Open Connection And Log In" library="connection_client">
+<doc>Opens a connection with the given arguments, and logs in.</doc>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<assign>
+<var>${has_host}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.557" level="FAIL">Dictionary does not contain key 'host'.</msg>
+<status status="FAIL" endtime="20170810 04:33:17.557" starttime="20170810 04:33:17.556"></status>
+</kw>
+<msg timestamp="20170810 04:33:17.557" level="INFO">${has_host} = False</msg>
+<status status="PASS" endtime="20170810 04:33:17.557" starttime="20170810 04:33:17.556"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${has_host} == ${FALSE}</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>host=${OPENBMC_HOST}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:17.560" starttime="20170810 04:33:17.560"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.560" starttime="20170810 04:33:17.557"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and '${HTTPS_PORT}' != '${EMPTY}'</arg>
+<arg>User input SSH and HTTPs Ports</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:17.561" starttime="20170810 04:33:17.560"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<assign>
+<var>${has_port}</var>
+</assign>
+<kw name="Dictionary Should Contain Key" library="Collections">
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<arguments>
+<arg>${connection_args}</arg>
+<arg>port</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.562" level="FAIL">Dictionary does not contain key 'port'.</msg>
+<status status="FAIL" endtime="20170810 04:33:17.562" starttime="20170810 04:33:17.562"></status>
+</kw>
+<msg timestamp="20170810 04:33:17.562" level="INFO">${has_port} = False</msg>
+<status status="PASS" endtime="20170810 04:33:17.562" starttime="20170810 04:33:17.561"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SSH_PORT}' != '${EMPTY}' and ${has_port} == ${FALSE}</arg>
+<arg>Run Keywords</arg>
+<arg>Set To Dictionary</arg>
+<arg>${connection_args}</arg>
+<arg>port=${SSH_PORT}</arg>
+<arg>AND</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+<arg>ELSE</arg>
+<arg>Run Keyword</arg>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Run Keyword" library="BuiltIn">
+<doc>Executes the given keyword with the given arguments.</doc>
+<arguments>
+<arg>SSHLibrary.Open connection</arg>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given `host` and `port`.</doc>
+<arguments>
+<arg>&amp;{connection_args}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:17.564" starttime="20170810 04:33:17.563"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.564" starttime="20170810 04:33:17.563"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:17.564" starttime="20170810 04:33:17.562"></status>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<doc>Logs into the SSH server with the given `username` and `password`.</doc>
+<arguments>
+<arg>${username}</arg>
+<arg>${password}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:17.565" level="INFO">Logging into '9.41.166.169:22' as 'root'.</msg>
+<msg timestamp="20170810 04:33:19.287" level="INFO">Read output: root@witherspoon:~#</msg>
+<status status="PASS" endtime="20170810 04:33:19.288" starttime="20170810 04:33:17.564"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:19.288" starttime="20170810 04:33:17.555"></status>
+</kw>
+<kw name="Execute Command On BMC" library="utils">
+<doc>Execute given command on BMC and return output.</doc>
+<arguments>
+<arg>rm -rf /tmp/images/*</arg>
+</arguments>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes `command` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>${command}</arg>
+<arg>return_stderr=True</arg>
+</arguments>
+<assign>
+<var>${stdout}</var>
+<var>${stderr}</var>
+</assign>
+<msg timestamp="20170810 04:33:19.289" level="INFO">Executing command 'rm -rf /tmp/images/*'.</msg>
+<msg timestamp="20170810 04:33:19.356" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20170810 04:33:19.356" level="INFO">${stdout} = </msg>
+<msg timestamp="20170810 04:33:19.356" level="INFO">${stderr} = </msg>
+<status status="PASS" endtime="20170810 04:33:19.356" starttime="20170810 04:33:19.288"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${stderr}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:19.357" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20170810 04:33:19.357" starttime="20170810 04:33:19.357"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:19.357" starttime="20170810 04:33:19.288"></status>
+</kw>
+<kw name="Close All Connections" library="SSHLibrary">
+<doc>Closes all open connections.</doc>
+<status status="PASS" endtime="20170810 04:33:19.528" starttime="20170810 04:33:19.358"></status>
+</kw>
+<kw name="FFDC On Test Case Fail" library="openbmc_ffdc">
+<doc>Generic FFDC entry point. Place holder to hook in</doc>
+<kw name="Is Host Quiesced" library="state_manager">
+<doc>Check if host state is quiesced.</doc>
+<assign>
+<var>${status}</var>
+</assign>
+<kw name="Get Host State" library="state_manager">
+<doc>Return the state of the host as a string.</doc>
+<assign>
+<var>${host_state}</var>
+</assign>
+<kw name="Read Attribute" library="rest_client">
+<arguments>
+<arg>${HOST_STATE_URI}</arg>
+<arg>CurrentHostState</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${state}</var>
+</assign>
+<kw name="OpenBMC Get Request" library="rest_client">
+<arguments>
+<arg>${uri}/attr/${attr}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<kw name="Initialize OpenBMC" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>quiet=${quiet}</arg>
+</arguments>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>40 sec</arg>
+<arg>20 sec</arg>
+<arg>Post Login Request</arg>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Post Login Request" library="rest_client">
+<arguments>
+<arg>${timeout}</arg>
+<arg>${quiet}</arg>
+</arguments>
+<kw name="Create Session" library="RequestsLibrary.RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${AUTH_URI}</arg>
+<arg>timeout=${timeout}</arg>
+<arg>max_retries=3</arg>
+</arguments>
+<msg timestamp="20170810 04:33:19.533" level="INFO">Creating Session using : alias=openbmc, url=https://9.41.166.169, headers={},                     cookies=None, auth=None, timeout=10, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170810 04:33:19.534" starttime="20170810 04:33:19.533"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20170810 04:33:19.534" level="INFO">${headers} = {u'Content-Type': u'application/json'}</msg>
+<status status="PASS" endtime="20170810 04:33:19.534" starttime="20170810 04:33:19.534"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${OPENBMC_USERNAME}</arg>
+<arg>${OPENBMC_PASSWORD}</arg>
+</arguments>
+<assign>
+<var>@{credentials}</var>
+</assign>
+<msg timestamp="20170810 04:33:19.535" level="INFO">@{credentials} = [ root | 0penBmc ]</msg>
+<status status="PASS" endtime="20170810 04:33:19.535" starttime="20170810 04:33:19.534"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>data=@{credentials}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170810 04:33:19.535" level="INFO">${data} = {u'data': [u'root', u'0penBmc']}</msg>
+<status status="PASS" endtime="20170810 04:33:19.536" starttime="20170810 04:33:19.535"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Post Request</arg>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${resp}</var>
+</assign>
+<kw name="Post Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>/login</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:20.065" level="INFO">Post Request using : alias=openbmc, uri=/login, data={"data": ["root", "0penBmc"]}, headers={u'Content-Type': u'application/json'}, files=None, allow_redirects=True </msg>
+<status status="PASS" endtime="20170810 04:33:20.065" starttime="20170810 04:33:19.536"></status>
+</kw>
+<msg timestamp="20170810 04:33:20.065" level="INFO">${status} = PASS</msg>
+<msg timestamp="20170810 04:33:20.065" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:20.065" starttime="20170810 04:33:19.536"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${status}</arg>
+<arg>PASS</arg>
+<arg>msg=${resp}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:20.066" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:20.066" starttime="20170810 04:33:20.066"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:20.067" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:20.067" starttime="20170810 04:33:20.066"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:20.067" starttime="20170810 04:33:19.532"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:20.067" starttime="20170810 04:33:19.532"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:20.067" starttime="20170810 04:33:19.531"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${DBUS_PREFIX}</arg>
+<arg>${uri}</arg>
+</arguments>
+<assign>
+<var>${base_uri}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.068" level="INFO">${base_uri} = /xyz/openbmc_project/state/host0//attr/CurrentHostState</msg>
+<status status="PASS" endtime="20170810 04:33:20.068" starttime="20170810 04:33:20.067"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Request</arg>
+<arg>method=Get</arg>
+<arg>base_uri=${base_uri}</arg>
+<arg>args=&amp;{kwargs}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:20.068" starttime="20170810 04:33:20.068"></status>
+</kw>
+<kw name="Get Request" library="RequestsLibrary.RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>openbmc</arg>
+<arg>${base_uri}</arg>
+<arg>&amp;{kwargs}</arg>
+<arg>timeout=${timeout}</arg>
+</arguments>
+<assign>
+<var>${ret}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.158" level="INFO">Get Request using : alias=openbmc, uri=/xyz/openbmc_project/state/host0//attr/CurrentHostState, headers=None json=None</msg>
+<msg timestamp="20170810 04:33:20.158" level="INFO">${ret} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:20.158" starttime="20170810 04:33:20.068"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${quiet}' == '${0}'</arg>
+<arg>Log Response</arg>
+<arg>${ret}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:20.159" starttime="20170810 04:33:20.158"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsLibrary.RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170810 04:33:20.159" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170810 04:33:20.159" starttime="20170810 04:33:20.159"></status>
+</kw>
+<msg timestamp="20170810 04:33:20.159" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:20.159" starttime="20170810 04:33:19.530"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>${HTTP_OK}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:20.160" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170810 04:33:20.160" starttime="20170810 04:33:20.159"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary.RequestsKeywords">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<assign>
+<var>${content}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.160" level="INFO">To JSON using : content={
+  "data": "xyz.openbmc_project.State.Host.HostState.Off", 
+  "message": "200 OK", 
+  "status": "ok"
+} </msg>
+<msg timestamp="20170810 04:33:20.161" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170810 04:33:20.161" level="INFO">${content} = {u'status': u'ok', u'message': u'200 OK', u'data': u'xyz.openbmc_project.State.Host.HostState.Off'}</msg>
+<status status="PASS" endtime="20170810 04:33:20.161" starttime="20170810 04:33:20.160"></status>
+</kw>
+<msg timestamp="20170810 04:33:20.161" level="INFO">${state} = xyz.openbmc_project.State.Host.HostState.Off</msg>
+<status status="PASS" endtime="20170810 04:33:20.161" starttime="20170810 04:33:19.530"></status>
+</kw>
+<msg timestamp="20170810 04:33:20.161" level="INFO">${host_state} = Off</msg>
+<status status="PASS" endtime="20170810 04:33:20.161" starttime="20170810 04:33:19.529"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>Should Be Equal</arg>
+<arg>${host_state}</arg>
+<arg>Quiesced</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+</assign>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${host_state}</arg>
+<arg>Quiesced</arg>
+</arguments>
+<msg timestamp="20170810 04:33:20.162" level="FAIL">Off != Quiesced</msg>
+<status status="FAIL" endtime="20170810 04:33:20.162" starttime="20170810 04:33:20.162"></status>
+</kw>
+<msg timestamp="20170810 04:33:20.163" level="INFO">${status} = False</msg>
+<status status="PASS" endtime="20170810 04:33:20.163" starttime="20170810 04:33:20.162"></status>
+</kw>
+<msg timestamp="20170810 04:33:20.163" level="INFO">${status} = False</msg>
+<status status="PASS" endtime="20170810 04:33:20.163" starttime="20170810 04:33:19.529"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${TEST_STATUS}' == 'FAIL' or '${status}'=='True'</arg>
+<arg>FFDC</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:20.163" starttime="20170810 04:33:20.163"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${status}'=='True'</arg>
+<arg>Recover Quiesced Host</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:20.164" starttime="20170810 04:33:20.164"></status>
+</kw>
+<kw name="Log Test Case Status" library="openbmc_ffdc_methods">
+<doc>Test case execution result history.</doc>
+<kw name="Get Variable Value" library="BuiltIn">
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<arguments>
+<arg>${FFDC_DIR_PATH_STYLE}</arg>
+<arg>${EMPTY}</arg>
+</arguments>
+<assign>
+<var>${FFDC_DIR_PATH_STYLE}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.174" level="INFO">${FFDC_DIR_PATH_STYLE} = </msg>
+<status status="PASS" endtime="20170810 04:33:20.174" starttime="20170810 04:33:20.165"></status>
+</kw>
+<kw name="Get Variable Value" library="BuiltIn">
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<arguments>
+<arg>${FFDC_DIR_PATH}</arg>
+<arg>${EMPTY}</arg>
+</arguments>
+<assign>
+<var>${FFDC_DIR_PATH}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.182" level="INFO">${FFDC_DIR_PATH} = </msg>
+<status status="PASS" endtime="20170810 04:33:20.182" starttime="20170810 04:33:20.174"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${FFDC_DIR_PATH}' == '${EMPTY}'</arg>
+<arg>Set FFDC Defaults</arg>
+</arguments>
+<kw name="Set Ffdc Defaults" library="openbmc_ffdc">
+<doc>Set a default value for ffdc_dir_path and ffdc_prefix if they don't</doc>
+<kw name="Get Current Time Stamp" library="openbmc_ffdc_utils">
+<doc>Get the current time stamp data</doc>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>result_format=%Y-%m-%d %H:%M:%S:%f</arg>
+</arguments>
+<assign>
+<var>${cur_time}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.184" level="INFO">${cur_time} = 2017-08-10 04:33:20:184176</msg>
+<status status="PASS" endtime="20170810 04:33:20.184" starttime="20170810 04:33:20.184"></status>
+</kw>
+<kw name="Get Strip String" library="openbmc_ffdc_list">
+<doc>########################################################################</doc>
+<arguments>
+<arg>${cur_time}</arg>
+</arguments>
+<assign>
+<var>${cur_time}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.185" level="INFO">${cur_time} = 20170810043320184176</msg>
+<status status="PASS" endtime="20170810 04:33:20.185" starttime="20170810 04:33:20.185"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:20.185" starttime="20170810 04:33:20.184"></status>
+</kw>
+<msg timestamp="20170810 04:33:20.189" level="INFO">${FFDC_TIME} = 20170810043320184176</msg>
+<kw name="Get Test Dir and Name" library="openbmc_ffdc_utils">
+<doc>SUITE_NAME and TEST_NAME are automatic variables</doc>
+<kw name="Get Strip String" library="openbmc_ffdc_list">
+<doc>########################################################################</doc>
+<arguments>
+<arg>${SUITE_NAME}</arg>
+</arguments>
+<assign>
+<var>${suite_name}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.191" level="INFO">${suite_name} = CodeUpdate</msg>
+<status status="PASS" endtime="20170810 04:33:20.191" starttime="20170810 04:33:20.190"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${FFDC_TIME}_</arg>
+<arg>${suite_name}</arg>
+</arguments>
+<assign>
+<var>${suite_name}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.193" level="INFO">${suite_name} = 20170810043320184176_CodeUpdate</msg>
+<status status="PASS" endtime="20170810 04:33:20.193" starttime="20170810 04:33:20.193"></status>
+</kw>
+<kw name="Get Strip String" library="openbmc_ffdc_list">
+<doc>########################################################################</doc>
+<arguments>
+<arg>${TEST_NAME}</arg>
+</arguments>
+<assign>
+<var>${test_name}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.194" level="INFO">${test_name} = RESTHostCodeUpdate</msg>
+<status status="PASS" endtime="20170810 04:33:20.194" starttime="20170810 04:33:20.193"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${FFDC_TIME}_</arg>
+<arg>${test_name}</arg>
+</arguments>
+<assign>
+<var>${test_name}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.194" level="INFO">${test_name} = 20170810043320184176_RESTHostCodeUpdate</msg>
+<status status="PASS" endtime="20170810 04:33:20.194" starttime="20170810 04:33:20.194"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:20.194" starttime="20170810 04:33:20.190"></status>
+</kw>
+<msg timestamp="20170810 04:33:20.195" level="INFO">${FFDC_DIR_PATH} = /home/fspcibld/logs/20170810043320184176_CodeUpdate/20170810043320184176_RESTHostCodeUpdate/</msg>
+<msg timestamp="20170810 04:33:20.200" level="INFO">${FFDC_PREFIX} = 20170810043320184176_</msg>
+<status status="PASS" endtime="20170810 04:33:20.200" starttime="20170810 04:33:20.183"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:20.200" starttime="20170810 04:33:20.183"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${FFDC_DIR_PATH_STYLE}' == '${1}'</arg>
+<arg>Run Keywords</arg>
+<arg>Set Global Variable</arg>
+<arg>${FFDC_LOG_PATH}</arg>
+<arg>${FFDC_DIR_PATH}</arg>
+<arg>AND</arg>
+<arg>Set Global Variable</arg>
+<arg>${TEST_HISTORY}</arg>
+<arg>${FFDC_DIR_PATH}test_history.txt</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:20.200" starttime="20170810 04:33:20.200"></status>
+</kw>
+<kw name="Create Directory" library="OperatingSystem">
+<doc>Creates the specified directory.</doc>
+<arguments>
+<arg>${FFDC_LOG_PATH}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:20.201" html="yes" level="INFO">Directory '&lt;a href="file:///home/fspcibld/logs"&gt;/home/fspcibld/logs&lt;/a&gt;' already exists.</msg>
+<status status="PASS" endtime="20170810 04:33:20.201" starttime="20170810 04:33:20.201"></status>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<arguments>
+<arg>OperatingSystem.File Should Exist</arg>
+<arg>${TEST_HISTORY}</arg>
+</arguments>
+<assign>
+<var>${exist}</var>
+</assign>
+<kw name="File Should Exist" library="OperatingSystem">
+<doc>Fails unless the given ``path`` points to an existing file.</doc>
+<arguments>
+<arg>${TEST_HISTORY}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:20.202" html="yes" level="INFO">File '&lt;a href="file:///home/fspcibld/logs/test_history.txt"&gt;/home/fspcibld/logs/test_history.txt&lt;/a&gt;' exists.</msg>
+<status status="PASS" endtime="20170810 04:33:20.202" starttime="20170810 04:33:20.202"></status>
+</kw>
+<msg timestamp="20170810 04:33:20.202" level="INFO">${exist} = True</msg>
+<status status="PASS" endtime="20170810 04:33:20.202" starttime="20170810 04:33:20.201"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${exist}' == '${False}'</arg>
+<arg>Create File</arg>
+<arg>${TEST_HISTORY}</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:20.203" starttime="20170810 04:33:20.202"></status>
+</kw>
+<kw name="Rpvars" library="gen_robot_print">
+<arguments>
+<arg>TEST_HISTORY</arg>
+</arguments>
+<status status="PASS" endtime="20170810 04:33:20.203" starttime="20170810 04:33:20.203"></status>
+</kw>
+<kw name="Get Current Time Stamp" library="openbmc_ffdc_utils">
+<doc>Get the current time stamp data</doc>
+<assign>
+<var>${cur_time}</var>
+</assign>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<arguments>
+<arg>result_format=%Y-%m-%d %H:%M:%S:%f</arg>
+</arguments>
+<assign>
+<var>${cur_time}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.204" level="INFO">${cur_time} = 2017-08-10 04:33:20:204121</msg>
+<status status="PASS" endtime="20170810 04:33:20.204" starttime="20170810 04:33:20.204"></status>
+</kw>
+<kw name="Get Strip String" library="openbmc_ffdc_list">
+<doc>########################################################################</doc>
+<arguments>
+<arg>${cur_time}</arg>
+</arguments>
+<assign>
+<var>${cur_time}</var>
+</assign>
+<msg timestamp="20170810 04:33:20.205" level="INFO">${cur_time} = 20170810043320204121</msg>
+<status status="PASS" endtime="20170810 04:33:20.205" starttime="20170810 04:33:20.205"></status>
+</kw>
+<msg timestamp="20170810 04:33:20.205" level="INFO">${cur_time} = 20170810043320204121</msg>
+<status status="PASS" endtime="20170810 04:33:20.205" starttime="20170810 04:33:20.203"></status>
+</kw>
+<kw name="Append To File" library="OperatingSystem">
+<doc>Appends the given content to the specified file.</doc>
+<arguments>
+<arg>${TEST_HISTORY}</arg>
+<arg>${cur_time}:${SUITE_NAME}:${TEST_NAME}:${TEST_STATUS}${\n}</arg>
+</arguments>
+<msg timestamp="20170810 04:33:20.206" html="yes" level="INFO">Appended to file '&lt;a href="file:///home/fspcibld/logs/test_history.txt"&gt;/home/fspcibld/logs/test_history.txt&lt;/a&gt;'.</msg>
+<status status="PASS" endtime="20170810 04:33:20.206" starttime="20170810 04:33:20.205"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:20.206" starttime="20170810 04:33:20.164"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:20.206" starttime="20170810 04:33:19.529"></status>
+</kw>
+<status status="PASS" endtime="20170810 04:33:20.206" starttime="20170810 04:33:17.555"></status>
+</kw>
+<doc>Do a PNOR code update by uploading image on BMC via REST.</doc>
+<tags>
+<tag>REST_Host_Code_Update</tag>
+</tags>
+<status status="PASS" endtime="20170810 04:33:20.206" critical="yes" starttime="20170810 04:31:33.067"></status>
+</test>
+<doc>Code update to a target BMC.
+Execution Method:
+python -m robot -v OPENBMC_HOST:&lt;hostname&gt;
+-v DELETE_OLD_PNOR_IMAGES:&lt;"true" or "false"&gt;
+-v IMAGE_FILE_PATH:&lt;path/*.tar&gt; code_update.robot
+
+Code update method BMC
+Update work flow sequence:
+- Upload image via REST
+- Verify that the file exists on the BMC
+- Check software "Activation" status to be "Ready"
+- Set "Requested Activation" to "Active"
+- Wait for code update to complete
+- Verify the new version</doc>
+<status status="PASS" endtime="20170810 04:33:20.207" starttime="20170810 04:31:32.546"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
+</total>
+<tag>
+<stat fail="0" pass="1">REST_Host_Code_Update</stat>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="Code Update" pass="1">Code Update</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
